@@ -1,0 +1,6 @@
+{
+  "name": "@naass/kb-starter",
+  "version": "1.0.0",
+  "description": "N-A-A-S Starter Knowledge Base",
+  "type": "module"
+}

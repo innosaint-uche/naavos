@@ -1,0 +1,34 @@
+{
+  "name": "naass",
+  "version": "1.0.0",
+  "description": "Neuro AI - Avatar OS System — Give Every AI Your Brain",
+  "private": true,
+  "workspaces": [
+    "packages/*",
+    "dashboard",
+    "naass-mcp-server"
+  ],
+  "scripts": {
+    "dev": "npm run dev --workspaces",
+    "build": "npm run build --workspaces",
+    "test": "npm run test --workspaces",
+    "lint": "npm run lint --workspaces",
+    "doctor": "bash automations/avatar-check.sh",
+    "sync": "bash automations/sync-avatar.sh"
+  },
+  "keywords": [
+    "ai",
+    "avatar",
+    "personality",
+    "cognitive-profile",
+    "mcp",
+    "agentic",
+    "context",
+    "open-source"
+  ],
+  "author": "Uchenna Innocent",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

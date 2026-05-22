@@ -1,0 +1,13 @@
+{
+  "name": "@naass/core",
+  "version": "1.0.0",
+  "description": "N-A-A-S Avatar Schema and Validation",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "node test.js",
+    "validate": "node validate.js"
+  },
+  "keywords": ["naass", "avatar", "cognitive-profile"],
+  "license": "MIT"
+}

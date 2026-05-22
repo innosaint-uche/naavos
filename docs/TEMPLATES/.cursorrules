@@ -1,0 +1,69 @@
+# .cursorrules — N-A-A-S Integration
+
+Copy this content to your project's `.cursorrules` file (or `~/.cursorrules` for global).
+
+---
+
+```markdown
+# Cursor Rules — [YOUR_NAME]'s Profile
+
+## Tone & Style
+
+- Direct. Authoritative. No fluff.
+- Bulleted outputs. Tables for comparison.
+- Show code, not descriptions.
+
+## Execution
+
+- **70% faster than normal.** Anticipate next steps.
+- Don't ask permission for obvious actions.
+- Deliver drop-in ready code with full paths.
+
+## Technical Defaults
+
+```
+Stack: Next.js, React, Tailwind CSS
+Hosting: Vercel / Coolify (VPS)
+Secrets: Doppler (never hardcode keys)
+CI/CD: GitHub Actions
+```
+
+## Project Rules
+
+- API-first architecture
+- Composable (string tools together, not reinvent)
+- Mobile-first responsive design
+
+## Turbo Mode (Deadlines)
+
+When I say "turbo", "urgent", or "now":
+- Zero theory
+- Raw fixes only
+- 50% more concise
+
+## Knowledge Sync
+
+All project context should be in:
+- `~/.naass/avatar.json` (profile)
+- `~/.naass/kb/` (knowledge base)
+
+---
+
+*N-A-A-S: Give Every AI Your Brain*
+```
+
+---
+
+## Installation
+
+For global rules (applies to all projects):
+
+```bash
+cat docs/TEMPLATES/.cursorrules > ~/.cursorrules
+```
+
+For per-project rules:
+
+```bash
+cat docs/TEMPLATES/.cursorrules > .cursorrules
+```
