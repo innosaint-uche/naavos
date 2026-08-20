@@ -1,0 +1,14 @@
+{
+  "name": "@naavos/schema",
+  "version": "1.0.0",
+  "description": "NAAvOS avatar package schema and validation",
+  "main": "src/index.js",
+  "type": "module",
+  "scripts": {
+    "lint": "echo 'Lint not configured'",
+    "test": "node test.js",
+    "typecheck": "echo 'No TypeScript'"
+  },
+  "keywords": ["naavos", "avatar", "schema"],
+  "license": "MIT"
+}

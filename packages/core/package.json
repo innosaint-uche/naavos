@@ -1,13 +1,15 @@
 {
-  "name": "@naass/core",
+  "name": "@naavos/core",
   "version": "1.0.0",
-  "description": "N-A-A-S Avatar Schema and Validation",
+  "description": "NAAvOS core utilities (compatibility shim)",
   "main": "index.js",
   "type": "module",
   "scripts": {
+    "lint": "echo 'Lint not configured'",
     "test": "node test.js",
+    "typecheck": "echo 'No TypeScript'",
     "validate": "node validate.js"
   },
-  "keywords": ["naass", "avatar", "cognitive-profile"],
+  "keywords": ["naavos", "avatar", "cognitive-profile"],
   "license": "MIT"
 }

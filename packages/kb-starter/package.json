@@ -1,6 +1,13 @@
 {
-  "name": "@naass/kb-starter",
+  "name": "@naavos/kb-starter",
   "version": "1.0.0",
-  "description": "N-A-A-S Starter Knowledge Base",
-  "type": "module"
+  "description": "NAAvOS starter knowledge base template",
+  "type": "module",
+  "scripts": {
+    "lint": "echo 'Lint not configured in M0'",
+    "test": "echo 'No tests yet'",
+    "typecheck": "echo 'No TypeScript in M0'"
+  },
+  "keywords": ["naavos", "knowledge-base", "template"],
+  "license": "MIT"
 }

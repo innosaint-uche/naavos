@@ -1,0 +1,10 @@
+# Gitleaks configuration for NAAvOS
+# This file defines rules to prevent secrets from being committed.
+
+title = "gitleaks config for NAAvOS"
+
+[[rules]]
+id = "generic-api-key"
+description = "Generic API Key"
+regex = '''(?i)(api_key|apikey|api-key|access_key|access-key|secret_key|secret-key)\s*[:=]\s*['"]([a-zA-Z0-9\-_]{20,})['"]'''
+tags = ["key", "api", "generic"]

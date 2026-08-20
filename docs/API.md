@@ -1,19 +1,19 @@
-# N-A-A-S API Reference
+# NAAvOS API Reference
 
 ## MCP Server Endpoints
 
 ### Base URL
 
 ```
-https://api.naass.io/mcp/v1
+https://api.naavos.io/mcp/v1
 ```
 
 ### Authentication
 
-Include your API key in the `X-NAASS-User-ID` header:
+Include your API key in the `X-NAAVOS-User-ID` header:
 
 ```
-X-NAASS-User-ID: your-user-id
+X-NAAVOS-User-ID: your-user-id
 ```
 
 ## Endpoints
@@ -38,7 +38,7 @@ Check server health.
 Load your avatar profile.
 
 **Headers:**
-- `X-NAASS-User-ID` (required)
+- `X-NAAVOS-User-ID` (required)
 
 **Response:**
 ```json

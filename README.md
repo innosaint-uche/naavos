@@ -1,76 +1,116 @@
-# N-A-A-S: Neuro AI - Avatar OS System
+# NAAvOS: Neuro AI - Avatar OS System
 
 > **Give Every AI Your Brain.**
 
-N-A-A-S is an open-source system that makes AI agents instantly understand your cognitive profile, working style, technical defaults, and project history — without you repeating yourself.
+NAAvOS is an open-source **compiler and conformance platform** that makes AI agents instantly and reliably understand your cognitive profile, working style, and project history.
 
-## 🎯 What It Does
+## What It Does
 
-- **One install.** Every AI tool (Claude Code, Gemini CLI, Cursor, Mavis, etc.) knows who you are.
-- **Zero re-explanation.** Your preferences, rules, and context persist across every session.
-- **Cross-platform sync.** Update once, propagate everywhere.
+- **Compile Your Persona:** Define your identity, rules, and knowledge sources in a single, versioned `Avatar-Source-Package`.
+- **Safe Installation:** The NAAvOS compiler translates your package into verified, host-specific instructions for every AI tool (Claude, Gemini, Cursor, Hermes, etc.).
+- **Prove It Works:** A conformance harness runs tests to ensure agents actually adhere to your rules, providing a "fidelity score" for each tool.
 
-## ⚡ Quick Start
+## Quick Start
 
 ```bash
-# Install the CLI
-npm install -g naass
+# Install dependencies
+pnpm install
 
 # Initialize your avatar
-naass init
+pnpm exec naavos init
 
-# Sync across all connected agents
-naass sync
+# Validate your avatar
+pnpm exec naavos validate
+
+# Compile for a target host
+pnpm exec naavos compile --target hermes
+
+# Run conformance tests
+pnpm exec naavos test
+
+# Check system health
+pnpm exec naavos doctor
 ```
 
-## 📦 What's Included
+## Supported Targets
+
+| Target | Output | Install Method |
+|--------|--------|----------------|
+| Hermes | `SOUL.md`, `SKILL.md`, `sub-agents/*.md`, `memories/**/*.md` | `naavos install --target hermes` or `.tar.gz` bundle |
+| Claude Code | `CLAUDE.md` | Copy to project root |
+| Gemini | `GEMINI.md` | Copy to project root |
+| Cursor | `.cursorrules` | Copy to project root or `~/.cursorrules` |
+| OpenClaw | `AGENTS.md` | Copy to project root |
+| ReMe | `.remerc`, `skills/reme_memory/SKILL.md`, `CLAUDE-reme.md` | `naavos install --target reme` |
+
+## What's Included
 
 | Package | Description |
 |---------|-------------|
-| `@naass/core` | Avatar schema + validation |
-| `@naass/cli` | Command-line interface |
-| `@naass/kb-starter` | Starter knowledge base template |
-| `@naass/mcp-server` | Cloudflare Workers MCP endpoint |
+| `@naavos/core` | Avatar schema + validation (compatibility shim) |
+| `@naavos/schema` | Zod-based avatar package schema |
+| `@naavos/compiler` | Host-specific compiler + adapters |
+| `@naavos/eval-packs` | Conformance runner + scenario packs |
+| `@naavos/cli` | Command-line interface |
+| `@naavos/kb-starter` | Starter knowledge base template |
+| `@naavos/mcp-server` | Cloudflare Workers MCP endpoint |
 
-## 🧠 How It Works
+## How It Works
 
 ```
 ┌─────────────────────────────────────────────────────────┐
-│                    N-A-A-S System                       │
+│                    NAAvOS System                       │
 │                                                          │
-│   Your Avatar ──► KB (Knowledge Base)                   │
+│   Your Avatar ──► Schema Validation                     │
 │        │                 │                               │
 │        ▼                 ▼                               │
-│   avatar_schema.json  projects_registry.json             │
+│   avatar.json     Zod Checks                            │
 │        │                 │                               │
 │        ▼                 ▼                               │
 │   ┌─────┐  ┌─────┐  ┌─────┐  ┌─────┐  ┌─────┐          │
-│   │ M   │  │ C   │  │ G   │  │ Cu  │  │ H   │   ...    │
-│   │ av  │  │ lau │  │ em  │  │ rs  │  │ erm │          │
-│   │ is  │  │ de  │  │ ini │  │ or  │  │ es  │          │
+│   │ H   │  │ C   │  │ G   │  │ Cu  │  │ O   │   ...    │
+│   │ erm │  │ lau │  │ em  │  │ rs  │  │ pe  │          │
+│   │ es  │  │ de  │  │ ini │  │ or  │  │ nc  │          │
 │   └─────┘  └─────┘  └─────┘  └─────┘  └─────┘          │
-│   AI Agent → Load KB → Knows You Instantly               │
+│   AI Agent → Loads compiled output → Knows You          │
 └─────────────────────────────────────────────────────────┘
 ```
 
-## 🌍 Cloud Version (Coming Soon)
+## CLI Commands
 
-Host your avatar on Cloudflare Workers with:
-- Real-time cross-device sync
-- MCP protocol endpoints
-- Freemium tier + paid premium features
+| Command | Description |
+|---------|-------------|
+| `naavos init` | Initialize your avatar with an interactive wizard |
+| `naavos validate` | Validate your avatar against the Zod schema |
+| `naavos compile` | Compile avatar for a target runtime |
+| `naavos compile --target <id>` | Compile for a specific target (hermes, claude-code, gemini, cursor, openclaw) |
+| `naavos compile --dry-run` | Print compiled output without writing files |
+| `naavos compile --format tar.gz` | Export as Hermes profile bundle (`.tar.gz`) |
+| `naavos install` | Install compiled avatar into target host |
+| `naavos install --dry-run` | Show what would be installed |
+| `naavos install --target hermes` | Install with automatic backup |
+| `naavos install --target reme` | Install ReMe memory config and Hermes skill |
+| `naavos export` | Export compiled avatar as a Hermes profile bundle |
+| `naavos test` | Run conformance eval packs against your avatar |
+| `naavos test --pack <id>` | Run a specific eval pack |
+| `naavos test --json` | Output results as JSON |
+| `naavos doctor` | Run health check on your avatar and environment |
+| `naavos backups` | List available backups |
+| `naavos rollback` | Rollback to most recent backup |
+| `naavos rollback --id <backupId>` | Rollback to a specific backup |
 
-## 📖 Documentation
+## Documentation
 
 - [Setup Guide](docs/SETUP.md)
 - [API Reference](docs/API.md)
 - [Integration Templates](docs/TEMPLATES/)
+- [Capability Status](docs/contracts/capability-status.json)
 
-## 🤝 Contributing
+## Contributing
 
 Contributions welcome. Read [CONTRIBUTING.md](CONTRIBUTING.md) to get started.
 
-## 📄 License
+## License
 
 MIT — Use it. Fork it. Make it yours.
 

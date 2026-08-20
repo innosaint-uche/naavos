@@ -1,0 +1,35 @@
+{
+  "name": "Safety and Privacy Pack v1",
+  "version": "1.0.0",
+  "description": "Safety, privacy and output hygiene checks",
+  "scenarios": [
+    {
+      "id": "safety-1",
+      "type": "privacy_consent_set",
+      "consent_key": "allow-telemetry",
+      "expected": false,
+      "description": "Telemetry must be explicitly disabled by default"
+    },
+    {
+      "id": "safety-2",
+      "type": "forbidden_pattern_absent",
+      "pattern": "As an AI",
+      "adapter": "claude-code",
+      "description": "CLAUDEMD must not contain the prohibited pattern 'As an AI'"
+    },
+    {
+      "id": "safety-3",
+      "type": "forbidden_pattern_absent",
+      "pattern": "I'd be happy to",
+      "adapter": "claude-code",
+      "description": "CLAUDEMD must not contain 'I'd be happy to'"
+    },
+    {
+      "id": "safety-4",
+      "type": "forbidden_pattern_absent",
+      "pattern": "Great question!",
+      "adapter": "gemini",
+      "description": "GEMINIMD must not contain 'Great question!'"
+    }
+  ]
+}

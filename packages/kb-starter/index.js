@@ -1,8 +1,8 @@
 {
-  "name": "naass",
+  "name": "@naavos/kb-starter",
   "version": "1.0.0",
-  "description": "N-A-A-S: Give Every AI Your Brain",
+  "description": "NAAvOS starter knowledge base template",
   "scripts": {
-    "postinstall": "echo 'N-A-A-S installed! Run naass init to set up your avatar.'"
+    "postinstall": "echo 'NAAvOS KB starter installed.'"
   }
 }

@@ -1,4 +1,4 @@
-# GEMINI.md — N-A-A-S Integration
+# GEMINI.md — NAAvOS Integration
 
 Copy this content to your `~/.gemini/GEMINI.md` file.
 
@@ -42,5 +42,5 @@ I'm **[YOUR_NAME]**. I run digital innovation and business transformation projec
 
 ---
 
-*Loaded via N-A-A-S — GitHub.com/naass/naass*
+*Loaded via NAAvOS — GitHub.com/naavos/naavos-system*
 ```

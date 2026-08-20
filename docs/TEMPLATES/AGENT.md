@@ -1,4 +1,4 @@
-# Mavis Agent Template — N-A-A-S Integration
+# Mavis Agent Template — NAAvOS Integration
 
 Use this in your Mavis agent configuration.
 
@@ -21,9 +21,9 @@ Working on behalf of **[YOUR_NAME]**.
 
 ## Profile Files
 
-- Avatar: `~/.naass/avatar.json`
-- KB: `~/.naass/kb/`
-- Registry: `~/.naass/projects.json`
+- Avatar: `~/.naavos/avatar.json`
+- KB: `~/.naavos/kb/`
+- Registry: `~/.naavos/projects.json`
 
 ## Tech Stack
 
@@ -52,5 +52,5 @@ Never:
 
 ---
 
-*Loaded via N-A-A-S*
+*Loaded via NAAvOS*
 ```

@@ -1,0 +1,17 @@
+{
+  "compile": "completed",
+  "safeInstall": "completed",
+  "hermesTarget": "completed",
+  "claudeCodeTarget": "completed",
+  "geminiTarget": "completed",
+  "openclawTarget": "completed",
+  "cursorTarget": "completed",
+  "remeTarget": "completed",
+  "conformance": "completed",
+  "profileBundle": "completed",
+  "cogneeIntegration": "not-started",
+  "memuAdapter": "not-started",
+  "researchPack": "not-started",
+  "providerBenchmark": "not-started",
+  "cloudSync": "not-started"
+}

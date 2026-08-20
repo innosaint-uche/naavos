@@ -1,12 +1,12 @@
-# @naass/kb-starter
+# @naavos/kb-starter
 
-A ready-to-use knowledge base template for N-A-A-S.
+A ready-to-use knowledge base template for NAAvOS.
 
 ## Usage
 
 ```bash
 # Copy to your local KB
-cp -r node_modules/@naass/kb-starter ~/.naass/kb
+cp -r node_modules/@naavos/kb-starter ~/.naavos/kb
 ```
 
 ## What's Included

@@ -1,0 +1,17 @@
+{
+  "name": "@naavos/compiler",
+  "version": "1.0.0",
+  "description": "NAAvOS avatar compiler - generates host-specific artifacts",
+  "main": "src/index.js",
+  "type": "module",
+  "scripts": {
+    "lint": "echo 'Lint not configured'",
+    "test": "node test.js",
+    "typecheck": "echo 'No TypeScript'"
+  },
+  "dependencies": {
+    "@naavos/schema": "workspace:*"
+  },
+  "keywords": ["naavos", "compiler", "avatar"],
+  "license": "MIT"
+}

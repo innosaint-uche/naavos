@@ -1,4 +1,4 @@
-# Contributing to N-A-A-S
+# Contributing to NAAvOS
 
 We welcome contributions! Here's how to get started.
 
@@ -6,27 +6,27 @@ We welcome contributions! Here's how to get started.
 
 ```bash
 # Fork and clone
-git clone https://github.com/naass/naass.git
-cd naass
+git clone https://github.com/naavos/naavos-system.git
+cd naavos-system
 
 # Install dependencies
-npm install
+pnpm install
 
 # Run health check
-npm run doctor
+pnpm run doctor
 ```
 
 ## Development
 
 ```bash
-# Start dashboard
-cd dashboard && npm run dev
-
-# Run MCP server locally
-cd naass-mcp-server && wrangler dev
+# Build all packages
+pnpm run build
 
 # Run CLI
-cd packages/cli && node bin/naass.js
+cd packages/cli && node bin/naavos.js
+
+# Start dashboard
+cd apps/dashboard && pnpm run dev
 ```
 
 ## Making Changes
@@ -59,16 +59,16 @@ Types:
 ## Testing
 
 ```bash
-npm test
+pnpm run test
 ```
 
 ## Reporting Issues
 
 - Use GitHub Issues
-- Include your OS, Node version, and N-A-A-S version
+- Include your OS, Node version, and NAAvOS version
 - Provide minimal reproduction steps
 
 ## Questions?
 
-- Discord: https://discord.gg/naass
-- Email: hello@naass.io
+- Discord: https://discord.gg/naavos
+- Email: hello@naavos.io

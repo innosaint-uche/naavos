@@ -1,191 +1,139 @@
-# N-A-A-S Setup Guide
+# NAAvOS Setup Guide
 
-**Give Every AI Your Brain** — in 15 minutes.
+**Give Every AI Your Brain.**
 
 ## Prerequisites
 
-- Node.js 18+ installed
-- npm or yarn
+- Node.js 22+ installed
+- pnpm 9+
 - Git (for cloning)
-- Accounts for AI tools you want to connect
 
 ## Installation
 
-### Step 1: Install the CLI
+### Step 1: Clone and Install
 
 ```bash
-npm install -g naass
-```
-
-Verify installation:
-
-```bash
-naass --version
-# Should output: 1.0.0
+git clone https://github.com/naavos/naavos.git
+cd naavos
+pnpm install
 ```
 
 ### Step 2: Initialize Your Avatar
 
 ```bash
-naass init
+pnpm exec naavos init
 ```
 
 You'll be prompted for:
 - Your name
-- Your MBTI type (optional, defaults to ENTP-A)
-- Your email (for cross-device sync)
+- Communication style
+- Top operating rules
+- Primary AI runtime
 
-This creates `~/.naass/avatar.json` with your cognitive profile.
+This creates `~/.naavos/avatar.json` with your cognitive profile.
 
-### Step 3: Connect Your AI Tools
-
-```bash
-# Connect Claude Code
-naass connect claude-code
-
-# Connect Gemini CLI
-naass connect gemini
-
-# Connect Cursor
-naass connect cursor
-
-# Connect Mavis
-naass connect mavis
-
-# Connect OpenClaw
-naass connect openclaw
-```
-
-### Step 4: Sync
+### Step 3: Compile for Your Target
 
 ```bash
-naass sync
+# Compile for Hermes
+pnpm exec naavos compile --target hermes
+
+# Compile for Claude Code
+pnpm exec naavos compile --target claude-code
+
+# Compile for Cursor
+pnpm exec naavos compile --target cursor
+
+# Compile for ReMe memory
+pnpm exec naavos compile --target reme
 ```
 
-Your avatar is now loaded by all connected AI agents automatically.
+### Step 4: Install
+
+```bash
+# Install into Hermes (with automatic backup)
+pnpm exec naavos install --target hermes
+
+# Install ReMe config into current project
+pnpm exec naavos install --target reme
+```
+
+### Step 5: Verify
+
+```bash
+pnpm exec naavos validate
+pnpm exec naavos doctor
+pnpm exec naavos test
+```
 
 ## Manual Setup (Without CLI)
 
-If you prefer to set up manually:
-
 ### Claude Code
 
-```bash
-# Add this to your ~/.claude/CLAUDE.md
-# OR create ~/.claude/CLAUDE.md if it doesn't exist
-
-# [Paste content from examples/claude-code-setup/CLAUDE.md]
-```
+Copy the generated `CLAUDE.md` to your project root or `~/.claude/`.
 
 ### Gemini CLI
 
-```bash
-# Add to ~/.gemini/GEMINI.md
-
-# [Paste content from examples/gemini-setup/GEMINI.md]
-```
+Copy the generated `GEMINI.md` to your project root or `~/.gemini/`.
 
 ### Cursor
 
-```bash
-# Create or edit .cursorrules in your project root
+Copy the generated `.cursorrules` to your project root or `~/.cursorrules`.
 
-# [Paste content from examples/cursor-setup/.cursorrules]
-```
+### Hermes
 
-### Mavis
+Run `naavos install --target hermes` to write directly to `~/.hermes/`, or export a profile bundle:
 
 ```bash
-# Add to your agent directory
-# ~/.mavis/agents/<your-agent>/agent.md
-
-# [Paste content from examples/mavis-setup/agent.md]
+pnpm exec naavos compile --target hermes --format tar.gz
 ```
+
+Then import via Hermes desktop (`⌘K → Import profile…`) or `hermes profile import avatar-profile.tar.gz`.
+
+### ReMe
+
+Run `naavos install --target reme` to generate `.remerc` and `CLAUDE-reme.md` in your project.
 
 ## Configuration
 
 ### Your Avatar Directory
 
 ```
-~/.naass/
+~/.naavos/
 ├── avatar.json      # Your cognitive profile
-├── kb/              # Knowledge base (optional)
-├── sync/            # Sync state
-└── config.json      # CLI configuration
-```
-
-### Environment Variables
-
-```bash
-# Optional: Set your sync endpoint
-export NAASS_ENDPOINT="https://api.naass.io"
-
-# Optional: Set your user ID
-export NAASS_USER_ID="your-email"
-```
-
-## Updating Your Avatar
-
-### Add a Project
-
-```bash
-naass log "Project Name" "Description" "tag1,tag2"
-```
-
-### Update Your Profile
-
-```bash
-# Edit directly
-nano ~/.naass/avatar.json
-
-# Or use the CLI
-naass update --name "New Name" --mbti "INTJ-A"
-```
-
-### Sync
-
-```bash
-naass sync
+├── compiled/        # Compiled outputs per target
+│   ├── hermes/
+│   ├── claude-code/
+│   └── ...
+├── backups/         # Installation backups (Hermes)
+└── avatar-profile.tar.gz  # Exported Hermes bundle
 ```
 
 ## Troubleshooting
 
-### "Command not found: naass"
+### "Command not found: naavos"
 
 ```bash
-# Ensure npm global bin is in your PATH
-echo $PATH
-
-# If not, add to ~/.zshrc or ~/.bashrc:
-export PATH="$PATH:$(npm bin -g)"
+# Use pnpm exec
+pnpm exec naavos --version
 ```
 
-### "Connection failed"
-
-Check that the target agent's config file exists:
+### "No avatar found"
 
 ```bash
-# For Claude Code
-cat ~/.claude/CLAUDE.md
-
-# For Gemini
-cat ~/.gemini/GEMINI.md
+pnpm exec naavos init
 ```
 
-### Run Health Check
+### Rollback a Hermes installation
 
 ```bash
-naass doctor
+pnpm exec naavos backups
+pnpm exec naavos rollback --id <backup-id>
 ```
 
 ## Next Steps
 
+- [README](../README.md)
 - [API Reference](API.md)
 - [Integration Templates](TEMPLATES/)
-- [Cloudflare Deployment Guide](CLOUDFLARE.md)
-
-## Getting Help
-
-- GitHub Issues: https://github.com/naass/naass/issues
-- Discord: https://discord.gg/naass
-- Email: hello@naass.io
+- [Capability Status](contracts/capability-status.json)

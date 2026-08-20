@@ -1,11 +1,11 @@
-# .cursorrules — N-A-A-S Integration
+# .cursorrules — NAAvOS Integration
 
 Copy this content to your project's `.cursorrules` file (or `~/.cursorrules` for global).
 
 ---
 
 ```markdown
-# Cursor Rules — [YOUR_NAME]'s Profile
+# Cursor Rules — NAAvOS Profile
 
 ## Tone & Style
 
@@ -44,12 +44,12 @@ When I say "turbo", "urgent", or "now":
 ## Knowledge Sync
 
 All project context should be in:
-- `~/.naass/avatar.json` (profile)
-- `~/.naass/kb/` (knowledge base)
+- `~/.naavos/avatar.json` (profile)
+- `~/.naavos/kb/` (knowledge base)
 
 ---
 
-*N-A-A-S: Give Every AI Your Brain*
+*NAAvOS: Give Every AI Your Brain*
 ```
 
 ---

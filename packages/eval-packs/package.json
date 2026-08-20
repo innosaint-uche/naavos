@@ -1,0 +1,18 @@
+{
+  "name": "@naavos/eval-packs",
+  "version": "1.0.0",
+  "description": "NAAvOS eval packs and conformance runner",
+  "main": "src/index.js",
+  "type": "module",
+  "scripts": {
+    "lint": "echo 'Lint not configured'",
+    "test": "node test.js",
+    "typecheck": "echo 'No TypeScript'"
+  },
+  "dependencies": {
+    "@naavos/schema": "workspace:*",
+    "@naavos/compiler": "workspace:*"
+  },
+  "keywords": ["naavos", "eval", "conformance", "fidelity"],
+  "license": "MIT"
+}

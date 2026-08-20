@@ -1,0 +1,29 @@
+{
+  "name": "Core Conformance Pack v1",
+  "version": "1.0.0",
+  "description": "Basic structural and compilation checks for every avatar package",
+  "scenarios": [
+    {
+      "id": "core-1",
+      "type": "schema_valid",
+      "description": "Avatar package must validate against AvatarPackageSchema"
+    },
+    {
+      "id": "core-2",
+      "type": "uuid_fields_present",
+      "description": "Metadata must contain valid UUIDs"
+    },
+    {
+      "id": "core-3",
+      "type": "adapter_compiles",
+      "description": "All declared adapters must compile without error",
+      "targets": ["hermes", "claude-code", "gemini", "openclaw"]
+    },
+    {
+      "id": "core-4",
+      "type": "rule_present",
+      "rule_id": "evidence.no_false_completion",
+      "description": "Critical rule 'evidence.no_false_completion' must be present"
+    }
+  ]
+}

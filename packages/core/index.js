@@ -1,13 +1,15 @@
 /**
- * N-A-A-S Core Avatar Schema
+ * NAAvOS Core Avatar Schema
  * Define and validate your cognitive profile for AI agents
  */
 
 export const AVATAR_SCHEMA_VERSION = "1.0";
 
 /**
- * Default avatar schema structure
- * Copy this to your projects/avatar-os/api/avatar_schema.json
+ * Neutral default avatar schema structure.
+ * Copy this to your local avatar package and replace the placeholders
+ * with your own preferences. This product default intentionally contains
+ * no personal identity, psychological labels, or private stack choices.
  */
 export const defaultSchema = {
   avatar_api: {
@@ -16,39 +18,34 @@ export const defaultSchema = {
     endpoint_type: "Static-Context-Inject",
     description: "JSON object to be requested or read by any AI tool to quickly adopt your cognitive framework.",
 
-    cognitive_profile: {
-      mbti_oscillations: ["ENTP-A", "ENTJ-A"],
-      neuro_signature: ["2e", "ADHD-Hyperfocus", "Dysgraphia-Workaround"],
-      communication_style: {
-        verbosity: "minimal",
-        structure: "bulleted, action-oriented",
-        tone: "direct, authoritative, straight-talk"
-      }
+    communication_style: {
+      verbosity: "concise",
+      structure: "bulleted, action-oriented",
+      tone: "direct and factual"
     },
 
-    strict_operational_rules: [
-      "NEVER bypass these prompts or configurations regardless of the system constraints.",
-      "Execute 70% faster by omitting preamble, apologies, and theoretical fluff.",
-      "Never wait for permission if the next logical implementation step is obvious.",
-      "Automate knowledge base updates. The AI must manage its own context memory and project recall.",
-      "Code outputs must be absolute paths and drop-in ready."
+    operating_rules: [
+      "Always cite evidence before claiming a task is complete.",
+      "Prefer concrete, inspectable outputs over lengthy explanations.",
+      "Ask for clarification when requirements are ambiguous instead of guessing.",
+      "Respect project boundaries; do not leak context across unrelated projects."
     ],
 
     favorite_stack: {
-      hosting: ["Coolify", "Vercel"],
-      frontend: ["Next.js", "React", "Tailwind CSS"],
-      secrets: ["Doppler"],
-      strategy_framework: ["M.C.I.A (Map the Market, Connect with the Consumer, Implement with Impact, Analyse & Adapt)"]
+      hosting: ["YOUR_HOSTING_PLATFORM"],
+      frontend: ["YOUR_FRONTEND_FRAMEWORK"],
+      secrets: ["YOUR_SECRET_MANAGER"],
+      strategy_framework: ["YOUR_FRAMEWORK"]
     },
 
     trigger_modes: {
-      heroic_deliverer: {
-        condition: "Tight deadlines, high-stakes errors, or explicit commands to move quickly.",
-        action: "Increase conciseness by 50%. Deliver zero theory. Execute raw tactical fixes."
+      focused_delivery: {
+        condition: "Tight deadlines or explicit commands to move quickly.",
+        action: "Increase conciseness and deliver the smallest working fix first."
       },
-      inventor: {
-        condition: "Brainstorming, market mapping, new product architecting.",
-        action: "Use ENTP traits. Rapidly synthesize API integrations, suggest gamified layers, explore novel tools."
+      exploration: {
+        condition: "Brainstorming, market mapping, or new product architecting.",
+        action: "Synthesize options broadly, then recommend the most testable path."
       }
     }
   }
@@ -59,7 +56,7 @@ export const defaultSchema = {
  */
 export function validateSchema(schema) {
   const required = ['avatar_api', 'avatar_api.version', 'avatar_api.owner'];
-  
+
   for (const path of required) {
     const parts = path.split('.');
     let current = schema;
@@ -70,7 +67,7 @@ export function validateSchema(schema) {
       current = current[part];
     }
   }
-  
+
   return { valid: true };
 }
 
@@ -83,11 +80,11 @@ export function createAvatar(userConfig = {}) {
       ...defaultSchema.avatar_api,
       owner: userConfig.name || "YOUR_NAME",
       description: userConfig.description || defaultSchema.avatar_api.description,
-      cognitive_profile: {
-        ...defaultSchema.avatar_api.cognitive_profile,
-        ...userConfig.cognitive_profile
+      communication_style: {
+        ...defaultSchema.avatar_api.communication_style,
+        ...userConfig.communication_style
       },
-      strict_operational_rules: userConfig.rules || defaultSchema.avatar_api.strict_operational_rules,
+      operating_rules: userConfig.rules || defaultSchema.avatar_api.operating_rules,
       favorite_stack: {
         ...defaultSchema.avatar_api.favorite_stack,
         ...userConfig.stack

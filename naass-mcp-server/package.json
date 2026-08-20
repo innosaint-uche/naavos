@@ -1,7 +1,0 @@
-{
-  "name": "@naass/mcp-server",
-  "version": "1.0.0",
-  "description": "N-A-A-S MCP Server for Cloudflare Workers",
-  "main": "src/index.js",
-  "type": "module"
-}

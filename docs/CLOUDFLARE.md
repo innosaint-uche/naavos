@@ -1,15 +1,15 @@
-# Deploy N-A-A-S to Cloudflare
+# Deploy NAAvOS to Cloudflare
 
 ## Prerequisites
 
 - Cloudflare account
-- Wrangler CLI: `npm install -g wrangler`
-- Node.js 18+
+- Wrangler CLI: `pnpm add -g wrangler`
+- Node.js 22+
 
 ## Deploy MCP Server
 
 ```bash
-cd naass-mcp-server
+cd apps/mcp-server
 
 # Login to Cloudflare
 wrangler login
@@ -24,7 +24,7 @@ wrangler deploy
 ## wrangler.toml
 
 ```toml
-name = "naass-mcp-server"
+name = "naavos-mcp-server"
 main = "src/index.js"
 compatibility_date = "2024-01-01"
 
@@ -38,22 +38,22 @@ class = "AvatarStore"
 ## Deploy Dashboard
 
 ```bash
-cd dashboard
+cd apps/dashboard
 
 # Build
-npm run build
+pnpm run build
 
 # Deploy to Pages
-npx wrangler pages deploy .next/static --project-name=naas-dashboard
+npx wrangler pages deploy .next/static --project-name=naavos-dashboard
 ```
 
 ## Environment Variables
 
 ```bash
 # In Cloudflare dashboard
-NAASS_D1_DATABASE=xxx
-NAASS_R2_BUCKET=xxx
-NAASS_API_KEY=xxx
+NAAVOS_D1_DATABASE=xxx
+NAAVOS_R2_BUCKET=xxx
+NAAVOS_API_KEY=xxx
 ```
 
 ## MCP Endpoints
@@ -61,7 +61,7 @@ NAASS_API_KEY=xxx
 After deployment, your MCP server will be available at:
 
 ```
-https://naass-mcp-server.your-subdomain.workers.dev/mcp/v1/
+https://naavos-mcp-server.your-subdomain.workers.dev/mcp/v1/
 ```
 
 ## CORS Configuration
@@ -70,7 +70,7 @@ Update `src/index.js` with your production domain:
 
 ```javascript
 const corsHeaders = {
-  'Access-Control-Allow-Origin': 'https://naass.io',
+  'Access-Control-Allow-Origin': 'https://naavos.io',
   // ...
 };
 ```

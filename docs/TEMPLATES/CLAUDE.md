@@ -1,4 +1,4 @@
-# CLAUDE.md — N-A-A-S Integration
+# CLAUDE.md — NAAvOS Integration
 
 Copy this content to your `~/.claude/CLAUDE.md` file.
 
@@ -25,10 +25,10 @@ You are working with **[YOUR_NAME]**.
 
 ## My Tech Stack
 
-- **Hosting:** Coolify, Vercel
-- **Frontend:** Next.js, React, Tailwind CSS
-- **Secrets:** Doppler
-- **CI/CD:** GitHub Actions
+- **Hosting:** [YOUR_HOSTING_PLATFORM]
+- **Frontend:** [YOUR_FRONTEND_FRAMEWORK]
+- **Secrets:** [YOUR_SECRET_MANAGER]
+- **CI/CD:** [YOUR_CI_CD_PLATFORM]
 
 ## Trigger Modes
 
@@ -44,8 +44,11 @@ You are working with **[YOUR_NAME]**.
 
 ## Project Context
 
-[Load from: ~/.naass/avatar.json or projects_registry.json]
+[Load from: ~/.naavos/avatar.json or projects_registry.json]
 
 ---
 
-*This profile was loaded via N-A-A-S. Update it with: `naass sync`*
+*This profile was loaded via NAAvOS. Update it with: `naavos sync`*
+```
+
+---

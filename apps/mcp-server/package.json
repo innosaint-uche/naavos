@@ -1,0 +1,15 @@
+{
+  "name": "@naavos/mcp-server",
+  "version": "1.0.0",
+  "description": "NAAvOS MCP server (STDIO-first prototype; HTTP transport to follow)",
+  "main": "src/index.js",
+  "type": "module",
+  "scripts": {
+    "dev": "wrangler dev",
+    "lint": "echo 'Lint not configured in M0'",
+    "test": "node --check src/index.js",
+    "typecheck": "echo 'No TypeScript in M0'"
+  },
+  "keywords": ["naavos", "mcp", "avatar"],
+  "license": "MIT"
+}
