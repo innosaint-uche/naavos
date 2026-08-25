@@ -15,6 +15,9 @@ evidence recorded in `docs/contracts/capability-status.json`.
 The verified source repository is [github.com/innosaint-uche/naavos](https://github.com/innosaint-uche/naavos). This URL
 is the source authority; do not substitute retired or unresolved API hosts for it.
 
+The complete product request and non-negotiable release rules are in the
+[Product Request and Release Charter](docs/PRODUCT_REQUEST_AND_RELEASE_CHARTER.md).
+
 ## What It Does
 
 - **Compile Your Persona:** Define your identity, rules, and knowledge sources in a single, versioned
