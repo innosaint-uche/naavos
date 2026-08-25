@@ -7,6 +7,14 @@ dist/
 build/
 .turbo/
 *.local
+*.tsbuildinfo
+tmp/
+
+# Generated test/build output
+packages/schema/vitest.config.js
+packages/schema/vitest.config.js.map
+packages/schema/vitest.config.d.ts
+packages/schema/vitest.config.d.ts.map
 
 # IDE
 .vscode/
