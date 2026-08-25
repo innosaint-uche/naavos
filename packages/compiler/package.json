@@ -12,6 +12,10 @@
   "dependencies": {
     "@naavos/schema": "workspace:*"
   },
-  "keywords": ["naavos", "compiler", "avatar"],
+  "keywords": [
+    "naavos",
+    "compiler",
+    "avatar"
+  ],
   "license": "MIT"
 }

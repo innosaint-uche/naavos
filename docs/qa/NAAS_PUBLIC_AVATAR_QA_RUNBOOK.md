@@ -1,7 +1,7 @@
 # NAAS Public Avatar QA Runbook
 
-**Purpose:** Evidence gates for an open-source, user-personalisable Avatar OS.
-**Rule:** A command that exits successfully is not enough; reread state, restart the relevant process and verify semantics.
+**Purpose:** Evidence gates for an open-source, user-personalisable Avatar OS. **Rule:** A command that exits
+successfully is not enough; reread state, restart the relevant process and verify semantics.
 
 ## 0. Clean-room preflight
 
@@ -13,7 +13,8 @@ corepack pnpm install --frozen-lockfile
 ```
 
 **Pass:** supported Node version, pinned pnpm, clean dependency install and no undeclared package-manager dependency.
-**Fail:** missing binary, lock mismatch, install relying on an existing `node_modules`, or unrelated dirty files overwritten.
+**Fail:** missing binary, lock mismatch, install relying on an existing `node_modules`, or unrelated dirty files
+overwritten.
 
 ## 1. Repository gates
 
@@ -25,7 +26,8 @@ corepack pnpm test
 corepack pnpm format:check
 ```
 
-Record each command, exit code, duration and artifact path. Turbo must run all declared workspaces; no package may advertise a placeholder test or lint script as a release gate.
+Record each command, exit code, duration and artifact path. Turbo must run all declared workspaces; no package may
+advertise a placeholder test or lint script as a release gate.
 
 ## 2. Schema and neutral fixture gates
 
@@ -56,7 +58,8 @@ node packages/cli/bin/naavos.js compile --target claude-code --dry-run
 node packages/cli/bin/naavos.js compile --target gemini --dry-run
 ```
 
-Compile the same source twice and compare hashes. The output must be deterministic, target-scoped and free of credentials. Unsupported fields must produce explicit warnings or fail according to adapter policy.
+Compile the same source twice and compare hashes. The output must be deterministic, target-scoped and free of
+credentials. Unsupported fields must produce explicit warnings or fail according to adapter policy.
 
 ## 4. Safe install and rollback
 
@@ -168,15 +171,15 @@ Release only when all are true:
 
 ## Current run record — 2026-08-23
 
-| Check | Result |
-|---|---|
-| Core direct test | PASS |
-| Schema direct test | PASS |
-| Root Turbo test | FAIL: Turbo cannot resolve pnpm binary |
-| Schema build | FAIL: `tsc` missing |
-| Compiler/eval/CLI direct tests | FAIL: schema `dist/index.js` missing |
-| Dashboard build | BLOCKED: filesystem `EPERM` on `.next/trace` |
-| MCP lifecycle | NOT PASS: current server is REST-like, not MCP JSON-RPC |
-| Safe install/reload/rollback | NOT PROVEN |
-| Behavioral conformance | NOT PROVEN |
-| Public release | NO-GO |
+| Check                          | Result                                                  |
+| ------------------------------ | ------------------------------------------------------- |
+| Core direct test               | PASS                                                    |
+| Schema direct test             | PASS                                                    |
+| Root Turbo test                | FAIL: Turbo cannot resolve pnpm binary                  |
+| Schema build                   | FAIL: `tsc` missing                                     |
+| Compiler/eval/CLI direct tests | FAIL: schema `dist/index.js` missing                    |
+| Dashboard build                | BLOCKED: filesystem `EPERM` on `.next/trace`            |
+| MCP lifecycle                  | NOT PASS: current server is REST-like, not MCP JSON-RPC |
+| Safe install/reload/rollback   | NOT PROVEN                                              |
+| Behavioral conformance         | NOT PROVEN                                              |
+| Public release                 | NO-GO                                                   |

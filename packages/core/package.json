@@ -10,6 +10,10 @@
     "typecheck": "node --check index.js && node --check validate.js",
     "validate": "node validate.js"
   },
-  "keywords": ["naavos", "avatar", "cognitive-profile"],
+  "keywords": [
+    "naavos",
+    "avatar",
+    "cognitive-profile"
+  ],
   "license": "MIT"
 }

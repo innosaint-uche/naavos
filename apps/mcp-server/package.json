@@ -11,6 +11,10 @@
     "typecheck": "node --check src/index.js",
     "build": "node --check src/index.js"
   },
-  "keywords": ["naavos", "mcp", "avatar"],
+  "keywords": [
+    "naavos",
+    "mcp",
+    "avatar"
+  ],
   "license": "MIT"
 }

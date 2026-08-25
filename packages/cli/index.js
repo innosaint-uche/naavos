@@ -4,19 +4,19 @@
  * Phase 1: Schema + Compiler wired in
  */
 
-import { Command } from 'commander';
-import chalk from 'chalk';
-import ora from 'ora';
-import inquirer from 'inquirer';
-import fs from 'fs';
-import path from 'path';
-import { fileURLToPath } from 'url';
-import { createGzip } from 'zlib';
-import { pipeline } from 'stream/promises';
-import { PassThrough } from 'stream';
-import { AvatarPackageSchema } from '@naavos/schema';
 import { compile, listTargets } from '@naavos/compiler';
 import { listPacks, runEval } from '@naavos/eval-packs';
+import { AvatarPackageSchema } from '@naavos/schema';
+import chalk from 'chalk';
+import { Command } from 'commander';
+import fs from 'fs';
+import inquirer from 'inquirer';
+import ora from 'ora';
+import path from 'path';
+import { PassThrough } from 'stream';
+import { pipeline } from 'stream/promises';
+import { fileURLToPath } from 'url';
+import { createGzip } from 'zlib';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -30,10 +30,7 @@ const logo = `
    AI Avatar OS System
 `;
 
-program
-  .name('naavos')
-  .description('NAAvOS: Give Every AI Your Brain')
-  .version('1.0.0');
+program.name('naavos').description('NAAvOS: Give Every AI Your Brain').version('1.0.0');
 
 function getAvatarPath() {
   return path.join(process.env.HOME, '.naavos', 'avatar.json');
@@ -87,7 +84,7 @@ async function createBackup(target, data) {
     target,
     created_at: new Date().toISOString(),
     package_id: data.metadata?.package_id,
-    files: Array.from(files.keys())
+    files: Array.from(files.keys()),
   });
   saveJournal(journal);
 
@@ -101,7 +98,7 @@ async function restoreBackup(backupId) {
   }
 
   const journal = loadJournal();
-  const entry = journal.find(j => j.id === backupId);
+  const entry = journal.find((j) => j.id === backupId);
   if (!entry) {
     throw new Error(`Backup not found in journal: ${backupId}`);
   }
@@ -131,39 +128,39 @@ function listBackups() {
 
 async function createTarGz(files, outputPath) {
   const tarParts = [];
-  
+
   for (const [filePath, content] of files) {
     const contentBuffer = Buffer.from(content, 'utf-8');
     const header = Buffer.alloc(512);
-    
+
     const nameBytes = Buffer.from(filePath, 'utf-8');
     nameBytes.copy(header, 0, 0, Math.min(100, nameBytes.length));
-    
+
     const mode = Buffer.alloc(8);
     mode.write('0000644', 0, 7, 'ascii');
     mode.copy(header, 100);
-    
+
     const uid = Buffer.alloc(8);
     uid.write('0000000', 0, 7, 'ascii');
     uid.copy(header, 108);
-    
+
     const gid = Buffer.alloc(8);
     gid.write('0000000', 0, 7, 'ascii');
     gid.copy(header, 116);
-    
+
     const size = Buffer.alloc(12);
     size.write(contentBuffer.length.toString(8).padStart(11, '0'), 0, 11, 'ascii');
     size.copy(header, 124);
-    
+
     const mtime = Buffer.alloc(12);
     mtime.write('00000000000', 0, 11, 'ascii');
     mtime.copy(header, 136);
-    
+
     header.fill(' ', 148, 156);
-    
+
     Buffer.from('ustar', 'ascii').copy(header, 257, 0, 5);
     Buffer.from('00', 'ascii').copy(header, 262, 0, 2);
-    
+
     let checksum = 0;
     for (let i = 0; i < 512; i++) {
       checksum += header[i];
@@ -172,27 +169,26 @@ async function createTarGz(files, outputPath) {
     header.write(checksumStr, 148, 6, 'ascii');
     header.write('\0', 154, 1);
     header.write(' ', 155, 1);
-    
+
     tarParts.push(header);
-    
+
     const paddedLength = Math.ceil(contentBuffer.length / 512) * 512;
-    const paddedContent = Buffer.concat([contentBuffer, Buffer.alloc(paddedLength - contentBuffer.length)]);
+    const paddedContent = Buffer.concat([
+      contentBuffer,
+      Buffer.alloc(paddedLength - contentBuffer.length),
+    ]);
     tarParts.push(paddedContent);
   }
-  
+
   tarParts.push(Buffer.alloc(1024));
-  
+
   const tarBuffer = Buffer.concat(tarParts);
-  
+
   const pass = new PassThrough();
   pass.write(tarBuffer);
   pass.end();
-  
-  await pipeline(
-    pass,
-    createGzip(),
-    fs.createWriteStream(outputPath)
-  );
+
+  await pipeline(pass, createGzip(), fs.createWriteStream(outputPath));
 }
 
 program
@@ -209,26 +205,26 @@ program
           type: 'input',
           name: 'name',
           message: 'Your name:',
-          default: 'Your Name'
+          default: 'Your Name',
         },
         {
           type: 'input',
           name: 'style',
           message: 'Communication style (concise / detailed / balanced):',
-          default: 'concise'
+          default: 'concise',
         },
         {
           type: 'input',
           name: 'rules',
           message: 'Top 3 operating rules (comma-separated):',
-          default: 'Execute 70% faster, Zero fluff, Cite evidence before claiming completion'
+          default: 'Execute 70% faster, Zero fluff, Cite evidence before claiming completion',
         },
         {
           type: 'list',
           name: 'target',
           message: 'Primary AI runtime:',
-          choices: listTargets()
-        }
+          choices: listTargets(),
+        },
       ]);
 
       const avatarDir = path.join(process.env.HOME, '.naavos');
@@ -238,50 +234,54 @@ program
         metadata: {
           package_id: crypto.randomUUID(),
           owner_id: crypto.randomUUID(),
-          schema_version: "1.0.0",
-          semantic_version: "1.0.0",
+          schema_version: '1.0.0',
+          semantic_version: '1.0.0',
           created_at: new Date().toISOString(),
           updated_at: new Date().toISOString(),
-          source_provenance: "created-from-cli"
+          source_provenance: 'created-from-cli',
         },
         identity: {
           name: answers.name,
-          roles: []
+          roles: [],
         },
         communication: {
           tone: 'Direct, authoritative',
           structure: 'Bulleted, action-oriented',
-          verbosity: answers.style
+          verbosity: answers.style,
         },
-        operating_rules: answers.rules.split(',').map(r => r.trim()).filter(Boolean).map((statement, idx) => ({
-          id: `rule.${idx}`,
-          statement,
-          priority: 80 - idx,
-          tests: []
-        })),
+        operating_rules: answers.rules
+          .split(',')
+          .map((r) => r.trim())
+          .filter(Boolean)
+          .map((statement, idx) => ({
+            id: `rule.${idx}`,
+            statement,
+            priority: 80 - idx,
+            tests: [],
+          })),
         privacy: {
           consents: {
             'allow-cloud-sync': false,
-            'allow-telemetry': false
-          }
+            'allow-telemetry': false,
+          },
         },
         adapters: [
-          { host_id: answers.target, min_adapter_version: "1.0.0", unsupported_behaviour_policy: "warn" }
+          {
+            host_id: answers.target,
+            min_adapter_version: '1.0.0',
+            unsupported_behaviour_policy: 'warn',
+          },
         ],
-        evals: []
+        evals: [],
       };
 
-      fs.writeFileSync(
-        path.join(avatarDir, 'avatar.json'),
-        JSON.stringify(schema, null, 2)
-      );
+      fs.writeFileSync(path.join(avatarDir, 'avatar.json'), JSON.stringify(schema, null, 2));
 
       spinner.succeed(chalk.green('Avatar initialized!'));
       console.log(chalk.bold('\nNext steps:'));
       console.log(chalk.gray('  naavos validate            # Validate your avatar'));
       console.log(chalk.gray('  naavos compile             # Compile for your target'));
       console.log(chalk.gray('  naavos install             # Install into your AI tool'));
-
     } catch (error) {
       spinner.fail(chalk.red('Failed: ' + error.message));
     }
@@ -298,7 +298,10 @@ program
       spinner.succeed(chalk.green('Avatar package is valid.'));
     } catch (error) {
       spinner.fail(chalk.red('Validation failed:'));
-      console.error(error.errors?.map(e => `  - ${e.path.join('.')}: ${e.message}`).join('\n') || error.message);
+      console.error(
+        error.errors?.map((e) => `  - ${e.path.join('.')}: ${e.message}`).join('\n') ||
+          error.message
+      );
       process.exit(1);
     }
   });
@@ -369,7 +372,7 @@ program
     try {
       const data = loadAvatar();
       const target = options.target || data.adapters?.[0]?.host_id || 'hermes';
-      
+
       if (target !== 'hermes') {
         throw new Error('Export is only supported for the Hermes target.');
       }
@@ -377,13 +380,14 @@ program
       const compiledDir = path.join(process.env.HOME, '.naavos', 'compiled', target);
       if (!fs.existsSync(compiledDir)) {
         const files = compile(data, target);
-        const outputPath = options.output || path.join(process.env.HOME, '.naavos', 'avatar-profile.tar.gz');
+        const outputPath =
+          options.output || path.join(process.env.HOME, '.naavos', 'avatar-profile.tar.gz');
         fs.mkdirSync(path.dirname(outputPath), { recursive: true });
         await createTarGz(files, outputPath);
         spinner.succeed(chalk.green(`Exported Hermes profile bundle to ${outputPath}`));
       } else {
         const files = new Map();
-        
+
         function walkDir(dir, base) {
           const entries = fs.readdirSync(dir, { withFileTypes: true });
           for (const entry of entries) {
@@ -396,9 +400,10 @@ program
             }
           }
         }
-        
+
         walkDir(compiledDir, compiledDir);
-        const outputPath = options.output || path.join(process.env.HOME, '.naavos', 'avatar-profile.tar.gz');
+        const outputPath =
+          options.output || path.join(process.env.HOME, '.naavos', 'avatar-profile.tar.gz');
         fs.mkdirSync(path.dirname(outputPath), { recursive: true });
         await createTarGz(files, outputPath);
         spinner.succeed(chalk.green(`Exported Hermes profile bundle to ${outputPath}`));
@@ -425,17 +430,19 @@ program
 
       const compiledDir = path.join(process.env.HOME, '.naavos', 'compiled', target);
       if (!fs.existsSync(compiledDir)) {
-        throw new Error(`Nothing compiled for target "${target}". Run naavos compile --target ${target} first.`);
+        throw new Error(
+          `Nothing compiled for target "${target}". Run naavos compile --target ${target} first.`
+        );
       }
 
       if (target === 'hermes') {
         const hermesHome = process.env.HERMES_HOME || path.join(process.env.HOME, '.hermes');
-        
+
         if (!options.dryRun) {
           const backupId = await createBackup(target, data);
           console.log(chalk.gray(`Backup created: ${backupId}`));
         }
-        
+
         const files = compile(data, target);
         for (const [relativePath, content] of files) {
           const dest = path.join(hermesHome, relativePath);
@@ -446,7 +453,9 @@ program
             fs.writeFileSync(dest, content);
           }
         }
-        spinner.succeed(chalk.green(options.dryRun ? 'Dry-run complete.' : `Installed into ${hermesHome}`));
+        spinner.succeed(
+          chalk.green(options.dryRun ? 'Dry-run complete.' : `Installed into ${hermesHome}`)
+        );
       } else if (target === 'reme') {
         const projectRoot = process.cwd();
         const files = compile(data, target);
@@ -459,7 +468,7 @@ program
             fs.writeFileSync(dest, content);
           }
         }
-        
+
         const hermesSkill = path.join(projectRoot, 'skills', 'reme_memory', 'SKILL.md');
         const hermesHome = process.env.HERMES_HOME || path.join(process.env.HOME, '.hermes');
         const destSkill = path.join(hermesHome, 'skills', 'reme_memory', 'SKILL.md');
@@ -468,10 +477,18 @@ program
           fs.copyFileSync(hermesSkill, destSkill);
           console.log(chalk.gray(`Installed ReMe skill into Hermes: ${destSkill}`));
         }
-        
-        spinner.succeed(chalk.green(options.dryRun ? 'Dry-run complete.' : `Installed ReMe config into ${projectRoot}`));
+
+        spinner.succeed(
+          chalk.green(
+            options.dryRun ? 'Dry-run complete.' : `Installed ReMe config into ${projectRoot}`
+          )
+        );
       } else {
-        spinner.fail(chalk.yellow(`Direct install for target "${target}" is not implemented yet. Copy files from ${compiledDir} manually.`));
+        spinner.fail(
+          chalk.yellow(
+            `Direct install for target "${target}" is not implemented yet. Copy files from ${compiledDir} manually.`
+          )
+        );
       }
     } catch (error) {
       spinner.fail(chalk.red('Installation failed: ' + error.message));
@@ -501,7 +518,7 @@ program
       console.log(`  ${icon} ${check.name}`);
     }
 
-    const passed = checks.filter(c => c.pass).length;
+    const passed = checks.filter((c) => c.pass).length;
     console.log(chalk.gray(`\n${passed}/${checks.length} checks passed`));
   });
 
@@ -516,7 +533,7 @@ program
       const data = loadAvatar();
       AvatarPackageSchema.parse(data);
 
-      const packs = options.pack ? [options.pack] : (data.evals || listPacks());
+      const packs = options.pack ? [options.pack] : data.evals || listPacks();
       if (packs.length === 0) {
         spinner.warn('No eval packs specified and none found in avatar.evals.');
         return;
@@ -536,8 +553,11 @@ program
 
       console.log(chalk.cyan('\n=== Conformance Results ===\n'));
       for (const result of results) {
-        const color = result.score === 100 ? chalk.green : result.score >= 80 ? chalk.yellow : chalk.red;
-        console.log(`${color(result.packName)} — ${result.passed}/${result.total} passed (${result.score}%)\n`);
+        const color =
+          result.score === 100 ? chalk.green : result.score >= 80 ? chalk.yellow : chalk.red;
+        console.log(
+          `${color(result.packName)} — ${result.passed}/${result.total} passed (${result.score}%)\n`
+        );
         for (const r of result.results) {
           const icon = r.pass ? chalk.green('✓') : chalk.red('✗');
           console.log(`  ${icon} ${r.id}: ${r.evidence}`);
@@ -547,10 +567,14 @@ program
 
       const overallPassed = results.reduce((sum, r) => sum + r.passed, 0);
       const overallTotal = results.reduce((sum, r) => sum + r.total, 0);
-      const overallScore = overallTotal === 0 ? 0 : Math.round((overallPassed / overallTotal) * 100);
-      const overallColor = overallScore === 100 ? chalk.green : overallScore >= 80 ? chalk.yellow : chalk.red;
+      const overallScore =
+        overallTotal === 0 ? 0 : Math.round((overallPassed / overallTotal) * 100);
+      const overallColor =
+        overallScore === 100 ? chalk.green : overallScore >= 80 ? chalk.yellow : chalk.red;
 
-      spinner.succeed(overallColor(`Fidelity score: ${overallPassed}/${overallTotal} (${overallScore}%)`));
+      spinner.succeed(
+        overallColor(`Fidelity score: ${overallPassed}/${overallTotal} (${overallScore}%)`)
+      );
     } catch (error) {
       spinner.fail(chalk.red('Test run failed: ' + error.message));
       process.exit(1);
@@ -591,7 +615,7 @@ program
       }
 
       const backupId = options.id || backups[0].id;
-      const backup = backups.find(b => b.id === backupId);
+      const backup = backups.find((b) => b.id === backupId);
       if (!backup) {
         console.log(chalk.red(`Backup not found: ${backupId}`));
         console.log(chalk.gray('Available backups:'));

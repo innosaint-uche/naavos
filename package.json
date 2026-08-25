@@ -8,8 +8,8 @@
     "lint": "turbo run lint",
     "typecheck": "turbo run typecheck",
     "test": "turbo run test",
-    "format": "prettier --write \"**/*.{ts,tsx,js,jsx,md,json,yaml,yml}\"",
-    "format:check": "prettier --check \"**/*.{ts,tsx,js,jsx,md,json,yaml,yml}\"",
+    "format": "node scripts/check-format.mjs --write",
+    "format:check": "node scripts/check-format.mjs",
     "secrets:scan": "gitleaks detect --source . --config .gitleaks.toml -v",
     "prepare": "husky install"
   },

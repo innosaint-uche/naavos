@@ -18,7 +18,11 @@
     "test:watch": "node --watch test.js",
     "typecheck": "node --check src/index.js"
   },
-  "keywords": ["naavos", "avatar", "schema"],
+  "keywords": [
+    "naavos",
+    "avatar",
+    "schema"
+  ],
   "license": "MIT",
   "dependencies": {
     "zod": "^3.23.0"

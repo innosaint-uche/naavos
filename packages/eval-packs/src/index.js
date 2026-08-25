@@ -1,8 +1,8 @@
+import { compile } from '@naavos/compiler';
+import { AvatarPackageSchema } from '@naavos/schema';
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { AvatarPackageSchema } from '@naavos/schema';
-import { compile, listTargets } from '@naavos/compiler';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const PACKS_DIR = path.join(__dirname, '..', 'packs');
@@ -17,7 +17,7 @@ export function loadPack(packId) {
 
 export function listPacks() {
   if (!fs.existsSync(PACKS_DIR)) return [];
-  return fs.readdirSync(PACKS_DIR).filter(name => {
+  return fs.readdirSync(PACKS_DIR).filter((name) => {
     const p = path.join(PACKS_DIR, name, 'pack.json');
     return fs.existsSync(p);
   });
@@ -33,7 +33,7 @@ export async function runEval(packId, avatarData) {
     results.push(result);
   }
 
-  const passed = results.filter(r => r.pass).length;
+  const passed = results.filter((r) => r.pass).length;
   const total = results.length;
   const score = total === 0 ? 0 : Math.round((passed / total) * 100);
 
@@ -44,7 +44,7 @@ export async function runEval(packId, avatarData) {
     passed,
     failed: total - passed,
     score,
-    results
+    results,
   };
 }
 
@@ -60,12 +60,14 @@ export async function runScenario(scenario, avatar) {
         pass = true;
         evidence.push('Avatar package parses against Zod schema');
       } catch (e) {
-        evidence.push(`Schema error: ${e.errors?.map(i => i.path.join('.') + ': ' + i.message).join('; ') || e.message}`);
+        evidence.push(
+          `Schema error: ${e.errors?.map((i) => i.path.join('.') + ': ' + i.message).join('; ') || e.message}`
+        );
       }
       break;
 
     case 'adapter_compiles': {
-      const targets = scenario.targets || ctx.avatar.adapters.map(a => a.host_id);
+      const targets = scenario.targets || ctx.avatar.adapters.map((a) => a.host_id);
       const failures = [];
       for (const target of targets) {
         try {
@@ -81,7 +83,7 @@ export async function runScenario(scenario, avatar) {
 
     case 'rule_present': {
       const ruleId = scenario.rule_id;
-      const rule = ctx.avatar.operating_rules.find(r => r.id === ruleId);
+      const rule = ctx.avatar.operating_rules.find((r) => r.id === ruleId);
       pass = !!rule;
       evidence.push(pass ? `Rule ${ruleId} found` : `Rule ${ruleId} missing`);
       break;
@@ -96,7 +98,9 @@ export async function runScenario(scenario, avatar) {
         if (pattern.test(content)) hits.push(target);
       }
       pass = hits.length === 0;
-      evidence.push(pass ? `No forbidden pattern in ${target}` : `Forbidden pattern found in ${hits.join(', ')}`);
+      evidence.push(
+        pass ? `No forbidden pattern in ${target}` : `Forbidden pattern found in ${hits.join(', ')}`
+      );
       break;
     }
 
@@ -127,7 +131,7 @@ export async function runScenario(scenario, avatar) {
     id: scenario.id,
     type: scenario.type,
     pass,
-    evidence: evidence.join('; ')
+    evidence: evidence.join('; '),
   };
 }
 

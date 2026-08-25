@@ -22,7 +22,9 @@
       "last_verified": "2026-08-26",
       "evidence": "central QA artifact run-2026-08-25T23-01-45-317Z/naas-public/evidence.json; Coolify container image and SOURCE_COMMIT readback",
       "status": "verified",
-      "known_limits": ["Coolify control-plane deployment record was not used; the labeled application container was reconciled directly with a rollback copy"]
+      "known_limits": [
+        "Coolify control-plane deployment record was not used; the labeled application container was reconciled directly with a rollback copy"
+      ]
     },
     {
       "project": "NAAS",

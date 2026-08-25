@@ -41,7 +41,7 @@ function generateSoul(pkg) {
 
 ## Operating Rules
 
-${rules.map(r => `- **${r.id || r.statement.slice(0, 30)}:** ${r.statement} (priority: ${r.priority})`).join('\n')}
+${rules.map((r) => `- **${r.id || r.statement.slice(0, 30)}:** ${r.statement} (priority: ${r.priority})`).join('\n')}
 
 ## Privacy
 
@@ -76,7 +76,7 @@ Activate when the user requests avatar-specific behavior, persona alignment, or 
 
 ## Operating Rules
 
-${rules.map(r => `- **${r.id || r.statement.slice(0, 30)}:** ${r.statement}`).join('\n')}
+${rules.map((r) => `- **${r.id || r.statement.slice(0, 30)}:** ${r.statement}`).join('\n')}
 
 ## Related Files
 
@@ -125,7 +125,7 @@ function generateMemory(pkg) {
 
 ## Operating Rules
 
-${rules.map(r => `- **${r.id || r.statement.slice(0, 30)}:** ${r.statement}`).join('\n')}
+${rules.map((r) => `- **${r.id || r.statement.slice(0, 30)}:** ${r.statement}`).join('\n')}
 
 ## Last Updated
 

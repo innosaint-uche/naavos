@@ -23,7 +23,7 @@ export function cursorAdapter(pkg) {
 
 ## Operating Rules
 
-${rules.map(r => `- **${r.id || r.statement.slice(0, 30)}:** ${r.statement} (priority: ${r.priority})`).join('\n')}
+${rules.map((r) => `- **${r.id || r.statement.slice(0, 30)}:** ${r.statement} (priority: ${r.priority})`).join('\n')}
 
 ## Privacy
 

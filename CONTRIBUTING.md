@@ -16,11 +16,10 @@ pnpm install
 pnpm run doctor
 ```
 
-The repository is currently maintained as a controlled development release.
-Do not publish a fork, package, or deployment as an official NAAvOS release
-unless the release evidence in `docs/DEPLOYMENT_EVIDENCE.md` is complete.
-The public repository URL must be verified before it is advertised; an old or
-unresolved GitHub URL is not a source authority.
+The repository is currently maintained as a controlled development release. Do not publish a fork, package, or
+deployment as an official NAAvOS release unless the release evidence in `docs/DEPLOYMENT_EVIDENCE.md` is complete. The
+public repository URL must be verified before it is advertised; an old or unresolved GitHub URL is not a source
+authority.
 
 ## Development
 
@@ -48,6 +47,7 @@ cd apps/dashboard && pnpm run dev
 Format: `type(scope): description`
 
 Types:
+
 - `feat` — New feature
 - `fix` — Bug fix
 - `docs` — Documentation

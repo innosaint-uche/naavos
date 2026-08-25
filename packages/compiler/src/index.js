@@ -1,9 +1,9 @@
 import { AvatarPackageSchema } from '@naavos/schema';
-import { hermesAdapter } from './adapters/hermes.js';
 import { claudeCodeAdapter } from './adapters/claude-code.js';
-import { geminiAdapter } from './adapters/gemini.js';
-import { openclawAdapter } from './adapters/openclaw.js';
 import { cursorAdapter } from './adapters/cursor.js';
+import { geminiAdapter } from './adapters/gemini.js';
+import { hermesAdapter } from './adapters/hermes.js';
+import { openclawAdapter } from './adapters/openclaw.js';
 import { remeAdapter } from './adapters/reme.js';
 
 const ADAPTERS = {

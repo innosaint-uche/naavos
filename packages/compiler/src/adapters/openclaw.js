@@ -9,7 +9,7 @@ Working on behalf of **${identity.name || 'User'}**.
 
 ## Operating Rules
 
-${rules.map(r => `- **${r.id || r.statement.slice(0, 30)}:** ${r.statement}`).join('\n')}
+${rules.map((r) => `- **${r.id || r.statement.slice(0, 30)}:** ${r.statement}`).join('\n')}
 
 ## Communication
 

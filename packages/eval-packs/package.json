@@ -13,6 +13,11 @@
     "@naavos/schema": "workspace:*",
     "@naavos/compiler": "workspace:*"
   },
-  "keywords": ["naavos", "eval", "conformance", "fidelity"],
+  "keywords": [
+    "naavos",
+    "eval",
+    "conformance",
+    "fidelity"
+  ],
   "license": "MIT"
 }

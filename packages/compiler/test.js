@@ -2,13 +2,20 @@ import assert from 'node:assert/strict';
 import { compile, listTargets } from './src/index.js';
 
 const sample = {
-  metadata: { package_id: "a1b2c3d4-e5f6-7777-8888-999999999999", owner_id: "f6e5d4c3-b2a1-8888-7777-666666666666", schema_version: "1.0.0", semantic_version: "1.0.0", created_at: new Date().toISOString(), updated_at: new Date().toISOString() },
-  identity: { name: "Test" },
-  communication: { tone: "Direct", structure: "Bulleted", verbosity: "Minimal" },
-  operating_rules: [{ id: "r1", statement: "Be fast", priority: 80 }],
+  metadata: {
+    package_id: 'a1b2c3d4-e5f6-7777-8888-999999999999',
+    owner_id: 'f6e5d4c3-b2a1-8888-7777-666666666666',
+    schema_version: '1.0.0',
+    semantic_version: '1.0.0',
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
+  },
+  identity: { name: 'Test' },
+  communication: { tone: 'Direct', structure: 'Bulleted', verbosity: 'Minimal' },
+  operating_rules: [{ id: 'r1', statement: 'Be fast', priority: 80 }],
   privacy: { consents: {} },
-  adapters: [{ host_id: "hermes", min_adapter_version: "1.0.0" }],
-  evals: []
+  adapters: [{ host_id: 'hermes', min_adapter_version: '1.0.0' }],
+  evals: [],
 };
 
 const targets = listTargets();
@@ -39,7 +46,10 @@ assert.ok(cursorFiles.has('.cursorrules'), 'cursor output should include .cursor
 
 const remeFiles = compile(sample, 'reme');
 assert.ok(remeFiles.has('.remerc'), 'reme output should include .remerc');
-assert.ok(remeFiles.has('skills/reme_memory/SKILL.md'), 'reme output should include skills/reme_memory/SKILL.md');
+assert.ok(
+  remeFiles.has('skills/reme_memory/SKILL.md'),
+  'reme output should include skills/reme_memory/SKILL.md'
+);
 assert.ok(remeFiles.has('CLAUDE-reme.md'), 'reme output should include CLAUDE-reme.md');
 
 assert.throws(() => compile(sample, 'unknown'), 'unknown target should throw');

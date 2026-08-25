@@ -3,7 +3,7 @@
  */
 
 import assert from 'node:assert/strict';
-import { defaultSchema, validateSchema, createAvatar, AVATAR_SCHEMA_VERSION } from './index.js';
+import { AVATAR_SCHEMA_VERSION, createAvatar, defaultSchema, validateSchema } from './index.js';
 
 // Default schema should validate
 const defaultResult = validateSchema(defaultSchema);
@@ -23,7 +23,7 @@ assert.equal(missingApiResult.valid, false, 'schema without avatar_api should be
 // createAvatar should apply overrides
 const custom = createAvatar({
   name: 'Sanitized Test User',
-  rules: ['Rule one', 'Rule two']
+  rules: ['Rule one', 'Rule two'],
 });
 assert.equal(custom.avatar_api.owner, 'Sanitized Test User');
 assert.deepEqual(custom.avatar_api.operating_rules, ['Rule one', 'Rule two']);

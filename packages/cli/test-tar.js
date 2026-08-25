@@ -1,5 +1,5 @@
-import assert from 'node:assert/strict';
 import fs from 'fs';
+import assert from 'node:assert/strict';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
@@ -12,9 +12,9 @@ async function runCLI(args) {
     const proc = spawn('node', [NAavOS_BIN, ...args]);
     let stdout = '';
     let stderr = '';
-    proc.stdout.on('data', d => stdout += d.toString());
-    proc.stderr.on('data', d => stderr += d.toString());
-    proc.on('close', code => {
+    proc.stdout.on('data', (d) => (stdout += d.toString()));
+    proc.stderr.on('data', (d) => (stderr += d.toString()));
+    proc.on('close', (code) => {
       if (code === 0) resolve(stdout.trim());
       else reject(new Error(`CLI failed (${code}): ${stderr || stdout}`));
     });
@@ -23,15 +23,15 @@ async function runCLI(args) {
 
 async function testCompileTarGz() {
   const outputPath = path.join(process.env.HOME, '.naavos', 'avatar-profile.tar.gz');
-  
+
   try {
     await runCLI(['compile', '--target', 'hermes', '--format', 'tar.gz']);
-    
+
     assert.ok(fs.existsSync(outputPath), 'tar.gz should exist');
-    
+
     const contents = fs.readFileSync(outputPath);
     assert.ok(contents[0] === 0x1f && contents[1] === 0x8b, 'should be gzip format');
-    
+
     console.log('✓ compile --format tar.gz test passed');
   } finally {
     if (fs.existsSync(outputPath)) {
@@ -42,16 +42,16 @@ async function testCompileTarGz() {
 
 async function testExportCommand() {
   const outputPath = path.join(process.env.HOME, '.naavos', 'avatar-profile.tar.gz');
-  
+
   try {
     await runCLI(['compile', '--target', 'hermes']);
     await runCLI(['export', '--target', 'hermes']);
-    
+
     assert.ok(fs.existsSync(outputPath), 'exported tar.gz should exist');
-    
+
     const contents = fs.readFileSync(outputPath);
     assert.ok(contents[0] === 0x1f && contents[1] === 0x8b, 'should be gzip format');
-    
+
     console.log('✓ export command test passed');
   } finally {
     if (fs.existsSync(outputPath)) {
@@ -66,7 +66,7 @@ async function main() {
   console.log('✓ all tar.gz tests passed');
 }
 
-main().catch(e => {
+main().catch((e) => {
   console.error(e);
   process.exit(1);
 });

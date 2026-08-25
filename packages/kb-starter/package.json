@@ -8,6 +8,10 @@
     "test": "node test.js",
     "typecheck": "node --check index.js"
   },
-  "keywords": ["naavos", "knowledge-base", "template"],
+  "keywords": [
+    "naavos",
+    "knowledge-base",
+    "template"
+  ],
   "license": "MIT"
 }

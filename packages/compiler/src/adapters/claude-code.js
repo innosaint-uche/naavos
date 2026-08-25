@@ -15,7 +15,7 @@ You are working with **${identity.name || 'User'}**.
 
 ## Operational Rules
 
-${rules.map(r => `${rules.indexOf(r) + 1}. **${r.id || r.statement.slice(0, 30)}.** ${r.statement}`).join('\n')}
+${rules.map((r) => `${rules.indexOf(r) + 1}. **${r.id || r.statement.slice(0, 30)}.** ${r.statement}`).join('\n')}
 
 ## Privacy
 

@@ -1,7 +1,7 @@
 export function remeAdapter(pkg) {
   const identity = pkg.identity || {};
   const knowledgeSources = pkg.knowledge_sources || [];
-  const remeSource = knowledgeSources.find(ks => ks.type === 'connector-reme');
+  const remeSource = knowledgeSources.find((ks) => ks.type === 'connector-reme');
   const config = remeSource?.config || {};
 
   const workspaceDir = config.workspaceDir || '.reme';

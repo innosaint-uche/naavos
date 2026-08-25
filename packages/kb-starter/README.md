@@ -31,22 +31,26 @@ kb/
 # SKILL.md Structure
 
 ## Identity
+
 - Your name
 - Your role
 - Your communication style
 
 ## Rules
+
 - Operational rules
 - Trigger modes
 - Execution preferences
 
 ## Tech Stack
+
 - Languages
 - Frameworks
 - Tools
 - Platforms
 
 ## Project Patterns
+
 - Common project structures
 - Setup scripts
 - Deployment patterns
