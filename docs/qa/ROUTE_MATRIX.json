@@ -7,8 +7,8 @@
       "service": "public-dashboard",
       "environment": "production-facing-development",
       "release_identity": {
-        "source_marker": "ed847ba35e997057cb5b2b58146ff18ad75bc0f4",
-        "deployment_id": "a1rpkpmda1lhxn2kyxvvnmpm:ed847ba"
+        "source_marker": "ec8dd39433a565a39cfc493f9cc31b23f7c20600",
+        "deployment_id": "a1rpkpmda1lhxn2kyxvvnmpm:ec8dd39"
       },
       "hostname": "naavos.radoss.agency",
       "path": "/",
@@ -20,7 +20,7 @@
       "auth_boundary": "public informational page; no authenticated Avatar data",
       "health_command": "central ~/.radoss-qa adapter naas-public browser.dashboard",
       "last_verified": "2026-08-26",
-      "evidence": "central QA artifact run-2026-08-25T23-01-45-317Z/naas-public/evidence.json; Coolify container image and SOURCE_COMMIT readback",
+      "evidence": "central QA artifact run-2026-08-25T23-26-23-083Z/naas-public/evidence.json; Coolify container image and SOURCE_COMMIT readback",
       "status": "verified",
       "known_limits": [
         "Coolify control-plane deployment record was not used; the labeled application container was reconciled directly with a rollback copy"

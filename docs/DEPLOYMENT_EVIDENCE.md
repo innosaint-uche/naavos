@@ -14,8 +14,8 @@ The machine-readable record is
 - Public dashboard: `https://naavos.radoss.agency` — HTTP 200, Next.js response,
   valid TLS certificate, and the corrected evidence-gated release copy is live.
 - Dashboard source/deployment identity: source commit
-  `ed847ba35e997057cb5b2b58146ff18ad75bc0f4`, Coolify application container
-  `a1rpkpmda1lhxn2kyxvvnmpm:ed847ba` (application `4`, `naavos-dashboard`).
+  `ec8dd39433a565a39cfc493f9cc31b23f7c20600`, Coolify application container
+  `a1rpkpmda1lhxn2kyxvvnmpm:ec8dd39` (application `4`, `naavos-dashboard`).
 - Hosted MCP Worker: `https://naavos-mcp.innosaint-uche.workers.dev/mcp`.
 - Worker deployment version: `d683a9ac-bafb-454c-86eb-a81a94d19b29` (latest verified deployment; tenant-owner enforcement and branded OAuth metadata).
 - Deployment identity: `d683a9ac-bafb-454c-86eb-a81a94d19b29` (recorded separately from the source marker so a source hash cannot be mistaken for deployment proof).
