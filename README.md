@@ -12,8 +12,8 @@ evidence recorded in `docs/contracts/capability-status.json`.
 > [QA runbook](docs/qa/NAAS_PUBLIC_AVATAR_QA_RUNBOOK.md) before treating any capability as release-ready. The repository
 > is source-public for contributors, while hosted/customer release claims remain blocked until the evidence gate passes.
 
-The verified source repository is [github.com/innosaint-uche/naavos](https://github.com/innosaint-uche/naavos).
-This URL is the source authority; do not substitute retired or unresolved API hosts for it.
+The verified source repository is [github.com/innosaint-uche/naavos](https://github.com/innosaint-uche/naavos). This URL
+is the source authority; do not substitute retired or unresolved API hosts for it.
 
 ## What It Does
 
