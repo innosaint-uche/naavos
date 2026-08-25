@@ -6,11 +6,14 @@ NAAvOS is being built as an open-source **compiler and conformance platform** fo
 The current repository is a controlled development release; claims about universal host support require the adapter
 evidence recorded in `docs/contracts/capability-status.json`.
 
-> **Current status:** development baseline / controlled rebuild. Read the
+> **Current status:** public development baseline / controlled rebuild. Read the
 > [public Avatar guide](docs/OPEN_SOURCE_AVATAR_GUIDE.md),
 > [current review](docs/reviews/NAAS_PUBLIC_AVATAR_REVIEW_2026-08-23.md), and
 > [QA runbook](docs/qa/NAAS_PUBLIC_AVATAR_QA_RUNBOOK.md) before treating any capability as release-ready. The repository
-> remains private until the release owner approves public visibility after the evidence gate passes.
+> is source-public for contributors, while hosted/customer release claims remain blocked until the evidence gate passes.
+
+The verified source repository is [github.com/innosaint-uche/naavos](https://github.com/innosaint-uche/naavos).
+This URL is the source authority; do not substitute retired or unresolved API hosts for it.
 
 ## What It Does
 

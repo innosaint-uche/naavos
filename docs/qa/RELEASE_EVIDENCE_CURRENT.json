@@ -69,8 +69,8 @@
     "platforms": "not_verified"
   },
   "source_release": {
-    "visibility": "private",
-    "repository": "not_verified",
+    "visibility": "public",
+    "repository": "verified",
     "clean_tag": "not_verified"
   },
   "security": {
@@ -79,7 +79,7 @@
   },
   "dns": {
     "authoritative_mcp_radoss_agency": "no_record",
-    "authoritative_mcp_naavos_radoss_agency": "no_record",
+    "authoritative_mcp_naavos_radoss_agency": "verified_A_141.136.35.208_2026-08-26",
     "retired_api_naavos_io": "not_configured"
   }
 }

@@ -16,10 +16,10 @@ pnpm install
 pnpm run doctor
 ```
 
-The repository is currently maintained as a controlled development release. Do not publish a fork, package, or
-deployment as an official NAAvOS release unless the release evidence in `docs/DEPLOYMENT_EVIDENCE.md` is complete. The
-public repository URL must be verified before it is advertised; an old or unresolved GitHub URL is not a source
-authority.
+The repository is publicly readable but is maintained as a controlled development release. Do not publish a fork,
+package, or deployment as an official customer release unless the release evidence in `docs/DEPLOYMENT_EVIDENCE.md` is
+complete. The verified source authority is `https://github.com/innosaint-uche/naavos`; an old or unresolved GitHub URL
+is not a source authority.
 
 ## Development
 
