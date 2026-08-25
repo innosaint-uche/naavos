@@ -16,13 +16,13 @@ const jetbrainsMono = JetBrains_Mono({
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://naavos.radoss.agency'),
-  title: "NAAvOS | Neuro AI - Avatar OS System — Give Every AI Your Brain",
-  description: "Open-source system that makes AI agents instantly understand your cognitive profile, working style, and project history. One install. Every AI tool. Zero re-explanation.",
+  title: "NAAvOS | User-owned Avatar OS",
+  description: "A local-first, inspectable Avatar OS for compiling approved context into supported AI hosts. Public release is being verified in stages.",
   keywords: ["AI avatar", "cognitive profile", "AI agent customization", "context management", "MCP", "Model Context Protocol", "AI productivity", "personal AI assistant", "AI tools integration", "Claude Code", "Gemini CLI", "Cursor AI"],
   authors: [{ name: "NAAvOS Contributors" }],
   openGraph: {
-    title: "NAAvOS | Give Every AI Your Brain",
-    description: "Stop re-explaining your work style to every AI agent. NAAvOS installs your cognitive profile across Claude Code, Gemini, Cursor, and every other AI tool you use — instantly.",
+    title: "NAAvOS | User-owned Avatar OS",
+    description: "Define an inspectable Avatar package, preview changes, install reversibly, and verify supported AI-host integrations.",
     type: "website",
     locale: "en_US",
     siteName: "NAAvOS",
@@ -35,8 +35,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "NAAvOS | Give Every AI Your Brain",
-    description: "Stop re-explaining your work style to every AI agent. One install. Every AI knows you.",
+    title: "NAAvOS | User-owned Avatar OS",
+    description: "Local-first Avatar context with explicit privacy, scope, adapters, and evidence gates.",
     images: ["/opengraph-image"]
   },
   robots: {
@@ -70,7 +70,7 @@ export default function RootLayout({
               "@context": "https://schema.org",
               "@type": "SoftwareApplication",
               "name": "NAAvOS",
-              "description": "Open-source compiler and conformance platform that makes AI agents reliably understand your cognitive profile, working style, and project history.",
+              "description": "Local-first Avatar OS for inspectable context, reversible host adapters, privacy controls and evidence-gated integrations.",
               "url": "https://naavos.radoss.agency",
               "applicationCategory": "DeveloperApplication",
               "operatingSystem": "Windows, macOS, Linux",

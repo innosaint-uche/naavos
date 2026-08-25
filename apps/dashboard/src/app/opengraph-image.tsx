@@ -1,7 +1,7 @@
 import { ImageResponse } from 'next/og';
 
 export const runtime = 'edge';
-export const alt = 'NAAvOS - Give Every AI Your Brain';
+export const alt = 'NAAvOS - User-owned Avatar OS';
 export const size = { width: 1200, height: 630 };
 export const contentType = 'image/png';
 
@@ -57,7 +57,7 @@ export default function OgImage() {
             }}
           />
           <span style={{ color: '#a78bfa', fontSize: '18px', fontWeight: 500 }}>
-            Open Source — MIT Licensed
+            Controlled development release — public gate in progress
           </span>
         </div>
 
@@ -80,7 +80,7 @@ export default function OgImage() {
               lineHeight: 1.1,
             }}
           >
-            Give Every AI
+            Your context,
           </span>
           <span
             style={{
@@ -93,7 +93,7 @@ export default function OgImage() {
               lineHeight: 1.1,
             }}
           >
-            Your Brain.
+            under your control.
           </span>
         </div>
 
@@ -108,12 +108,12 @@ export default function OgImage() {
             margin: '0 0 48px',
           }}
         >
-          Compile your cognitive profile into host-specific instructions for every AI tool — from a single avatar.json.
+          Define an inspectable Avatar package and compile approved context for supported AI hosts — from a single avatar.json.
         </p>
 
         {/* Target pills */}
         <div style={{ display: 'flex', gap: '12px' }}>
-          {['Hermes', 'Claude Code', 'Gemini', 'Cursor', 'OpenClaw', 'ReMe'].map((name) => (
+          {['Hermes', 'Codex', 'Antigravity', 'Claude Code', 'Gemini', 'ReMe'].map((name) => (
             <div
               key={name}
               style={{

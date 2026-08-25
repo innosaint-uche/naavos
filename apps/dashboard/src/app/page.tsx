@@ -4,34 +4,28 @@ import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import {
-  Brain, Shield, Code2, Terminal, ArrowRight, CheckCircle2,
+  Brain, Shield, Code2, Terminal, CheckCircle2,
   ChevronDown, Sparkles, Settings, Link2, Cpu, Menu, X
 } from "lucide-react";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const GitHubIcon = ({ className = "w-4 h-4" }: { className?: string }) => (
-  <svg className={className} viewBox="0 0 24 24" fill="currentColor">
-    <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" />
-  </svg>
-);
-
 const platforms = [
-  { name: "Hermes", icon: "🧠" },
-  { name: "Claude Code", icon: "⌨️" },
-  { name: "Gemini CLI", icon: "✨" },
-  { name: "Cursor", icon: "⊕" },
-  { name: "OpenClaw", icon: "🦞" },
-  { name: "ReMe", icon: "📝" },
+  { name: "Hermes", icon: "🧠", status: "Local adapter observed" },
+  { name: "Codex", icon: "⌘", status: "Local adapter observed" },
+  { name: "Antigravity", icon: "✦", status: "Local adapter observed" },
+  { name: "Claude Code", icon: "⌨️", status: "Certification pending" },
+  { name: "Gemini CLI", icon: "✨", status: "Certification pending" },
+  { name: "ReMe", icon: "📝", status: "Optional projection" },
 ];
 
 const features = [
-  { icon: Brain, title: "Avatar Schema", desc: "Zod-validated cognitive profile: identity, rules, privacy, adapters. One source of truth.", color: "from-violet-500 to-purple-500" },
-  { icon: Shield, title: "Conformance Harness", desc: "Eval packs with scenario-based checks. Get a fidelity score proving agents follow your rules.", color: "from-amber-500 to-orange-500" },
-  { icon: Code2, title: "Deterministic Compiler", desc: "Host-specific adapters return Map<path, content>. Atomic installs with backup and rollback.", color: "from-cyan-500 to-blue-500" },
-  { icon: Terminal, title: "CLI-First", desc: "init, validate, compile, install, test, export, rollback. No dashboard required.", color: "from-emerald-500 to-green-500" },
-  { icon: Settings, title: "Profile Bundles", desc: "Export Hermes profiles as .tar.gz for portable, shareable distribution.", color: "from-pink-500 to-rose-500" },
-  { icon: Link2, title: "ReMe Memory", desc: "Optional local-first memory layer. Install with naavos install --target reme.", color: "from-indigo-500 to-violet-500" },
+  { icon: Brain, title: "Inspectable Avatar", desc: "A schema for identity, communication, rules, privacy and scope. Sensitive fields remain optional and private by default.", color: "from-violet-500 to-purple-500" },
+  { icon: Shield, title: "Evidence-Gated Conformance", desc: "Local fixtures and hosted MCP checks are tested separately from behavioural fidelity and host acceptance.", color: "from-amber-500 to-orange-500" },
+  { icon: Code2, title: "Target Adapters", desc: "Compile approved context for a named host, with unsupported fields and release limits made visible.", color: "from-cyan-500 to-blue-500" },
+  { icon: Terminal, title: "CLI and No-Code Paths", desc: "Developers can script the CLI; non-technical users use the guided desktop flow without editing configuration.", color: "from-emerald-500 to-green-500" },
+  { icon: Settings, title: "Reversible Changes", desc: "Preview, backup, reload verification and rollback are part of the product contract—not hidden side effects.", color: "from-pink-500 to-rose-500" },
+  { icon: Link2, title: "Optional Memory Projections", desc: "SQLite + FTS5 remains canonical. ReMe and future providers are explicit, rebuildable projections.", color: "from-indigo-500 to-violet-500" },
 ];
 
 const steps = [
@@ -78,9 +72,7 @@ export default function Home() {
             <div className="hidden md:flex items-center gap-8">
               <a href="#features" className="text-sm text-zinc-400 hover:text-white transition-colors">Features</a>
               <a href="#how-it-works" className="text-sm text-zinc-400 hover:text-white transition-colors">How it works</a>
-              <a href="https://github.com/naavos/naavos" className="text-sm text-zinc-400 hover:text-white transition-colors flex items-center gap-2">
-                <GitHubIcon className="w-4 h-4" /> GitHub
-              </a>
+              <a href="#release" className="text-sm text-zinc-400 hover:text-white transition-colors">Release status</a>
             </div>
             <button onClick={() => setMobileMenuOpen(!mobileMenuOpen)} className="md:hidden p-2">
               {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
@@ -91,7 +83,7 @@ export default function Home() {
               <div className="px-4 py-4 space-y-3">
                 <a href="#features" className="block text-sm text-zinc-400 hover:text-white" onClick={() => setMobileMenuOpen(false)}>Features</a>
                 <a href="#how-it-works" className="block text-sm text-zinc-400 hover:text-white" onClick={() => setMobileMenuOpen(false)}>How it works</a>
-                <a href="https://github.com/naavos/naavos" className="block text-sm text-zinc-400 hover:text-white" onClick={() => setMobileMenuOpen(false)}>GitHub</a>
+                <a href="#release" className="block text-sm text-zinc-400 hover:text-white" onClick={() => setMobileMenuOpen(false)}>Release status</a>
               </div>
             </div>
           )}
@@ -104,7 +96,7 @@ export default function Home() {
         <div className="max-w-5xl mx-auto text-center">
           <div className="hero-badge inline-flex items-center gap-2 px-4 py-2 rounded-full border border-violet-500/30 bg-violet-500/10 mb-8">
             <div className="w-2 h-2 rounded-full bg-violet-500 animate-pulse" />
-            <span className="text-sm text-violet-400 font-medium">Open Source — MIT Licensed</span>
+            <span className="text-sm text-violet-400 font-medium">Controlled development release — public gate in progress</span>
           </div>
 
           <h1 className="hero-title text-4xl sm:text-5xl lg:text-7xl font-bold tracking-tight mb-6">
@@ -114,7 +106,7 @@ export default function Home() {
           </h1>
 
           <p className="hero-title text-base sm:text-lg lg:text-xl text-zinc-400 max-w-2xl mx-auto mb-10 leading-relaxed">
-            NAAvOS compiles your cognitive profile into host-specific instructions for Claude Code, Gemini, Cursor, Hermes, and more — from a single <span className="text-white font-mono text-sm">avatar.json</span>.
+            NAAvOS helps you define an inspectable, user-owned Avatar package and compile approved context for supported AI hosts — from a single <span className="text-white font-mono text-sm">avatar.json</span>.
           </p>
 
           <div className="terminal-preview max-w-3xl mx-auto rounded-2xl border border-white/10 bg-zinc-900/80 backdrop-blur-xl overflow-hidden shadow-2xl shadow-violet-500/10 text-left">
@@ -142,11 +134,7 @@ export default function Home() {
           </div>
 
           <div className="hero-title flex flex-col sm:flex-row items-center justify-center gap-4 mt-10">
-            <a href="https://github.com/naavos/naavos" className="group px-6 py-3 rounded-xl bg-gradient-to-r from-violet-600 to-purple-600 hover:from-violet-500 hover:to-purple-500 text-white font-medium shadow-lg shadow-violet-500/25 flex items-center gap-2">
-              <GitHubIcon className="w-4 h-4" />
-              View on GitHub
-              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-            </a>
+            <a href="#release" className="px-6 py-3 rounded-xl bg-gradient-to-r from-violet-600 to-purple-600 hover:from-violet-500 hover:to-purple-500 text-white font-medium">See release status</a>
             <a href="#how-it-works" className="px-6 py-3 rounded-xl border border-white/10 hover:bg-white/5 text-zinc-300 font-medium flex items-center gap-2">
               How it works
             </a>
@@ -163,16 +151,16 @@ export default function Home() {
         <div className="max-w-5xl mx-auto">
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-12 text-center">
             <div>
-              <div className="text-3xl sm:text-4xl font-bold bg-gradient-to-r from-violet-400 to-purple-400 bg-clip-text text-transparent">6</div>
-              <div className="text-xs sm:text-sm text-zinc-500 mt-2">Compile targets</div>
+              <div className="text-3xl sm:text-4xl font-bold bg-gradient-to-r from-violet-400 to-purple-400 bg-clip-text text-transparent">Local</div>
+              <div className="text-xs sm:text-sm text-zinc-500 mt-2">First-class privacy</div>
             </div>
             <div>
               <div className="text-3xl sm:text-4xl font-bold bg-gradient-to-r from-amber-400 to-orange-400 bg-clip-text text-transparent">MIT</div>
               <div className="text-xs sm:text-sm text-zinc-500 mt-2">License</div>
             </div>
             <div>
-              <div className="text-3xl sm:text-4xl font-bold bg-gradient-to-r from-emerald-400 to-green-400 bg-clip-text text-transparent">Zod</div>
-              <div className="text-xs sm:text-sm text-zinc-500 mt-2">Schema validation</div>
+              <div className="text-3xl sm:text-4xl font-bold bg-gradient-to-r from-emerald-400 to-green-400 bg-clip-text text-transparent">MCP</div>
+              <div className="text-xs sm:text-sm text-zinc-500 mt-2">Hosted protocol surface</div>
             </div>
             <div>
               <div className="text-3xl sm:text-4xl font-bold bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent">ESM</div>
@@ -289,7 +277,7 @@ export default function Home() {
               <div key={platform.name} className="p-3 sm:p-4 rounded-xl border border-white/10 bg-zinc-900/50 flex flex-col items-center gap-2">
                 <span className="text-2xl">{platform.icon}</span>
                 <span className="font-medium text-xs sm:text-sm text-center">{platform.name}</span>
-                <span className="text-[10px] sm:text-xs text-emerald-400 font-mono">stable</span>
+                <span className="text-[10px] sm:text-xs text-zinc-400 font-mono">{platform.status}</span>
               </div>
             ))}
           </div>
@@ -297,25 +285,19 @@ export default function Home() {
       </section>
 
       {/* CTA */}
-      <section className="py-16 sm:py-24 px-4 sm:px-6 lg:px-8 border-t border-white/5 bg-gradient-to-b from-transparent to-violet-500/5">
+      <section id="release" className="py-16 sm:py-24 px-4 sm:px-6 lg:px-8 border-t border-white/5 bg-gradient-to-b from-transparent to-violet-500/5">
         <div className="max-w-3xl mx-auto text-center">
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4 sm:mb-6">
-            Open source.
+            Open development.
             <br />
-            <span className="bg-gradient-to-r from-violet-400 to-purple-400 bg-clip-text text-transparent">Free forever.</span>
+            <span className="bg-gradient-to-r from-violet-400 to-purple-400 bg-clip-text text-transparent">Public release in progress.</span>
           </h2>
           <p className="text-zinc-400 text-base sm:text-lg mb-8 sm:mb-10">
-            MIT licensed. No accounts. No telemetry. Your avatar stays on your machine.
+            The product is being prepared for a verified open-source release. Local-first storage and telemetry-off defaults are already part of the design; source publication and signed distribution remain release gates.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6">
-            <a href="https://github.com/naavos/naavos" className="group px-6 py-3 rounded-xl bg-gradient-to-r from-violet-600 to-purple-600 hover:from-violet-500 hover:to-purple-500 text-white font-medium shadow-lg shadow-violet-500/25 flex items-center gap-2">
-              <GitHubIcon className="w-4 h-4" />
-              Clone the repo
-              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-            </a>
-            <a href="https://github.com/naavos/naavos/blob/main/docs/SETUP.md" className="px-6 py-3 rounded-xl border border-white/10 hover:bg-white/5 text-zinc-300 font-medium flex items-center gap-2">
-              Read the docs
-            </a>
+            <a href="mailto:hello@naavos.radoss.agency?subject=NAAvOS%20public%20preview" className="px-6 py-3 rounded-xl bg-gradient-to-r from-violet-600 to-purple-600 hover:from-violet-500 hover:to-purple-500 text-white font-medium">Request the public preview</a>
+            <a href="#how-it-works" className="px-6 py-3 rounded-xl border border-white/10 hover:bg-white/5 text-zinc-300 font-medium">Read the product path</a>
           </div>
         </div>
       </section>
@@ -328,13 +310,11 @@ export default function Home() {
               <Cpu className="w-4 h-4 text-white" />
             </div>
             <span className="text-base sm:text-lg font-bold bg-gradient-to-r from-violet-400 to-purple-400 bg-clip-text text-transparent">NAAvOS</span>
-            <span className="text-zinc-500 text-xs sm:text-sm ml-2">MIT License</span>
+            <span className="text-zinc-500 text-xs sm:text-sm ml-2">Development release</span>
           </div>
           <div className="flex items-center gap-4 sm:gap-6 text-xs sm:text-sm text-zinc-500">
-            <a href="https://github.com/naavos/naavos" className="hover:text-white transition-colors flex items-center gap-2">
-              <GitHubIcon className="w-3 h-3 sm:w-4 sm:h-4" /> GitHub
-            </a>
-            <a href="https://github.com/naavos/naavos/blob/main/docs/SETUP.md" className="hover:text-white transition-colors">Docs</a>
+            <a href="#release" className="hover:text-white transition-colors">Release status</a>
+            <a href="#how-it-works" className="hover:text-white transition-colors">Product path</a>
             <a href="mailto:hello@naavos.radoss.agency" className="hover:text-white transition-colors">Contact</a>
           </div>
         </div>
