@@ -2,7 +2,12 @@
 
 > **Give Every AI Your Brain.**
 
-NAAvOS is an open-source **compiler and conformance platform** that makes AI agents instantly and reliably understand your cognitive profile, working style, and project history.
+NAAvOS is being built as an open-source **compiler and conformance platform**
+for portable, inspectable Avatar context. The current repository is a
+controlled development release; claims about universal host support require
+the adapter evidence recorded in `docs/contracts/capability-status.json`.
+
+> **Current status:** development baseline / controlled rebuild. Read the [public Avatar guide](docs/OPEN_SOURCE_AVATAR_GUIDE.md), [current review](docs/reviews/NAAS_PUBLIC_AVATAR_REVIEW_2026-08-23.md), and [QA runbook](docs/qa/NAAS_PUBLIC_AVATAR_QA_RUNBOOK.md) before treating any capability as release-ready. The repository remains private until the release owner approves public visibility after the evidence gate passes.
 
 ## What It Does
 
@@ -102,6 +107,9 @@ pnpm exec naavos doctor
 ## Documentation
 
 - [Setup Guide](docs/SETUP.md)
+- [Open-Source Avatar Guide](docs/OPEN_SOURCE_AVATAR_GUIDE.md)
+- [Public Avatar Review — 2026-08-23](docs/reviews/NAAS_PUBLIC_AVATAR_REVIEW_2026-08-23.md)
+- [Public Avatar QA Runbook](docs/qa/NAAS_PUBLIC_AVATAR_QA_RUNBOOK.md)
 - [API Reference](docs/API.md)
 - [Integration Templates](docs/TEMPLATES/)
 - [Capability Status](docs/contracts/capability-status.json)

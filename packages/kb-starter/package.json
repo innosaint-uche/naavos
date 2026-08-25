@@ -4,9 +4,9 @@
   "description": "NAAvOS starter knowledge base template",
   "type": "module",
   "scripts": {
-    "lint": "echo 'Lint not configured in M0'",
-    "test": "echo 'No tests yet'",
-    "typecheck": "echo 'No TypeScript in M0'"
+    "lint": "eslint . --ext .js",
+    "test": "node test.js",
+    "typecheck": "node --check index.js"
   },
   "keywords": ["naavos", "knowledge-base", "template"],
   "license": "MIT"

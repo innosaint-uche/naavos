@@ -247,7 +247,8 @@ Three schema definitions exist, none aligned:
 - **Overlapping motion libraries:** `@gsap/react`, `gsap`, `framer-motion` all installed
 - **Unused MUI/Emotion:** `@mui/material`, `@emotion/react`, `@emotion/styled` in package.json but not imported
 - **No accessibility pass:** No WCAG 2.2 AA evidence
-- **Brand:** Uses "NAAvOS" and `naavos.io` correctly ✓
+- **Brand:** Uses "NAAvOS"; historical `naavos.io` references in this audit
+  are not current routing authority and must not be used for deployment.
 
 ### 8.2 `dashboard/` (Root — Stale)
 - **Different package name:** `naass-dashboard` vs `naavos-dashboard`

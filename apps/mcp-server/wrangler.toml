@@ -1,0 +1,17 @@
+name = "naavos-mcp"
+main = "src/index.js"
+compatibility_date = "2026-08-25"
+workers_dev = true
+
+[vars]
+ALLOWED_ORIGINS = "https://naavos.radoss.agency,https://mcp.naavos.radoss.agency"
+OAUTH_ISSUER = "https://mcp.naavos.radoss.agency"
+RELEASE_SHA = "e79819d414731cda4d6cc25726842c94621e059c37ee523191bd5e7b68ec84aa"
+HF_OAUTH_ENABLED = "true"
+HF_OAUTH_WRITE_ENABLED = "true"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "naavos-avatar"
+database_id = "7b3c23b3-0c74-4eed-a541-519589ae4eef"
+migrations_dir = "migrations"

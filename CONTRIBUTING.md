@@ -6,8 +6,8 @@ We welcome contributions! Here's how to get started.
 
 ```bash
 # Fork and clone
-git clone https://github.com/naavos/naavos-system.git
-cd naavos-system
+git clone https://github.com/innosaint-uche/naavos.git
+cd naavos
 
 # Install dependencies
 pnpm install
@@ -15,6 +15,12 @@ pnpm install
 # Run health check
 pnpm run doctor
 ```
+
+The repository is currently maintained as a controlled development release.
+Do not publish a fork, package, or deployment as an official NAAvOS release
+unless the release evidence in `docs/DEPLOYMENT_EVIDENCE.md` is complete.
+The public repository URL must be verified before it is advertised; an old or
+unresolved GitHub URL is not a source authority.
 
 ## Development
 
@@ -70,5 +76,5 @@ pnpm run test
 
 ## Questions?
 
-- Discord: https://discord.gg/naavos
-- Email: hello@naavos.io
+- Email: hello@naavos.radoss.agency
+- Community link: not published yet; do not use an unverified invite URL.

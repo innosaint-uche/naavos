@@ -8,9 +8,9 @@
   },
   "scripts": {
     "start": "node bin/naavos.js",
-    "lint": "echo 'Lint not configured'",
+    "lint": "eslint . --ext .js",
     "test": "node --check bin/naavos.js && node --check index.js",
-    "typecheck": "echo 'No TypeScript'"
+    "typecheck": "node --check bin/naavos.js && node --check index.js"
   },
   "dependencies": {
     "@naavos/schema": "workspace:*",

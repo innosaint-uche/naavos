@@ -13,7 +13,7 @@
 ### Step 1: Clone and Install
 
 ```bash
-git clone https://github.com/naavos/naavos.git
+git clone https://github.com/innosaint-uche/naavos.git
 cd naavos
 pnpm install
 ```

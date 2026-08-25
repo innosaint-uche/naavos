@@ -1,0 +1,25 @@
+services:
+  naavos-mcp-proxy:
+    image: caddy:2-alpine
+    container_name: naavos-mcp-proxy
+    restart: unless-stopped
+    networks:
+      - coolify
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+    labels:
+      traefik.enable: "true"
+      traefik.docker.network: coolify
+      traefik.http.middlewares.naavos-mcp-redirect.redirectscheme.scheme: https
+      traefik.http.routers.naavos-mcp-http.entrypoints: http
+      traefik.http.routers.naavos-mcp-http.rule: Host(`mcp.naavos.radoss.agency`)
+      traefik.http.routers.naavos-mcp-http.middlewares: naavos-mcp-redirect
+      traefik.http.routers.naavos-mcp-https.entrypoints: https
+      traefik.http.routers.naavos-mcp-https.rule: Host(`mcp.naavos.radoss.agency`)
+      traefik.http.routers.naavos-mcp-https.tls: "true"
+      traefik.http.routers.naavos-mcp-https.tls.certresolver: letsencrypt
+      traefik.http.routers.naavos-mcp-https.service: naavos-mcp
+      traefik.http.services.naavos-mcp.loadbalancer.server.port: "3000"
+networks:
+  coolify:
+    external: true

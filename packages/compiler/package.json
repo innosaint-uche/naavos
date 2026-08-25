@@ -5,9 +5,9 @@
   "main": "src/index.js",
   "type": "module",
   "scripts": {
-    "lint": "echo 'Lint not configured'",
+    "lint": "eslint . --ext .js",
     "test": "node test.js",
-    "typecheck": "echo 'No TypeScript'"
+    "typecheck": "node --check src/index.js"
   },
   "dependencies": {
     "@naavos/schema": "workspace:*"

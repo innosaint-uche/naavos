@@ -1,5 +1,35 @@
 # Deploy NAAvOS to Cloudflare
 
+> **Important:** This is a deployment guide, not deployment evidence. Do not
+> publish or configure an endpoint until DNS, TLS, exact routing, MCP protocol,
+> OAuth, tenant isolation, and release identity have passed live checks.
+
+## Current routing decision
+
+- `https://naavos.radoss.agency` is the existing public dashboard surface.
+- The verified hosted MCP endpoint is
+  `https://naavos-mcp.innosaint-uche.workers.dev/mcp`.
+- `https://mcp.naavos.radoss.agency/mcp` is the verified branded route. Hostinger
+  authoritative DNS points to the Coolify VPS, which terminates TLS and uses a
+  thin Caddy proxy to the canonical Worker.
+- The verified hosted MCP surface is `https://mcp.naavos.radoss.agency/mcp`.
+- No ordinary public REST API is certified by this release evidence; do not
+  invent or advertise an `api.naavos.radoss.agency` endpoint.
+- `https://api.naavos.io/mcp/v1` is retired and unresolved; do not configure
+  it.
+
+The standards-based Worker remains deployed at this implementation/test origin:
+
+```text
+https://naavos-mcp.innosaint-uche.workers.dev/mcp
+```
+
+For the current NAAS architecture, the public dashboard remains on the
+existing Hostinger/Coolify origin while the standards-compliant MCP service is
+deployed as a Cloudflare Worker with D1 persistence. The branded route is
+publicly reachable through the existing edge proxy; the Worker origin is not
+the user-facing connector URL.
+
 ## Prerequisites
 
 - Cloudflare account
@@ -58,11 +88,16 @@ NAAVOS_API_KEY=xxx
 
 ## MCP Endpoints
 
-After deployment, your MCP server will be available at:
+After the authoritative Cloudflare account owns the zone, use a Worker Custom
+Domain, not a raw CNAME, and verify the branded MCP server at:
 
 ```
-https://naavos-mcp-server.your-subdomain.workers.dev/mcp/v1/
+https://mcp.naavos.radoss.agency/mcp
 ```
+
+Do not recreate an accidental MCP CNAME or use the retired `api.naavos.io`
+route. The branded route is the user-facing connector; the Worker URL is kept
+only as an implementation/test origin.
 
 ## CORS Configuration
 
@@ -70,17 +105,18 @@ Update `src/index.js` with your production domain:
 
 ```javascript
 const corsHeaders = {
-  'Access-Control-Allow-Origin': 'https://naavos.io',
+  'Access-Control-Allow-Origin': 'https://naavos.radoss.agency',
   // ...
 };
 ```
 
 ## Custom Domain
 
-1. Go to Cloudflare Dashboard
-2. Select your worker
-3. Custom Domains → Add custom domain
-4. Point DNS to Cloudflare
+1. Confirm `radoss.agency` appears in the Cloudflare account that deploys `naavos-mcp`.
+2. Select the Worker and add `mcp.naavos.radoss.agency` under Custom Domains.
+3. Remove any conflicting CNAME before creating the Custom Domain.
+4. Let Cloudflare provision DNS and TLS.
+5. Verify DNS, TLS, `/health`, OAuth discovery, MCP conformance, and release identity.
 
 ## Monitoring
 

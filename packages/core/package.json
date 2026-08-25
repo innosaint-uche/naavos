@@ -5,9 +5,9 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "lint": "echo 'Lint not configured'",
+    "lint": "eslint . --ext .js",
     "test": "node test.js",
-    "typecheck": "echo 'No TypeScript'",
+    "typecheck": "node --check index.js && node --check validate.js",
     "validate": "node validate.js"
   },
   "keywords": ["naavos", "avatar", "cognitive-profile"],

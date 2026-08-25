@@ -1,0 +1,13 @@
+# Apply this only from the Cloudflare account that owns the radoss.agency zone.
+# Keep the default wrangler.toml on workers.dev until that ownership is verified.
+name = "naavos-mcp"
+main = "src/index.js"
+compatibility_date = "2026-08-25"
+workers_dev = false
+
+[[routes]]
+pattern = "mcp.naavos.radoss.agency"
+custom_domain = true
+zone_name = "radoss.agency"
+
+# Copy the reviewed vars and D1 binding from wrangler.toml before deployment.

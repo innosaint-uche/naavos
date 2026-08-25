@@ -1,0 +1,9 @@
+:3000 {
+  reverse_proxy https://naavos-mcp.innosaint-uche.workers.dev {
+    header_up Host naavos-mcp.innosaint-uche.workers.dev
+    transport http {
+      tls_server_name naavos-mcp.innosaint-uche.workers.dev
+    }
+    flush_interval -1
+  }
+}

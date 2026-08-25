@@ -1,0 +1,92 @@
+{
+  "as_of": "2026-08-26",
+  "authority": "docs/DEPLOYMENT_EVIDENCE.md and .shared-ai-skills/DEPLOYMENT_TRUTH_PROTOCOL.md",
+  "routes": [
+    {
+      "project": "NAAS",
+      "service": "public-dashboard",
+      "environment": "production-facing-development",
+      "release_identity": {
+        "source_marker": "ed847ba35e997057cb5b2b58146ff18ad75bc0f4",
+        "deployment_id": "a1rpkpmda1lhxn2kyxvvnmpm:ed847ba"
+      },
+      "hostname": "naavos.radoss.agency",
+      "path": "/",
+      "dns_owner": "Hostinger authoritative DNS",
+      "record_type": "existing dashboard record",
+      "edge": "Coolify/Traefik",
+      "origin": "Hostinger VPS dashboard service",
+      "runtime": "Next.js",
+      "auth_boundary": "public informational page; no authenticated Avatar data",
+      "health_command": "central ~/.radoss-qa adapter naas-public browser.dashboard",
+      "last_verified": "2026-08-26",
+      "evidence": "central QA artifact run-2026-08-25T23-01-45-317Z/naas-public/evidence.json; Coolify container image and SOURCE_COMMIT readback",
+      "status": "verified",
+      "known_limits": ["Coolify control-plane deployment record was not used; the labeled application container was reconciled directly with a rollback copy"]
+    },
+    {
+      "project": "NAAS",
+      "service": "hosted-mcp-gateway",
+      "environment": "production-facing-development",
+      "release_identity": {
+        "source_marker": "e79819d414731cda4d6cc25726842c94621e059c37ee523191bd5e7b68ec84aa",
+        "deployment_id": "d683a9ac-bafb-454c-86eb-a81a94d19b29"
+      },
+      "hostname": "mcp.naavos.radoss.agency",
+      "path": "/mcp",
+      "dns_owner": "Hostinger authoritative DNS",
+      "record_type": "A",
+      "edge": "Coolify/Traefik TLS + Caddy proxy",
+      "origin": "Cloudflare Worker naavos-mcp.innosaint-uche.workers.dev",
+      "runtime": "Cloudflare Worker + D1",
+      "auth_boundary": "Hugging Face OAuth bearer; tenant-owner enforcement",
+      "health_command": "central ~/.radoss-qa public and authenticated adapters",
+      "last_verified": "2026-08-25",
+      "evidence": "central QA artifact naas-authenticated-final/evidence.json and docs/DEPLOYMENT_EVIDENCE.md",
+      "status": "protocol_verified",
+      "known_limits": [
+        "two independent live-user tenant isolation is not yet accepted",
+        "ChatGPT and Claude named-host acceptance is not yet recorded"
+      ]
+    },
+    {
+      "project": "NAAS",
+      "service": "worker-implementation-origin",
+      "environment": "deployment-test",
+      "release_identity": {
+        "source_marker": "e79819d414731cda4d6cc25726842c94621e059c37ee523191bd5e7b68ec84aa",
+        "deployment_id": "d683a9ac-bafb-454c-86eb-a81a94d19b29"
+      },
+      "hostname": "naavos-mcp.innosaint-uche.workers.dev",
+      "path": "/mcp",
+      "dns_owner": "Cloudflare Workers",
+      "record_type": "workers.dev deployment",
+      "edge": "Cloudflare",
+      "origin": "Worker runtime",
+      "runtime": "Cloudflare Worker + D1",
+      "auth_boundary": "Hugging Face OAuth bearer",
+      "health_command": "npx wrangler deployments list --name naavos-mcp plus MCP conformance",
+      "last_verified": "2026-08-25",
+      "evidence": "deployment ID d683a9ac-bafb-454c-86eb-a81a94d19b29",
+      "status": "reachable",
+      "known_limits": ["not the user-facing connector URL"]
+    },
+    {
+      "project": "NAAS",
+      "service": "retired-mcp-reference",
+      "environment": "retired",
+      "hostname": "api.naavos.io",
+      "path": "/mcp/v1",
+      "dns_owner": "unresolved",
+      "record_type": "none verified",
+      "edge": "none",
+      "origin": "none verified",
+      "runtime": "none verified",
+      "auth_boundary": "invalid legacy header must not be used",
+      "health_command": "DNS resolution check",
+      "last_verified": "2026-08-25",
+      "evidence": "ENOTFOUND; docs/DEPLOYMENT_EVIDENCE.md",
+      "status": "blocked"
+    }
+  ]
+}

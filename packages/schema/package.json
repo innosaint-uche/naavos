@@ -2,13 +2,29 @@
   "name": "@naavos/schema",
   "version": "1.0.0",
   "description": "NAAvOS avatar package schema and validation",
-  "main": "src/index.js",
+  "main": "dist/index.js",
+  "module": "dist/index.js",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    }
+  },
   "type": "module",
   "scripts": {
-    "lint": "echo 'Lint not configured'",
+    "build": "node ../../scripts/build-schema.mjs",
+    "lint": "eslint src --ext .js",
     "test": "node test.js",
-    "typecheck": "echo 'No TypeScript'"
+    "test:watch": "node --watch test.js",
+    "typecheck": "node --check src/index.js"
   },
   "keywords": ["naavos", "avatar", "schema"],
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "zod": "^3.23.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "vitest": "^2.0.0"
+  }
 }

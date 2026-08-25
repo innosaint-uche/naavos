@@ -51,7 +51,7 @@ export async function runEval(packId, avatarData) {
 export async function runScenario(scenario, avatar) {
   const ctx = { avatar, scenario };
   let pass = false;
-  let evidence = [];
+  const evidence = [];
 
   switch (scenario.type) {
     case 'schema_valid':

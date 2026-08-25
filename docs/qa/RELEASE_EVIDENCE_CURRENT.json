@@ -1,0 +1,85 @@
+{
+  "as_of": "2026-08-26",
+  "evidence_standard": {
+    "version": "1.0",
+    "source_authority": "docs/design/NAAS-Avatar-OS-Productisation-System-Design.pdf#page=18",
+    "fact_recommendation_separation": "enforced",
+    "adapter_reverification": "required_on_host_change",
+    "adapter_records": [
+      {
+        "adapter": "remote_mcp_gateway",
+        "status": "observed",
+        "fact_sources": [
+          "docs/design/NAAS-Avatar-OS-Productisation-System-Design.pdf#page=18",
+          "docs/REMOTE_MCP_GATEWAY_CONTRACT.md",
+          "docs/DEPLOYMENT_EVIDENCE.md",
+          "docs/qa/ROUTE_MATRIX.json"
+        ],
+        "verified_at": "2026-08-26",
+        "recommendations": [
+          "Reverify DNS, TLS, metadata, and authenticated protocol behavior after any host or proxy change."
+        ]
+      },
+      {
+        "adapter": "codex_antigravity_hermes_local",
+        "status": "observed",
+        "fact_sources": [
+          "docs/design/NAAS-Avatar-OS-Productisation-System-Design.pdf#page=18",
+          "docs/NO_CODE_SETUP.md"
+        ],
+        "verified_at": "2026-08-26",
+        "recommendations": [
+          "Re-run the adapter-specific official documentation check whenever the host changes."
+        ]
+      },
+      {
+        "adapter": "chatgpt_claude_host_handoff",
+        "status": "pending_named_host_acceptance",
+        "fact_sources": [
+          "docs/design/NAAS-Avatar-OS-Productisation-System-Design.pdf#page=18",
+          "docs/REMOTE_MCP_GATEWAY_CONTRACT.md"
+        ],
+        "verified_at": "2026-08-25",
+        "recommendations": [
+          "Do not infer host connection from a local configuration or opened browser page."
+        ]
+      }
+    ]
+  },
+  "endpoint": "https://mcp.naavos.radoss.agency/mcp",
+  "release_identity": {
+    "source_marker": "e79819d414731cda4d6cc25726842c94621e059c37ee523191bd5e7b68ec84aa",
+    "worker_version": "d683a9ac-bafb-454c-86eb-a81a94d19b29",
+    "deployment_id": "d683a9ac-bafb-454c-86eb-a81a94d19b29"
+  },
+  "remote_gateway": {
+    "conformance": "pass",
+    "oauth": "pass",
+    "tenant_isolation_fixture": "pass",
+    "tenant_isolation": "not_verified_two_live_users",
+    "branded_route": "verified"
+  },
+  "host_acceptance": {
+    "chatgpt": "pending_named_host_acceptance",
+    "claude": "pending_named_host_acceptance"
+  },
+  "distribution": {
+    "signing": "ad_hoc_local_only",
+    "notarization": "not_verified",
+    "platforms": "not_verified"
+  },
+  "source_release": {
+    "visibility": "private",
+    "repository": "not_verified",
+    "clean_tag": "not_verified"
+  },
+  "security": {
+    "secret_scan": "pass",
+    "credential_remediation": "pending"
+  },
+  "dns": {
+    "authoritative_mcp_radoss_agency": "no_record",
+    "authoritative_mcp_naavos_radoss_agency": "no_record",
+    "retired_api_naavos_io": "not_configured"
+  }
+}
