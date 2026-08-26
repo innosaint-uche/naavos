@@ -40,7 +40,9 @@ relevant official documentation whenever a host/provider version changes. The ma
 - Full working-tree secret scan: PASS — `gitleaks dir` found no leaks.
 - Central packaged no-code QA: PASS — the real Tauri macOS bundle launched with isolated temporary state; Playwright
   verified the setup UI, privacy mutation/readback, backup action and clean sidecar lifecycle. Evidence:
-  `/Users/radossagency/.radoss-qa/artifacts/run-2026-08-25T23-58-42-604Z/universal-tauri-macos/evidence.json`.
+  `/Users/radossagency/.radoss-qa/artifacts/run-2026-08-26T00-12-30-008Z/universal-tauri-macos/evidence.json`.
+- Central all-adapter QA: PASS — `naas-public` and `universal-tauri-macos` both passed in the same run; aggregate
+  evidence is under `/Users/radossagency/.radoss-qa/artifacts/run-2026-08-26T00-12-30-008Z/`.
 - Public source repository: verified public at `https://github.com/innosaint-uche/naavos`.
 - Release evidence identity: the live deployment version and source marker are now reconciled in the machine-readable
   manifest; this does not substitute for a clean public source tag.
