@@ -20,7 +20,7 @@
       "auth_boundary": "public informational page; no authenticated Avatar data",
       "health_command": "central ~/.radoss-qa adapter naas-public browser.dashboard",
       "last_verified": "2026-08-26",
-      "evidence": "central QA artifact run-2026-08-25T23-26-23-083Z/naas-public/evidence.json; Coolify container image and SOURCE_COMMIT readback",
+      "evidence": "central QA artifact run-2026-08-26T00-34-56-912Z/naas-public/evidence.json; Coolify container image and SOURCE_COMMIT readback",
       "status": "verified",
       "known_limits": [
         "Coolify control-plane deployment record was not used; the labeled application container was reconciled directly with a rollback copy"
@@ -43,8 +43,8 @@
       "runtime": "Cloudflare Worker + D1",
       "auth_boundary": "Hugging Face OAuth bearer; tenant-owner enforcement",
       "health_command": "central ~/.radoss-qa public and authenticated adapters",
-      "last_verified": "2026-08-25",
-      "evidence": "central QA artifact naas-authenticated-final/evidence.json and docs/DEPLOYMENT_EVIDENCE.md",
+      "last_verified": "2026-08-26",
+      "evidence": "central QA artifact run-2026-08-26T00-34-56-912Z/naas-public/evidence.json and docs/DEPLOYMENT_EVIDENCE.md",
       "status": "protocol_verified",
       "known_limits": [
         "two independent live-user tenant isolation is not yet accepted",
@@ -68,7 +68,7 @@
       "runtime": "Cloudflare Worker + D1",
       "auth_boundary": "Hugging Face OAuth bearer",
       "health_command": "npx wrangler deployments list --name naavos-mcp plus MCP conformance",
-      "last_verified": "2026-08-25",
+      "last_verified": "2026-08-26",
       "evidence": "deployment ID d683a9ac-bafb-454c-86eb-a81a94d19b29",
       "status": "reachable",
       "known_limits": ["not the user-facing connector URL"]
@@ -86,7 +86,7 @@
       "runtime": "none verified",
       "auth_boundary": "invalid legacy header must not be used",
       "health_command": "DNS resolution check",
-      "last_verified": "2026-08-25",
+      "last_verified": "2026-08-26",
       "evidence": "ENOTFOUND; docs/DEPLOYMENT_EVIDENCE.md",
       "status": "blocked"
     }

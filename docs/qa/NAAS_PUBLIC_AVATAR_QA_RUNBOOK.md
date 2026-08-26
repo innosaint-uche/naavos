@@ -169,7 +169,10 @@ Release only when all are true:
 - named human acceptance is recorded;
 - release artifact, commit SHA and rollback point are recorded.
 
-## Current run record — 2026-08-23
+## Historical run record — 2026-08-23 (superseded)
+
+The following record is retained as incident history. It is not the current
+implementation status.
 
 | Check                          | Result                                                  |
 | ------------------------------ | ------------------------------------------------------- |
@@ -183,3 +186,24 @@ Release only when all are true:
 | Safe install/reload/rollback   | NOT PROVEN                                              |
 | Behavioral conformance         | NOT PROVEN                                              |
 | Public release                 | NO-GO                                                   |
+
+## Current run record — 2026-08-26
+
+The current implementation was rechecked after the public-source, evidence,
+and central local-agent QA updates:
+
+| Check | Result |
+| --- | --- |
+| Universal direct tests | PASS: 31/31 |
+| Dependency audit | PASS: 0 high-severity vulnerabilities |
+| Public package preflight | PASS: 95 files scanned |
+| npm pack dry run | PASS: package contents reviewed |
+| Local Codex/Antigravity/Hermes adapter QA | PASS; two credential warnings recorded by field name only |
+| NAAS live browser/HTTP/MCP smoke | PASS |
+| Packaged Tauri macOS QA | PASS: isolated setup, persistence, privacy, backup and lifecycle |
+| NAAS CI | PASS: typecheck, tests, lint, build and secret scan |
+| Public source repositories | PASS: public repositories and clean source tags |
+| Customer/public production gate | BLOCKED: external tenant, host-account, credential and distribution evidence |
+
+Evidence is stored in the central run directory:
+`/Users/radossagency/.radoss-qa/artifacts/run-2026-08-26T00-34-56-912Z/`.
