@@ -71,7 +71,10 @@
   "source_release": {
     "visibility": "public",
     "repository": "verified",
-    "clean_tag": "not_verified"
+    "clean_tag": "verified",
+    "naas_tag": "v0.1.0-public-source",
+    "universal_avatar_repository": "https://github.com/innosaint-uche/radoss-universal-avatar",
+    "universal_avatar_tag": "v0.2.0-public-source"
   },
   "security": {
     "secret_scan": "pass",
