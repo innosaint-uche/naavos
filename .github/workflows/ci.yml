@@ -117,8 +117,8 @@ jobs:
 
       - name: Verify CLI works
         run: |
-          pnpm exec naavos --version
-          pnpm exec naavos doctor
+          pnpm --filter @naavos/cli exec node bin/naavos.js --version
+          pnpm --filter @naavos/cli exec node bin/naavos.js doctor
 
   secrets-scan:
     name: Secrets Scan
