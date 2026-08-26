@@ -40,12 +40,12 @@ relevant official documentation whenever a host/provider version changes. The ma
 - Full working-tree secret scan: PASS — `gitleaks dir` found no leaks.
 - Central packaged no-code QA: PASS — the real Tauri macOS bundle launched with isolated temporary state; Playwright
   verified the setup UI, privacy mutation/readback, backup action and clean sidecar lifecycle. Evidence:
-  `/Users/radossagency/.radoss-qa/artifacts/run-2026-08-26T00-30-14-302Z/universal-tauri-macos/evidence.json`.
+  `/Users/radossagency/.radoss-qa/artifacts/run-2026-08-26T00-34-56-912Z/universal-tauri-macos/evidence.json`.
 - Central all-adapter QA: PASS — `local-agents`, `naas-public` and `universal-tauri-macos` all passed in the same run; aggregate
-  evidence is under `/Users/radossagency/.radoss-qa/artifacts/run-2026-08-26T00-30-14-302Z/`.
+  evidence is under `/Users/radossagency/.radoss-qa/artifacts/run-2026-08-26T00-34-56-912Z/`.
 - Central local-agent QA: PASS — Codex, Antigravity and Hermes adapter markers were present; `radoss doctor`
   confirmed local MCP health and Hermes OAuth state. Evidence is under
-  `/Users/radossagency/.radoss-qa/artifacts/run-2026-08-26T00-30-14-302Z/local-agents/`.
+  `/Users/radossagency/.radoss-qa/artifacts/run-2026-08-26T00-34-56-912Z/local-agents/`.
 - Public source repository: verified public at `https://github.com/innosaint-uche/naavos`.
 - Universal Avatar source repository: verified public at
   `https://github.com/innosaint-uche/radoss-universal-avatar`.
