@@ -25,7 +25,7 @@ shell command merely to connect an account.
 | Hosted authority      | Branded HTTPS MCP gateway with OAuth, tenant-owner enforcement and exact deployment identity                                              |
 | Agent integrations    | Thin, independently verified adapters for Codex, Antigravity, Hermes, ChatGPT, Claude and later hosts                                     |
 | Open source           | Verified public source, license, contribution/security guidance, reproducible checks and truthful capability status                       |
-| Optional integrations | ReMe, Supabase and other providers remain explicit opt-ins; Ollama is not part of the public default path                                 |
+| Optional integrations | ReMe, MemU, NotebookLM, Supabase, Firebase and other providers are explicit, replaceable opt-ins with clear ownership; Ollama is not part of the public default path |
 
 ## What “ready” means
 
@@ -58,6 +58,24 @@ The shared process is:
 
 Rust is an optional central Tauri/artifact adapter. It must not be added to web-only projects or copied into every
 repository.
+
+## Tool responsibility boundary
+
+These tools are part of the requested product consideration, but they do not all become canonical Avatar infrastructure:
+
+| Tool | Bounded responsibility | Authority | Current status |
+| --- | --- | --- | --- |
+| Hermes | One visible layered orchestrator that guides setup and delegates guarded actions | Orchestration only; never Avatar truth | Implemented locally |
+| SQLite + FTS5 | User-owned identity, preference, consent, memory and audit ledger | Canonical local Avatar authority | Implemented locally |
+| ReMe | Optional readable local memory projection | Rebuildable projection | Implemented as explicit opt-in |
+| MemU | Optional memory retrieval/summarisation projection for online or agent workflows | Rebuildable projection; never identity or consent authority | Architecture candidate, not release evidence |
+| NotebookLM | Optional user-directed research/reference workspace and import source | External research source; never canonical personal memory | Integration not yet implemented |
+| Supabase | Optional authenticated cloud sync and durable hosted projection | Storage/synchronisation service; domain authorization remains NAAS | Hosted integration not yet evidenced |
+| Firebase | Alternative cloud identity/sync provider only if a measured decision selects it | Replaceable provider; not co-installed with Supabase by default | Not selected |
+| Ollama | Technical/local-model option for advanced users | User-managed external option | Excluded from the public default product |
+
+The public product must present these as user choices with consequences, not as a tool parade. Adding an adapter requires a
+named responsibility, consent boundary, export/delete path, replacement path, and evidence record.
 
 ## Non-negotiable delivery rules
 
