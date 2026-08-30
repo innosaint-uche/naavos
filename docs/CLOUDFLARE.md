@@ -4,6 +4,21 @@
 > publish or configure an endpoint until DNS, TLS, exact routing, MCP protocol,
 > OAuth, tenant isolation, and release identity have passed live checks.
 
+## Ownership boundary
+
+This document describes the existing NAAS operator deployment and is not a
+prerequisite for the open-source Universal Avatar or for an individual user.
+The current NAAS route uses the maintainer's Hostinger/Coolify and Cloudflare
+accounts. A user who chooses an online Avatar should deploy an isolated copy
+into the user's own Cloudflare account, VPS, or other supported host; the user
+owns that domain, storage, credentials, and operating cost. Local mode needs
+none of these services.
+
+The future no-code provisioning surface should collect the user's hosting
+choice and open that provider's authorization flow. It must never silently
+deploy into the maintainer's accounts or make the NAAS-managed route a hidden
+dependency.
+
 ## Current routing decision
 
 - `https://naavos.radoss.agency` is the existing public dashboard surface.
@@ -95,9 +110,10 @@ Domain, not a raw CNAME, and verify the branded MCP server at:
 https://mcp.naavos.radoss.agency/mcp
 ```
 
-Do not recreate an accidental MCP CNAME or use the retired `api.naavos.io`
-route. The branded route is the user-facing connector; the Worker URL is kept
-only as an implementation/test origin.
+Do not recreate an accidental MCP CNAME or use any retired route. The branded
+NAAS route is the user-facing connector for this operator deployment; a
+user-owned deployment must use the user's own verified hostname. The Worker
+URL is kept only as an implementation/test origin.
 
 ## CORS Configuration
 
