@@ -1,8 +1,8 @@
-# Building and Using NAAS as an Open-Source Avatar OS
+# Building and Using NAAvOS as an Open-Source Avatar OS
 
 ## What users get
 
-NAAS should let a person define a portable, inspectable context package and apply only the approved parts to supported AI hosts. It is not a personality test, a hidden surveillance layer or a promise that a model becomes the person.
+NAAvOS should let a person define a portable, inspectable context package and apply only the approved parts to supported AI hosts. It is not a personality test, a hidden surveillance layer or a promise that a model becomes the person. Radoss Agency is the maintainer; NAAvOS is the product.
 
 ## Recommended user journey
 

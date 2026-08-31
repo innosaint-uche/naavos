@@ -6,9 +6,9 @@
 
 ## Ownership boundary
 
-This document describes the existing NAAS operator deployment and is not a
+This document describes the existing NAAvOS operator deployment and is not a
 prerequisite for the open-source Universal Avatar or for an individual user.
-The current NAAS route uses the maintainer's Hostinger/Coolify and Cloudflare
+The current NAAvOS route uses the maintainer's Hostinger/Coolify and Cloudflare
 accounts. A user who chooses an online Avatar should deploy an isolated copy
 into the user's own Cloudflare account, VPS, or other supported host; the user
 owns that domain, storage, credentials, and operating cost. Local mode needs
@@ -16,7 +16,7 @@ none of these services.
 
 The future no-code provisioning surface should collect the user's hosting
 choice and open that provider's authorization flow. It must never silently
-deploy into the maintainer's accounts or make the NAAS-managed route a hidden
+deploy into the maintainer's accounts or make the NAAvOS-managed route a hidden
 dependency.
 
 ## Current routing decision
@@ -39,7 +39,7 @@ The standards-based Worker remains deployed at this implementation/test origin:
 https://naavos-mcp.innosaint-uche.workers.dev/mcp
 ```
 
-For the current NAAS architecture, the public dashboard remains on the
+For the current NAAvOS architecture, the public dashboard remains on the
 existing Hostinger/Coolify origin while the standards-compliant MCP service is
 deployed as a Cloudflare Worker with D1 persistence. The branded route is
 publicly reachable through the existing edge proxy; the Worker origin is not
@@ -111,7 +111,7 @@ https://mcp.naavos.radoss.agency/mcp
 ```
 
 Do not recreate an accidental MCP CNAME or use any retired route. The branded
-NAAS route is the user-facing connector for this operator deployment; a
+NAAvOS route is the user-facing connector for this operator deployment; a
 user-owned deployment must use the user's own verified hostname. The Worker
 URL is kept only as an implementation/test origin.
 
