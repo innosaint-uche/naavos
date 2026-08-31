@@ -78,7 +78,8 @@
   },
   "security": {
     "secret_scan": "pass",
-    "credential_remediation": "pending"
+    "distribution_review": "pending",
+    "personal_environment_warning": "pending"
   },
   "dns": {
     "authoritative_mcp_radoss_agency": "no_record",

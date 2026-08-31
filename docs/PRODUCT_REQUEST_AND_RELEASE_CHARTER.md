@@ -35,8 +35,9 @@ There are two separate release claims:
    contributor path and central QA.
 2. **Customer/public production release:** the source-public requirements plus hosted OAuth, two independent live-user
    tenant isolation, named ChatGPT and Claude acceptance, persistence/deletion/rollback evidence, production signing and
-   notarisation, advertised-platform artifacts, credential remediation, clean release tag and exact source/deployment
-   evidence.
+   notarisation, advertised-platform artifacts, a distribution security review, clean release tag and exact
+   source/deployment evidence. Personal credentials already present in an operator's private agent configuration are
+   tracked as a separate operational warning and are never copied, exposed, or mutated by a distributable build.
 
 Passing local tests does not prove the second claim.
 

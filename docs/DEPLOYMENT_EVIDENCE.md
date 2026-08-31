@@ -70,9 +70,10 @@ relevant official documentation whenever a host/provider version changes. The ma
 - Production signing/notarization evidence for the Tauri distribution.
 - Two independent live production users have not yet been used for the tenant-isolation acceptance; the fixture is not a
   substitute for that live evidence.
-- Credential-remediation evidence remains pending. The branded-route DNS/TLS/metadata evidence is
-  verified, but it does not substitute for authenticated MCP and two-live-user evidence. A successful repository secret
-  scan does not prove that previously embedded third-party credentials are safe to publish.
+- The personal Antigravity configuration contains pre-existing embedded credential fields; values were not read,
+  printed, copied, or modified. This is a personal-environment warning, not distribution evidence, and the isolated
+  sample does not use those paths. A distribution security review must still prove that the source and artifacts contain
+  no credentials before release.
 
 ## Do not use
 
