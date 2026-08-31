@@ -11,6 +11,7 @@
     "format": "node scripts/check-format.mjs --write",
     "format:check": "node scripts/check-format.mjs",
     "secrets:scan": "gitleaks detect --source . --config .gitleaks.toml -v",
+    "verify:live-tenants": "node scripts/verify-live-tenants.mjs",
     "prepare": "husky install"
   },
   "devDependencies": {
