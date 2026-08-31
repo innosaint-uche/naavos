@@ -1,7 +1,15 @@
-export function cursorAdapter(pkg) {
-  const identity = pkg.identity || {};
-  const communication = pkg.communication || {};
-  const rules = pkg.operating_rules || [];
+import type { AvatarPackage, Rule } from '@naavos/schema';
+
+import type { FileMap } from '../index.js';
+
+/**
+ * Cursor adapter — generates .cursorrules with identity, communication
+ * style, operating rules, and privacy settings.
+ */
+export function cursorAdapter(pkg: AvatarPackage): FileMap {
+  const identity = pkg.identity ?? {};
+  const communication = pkg.communication ?? {};
+  const rules = pkg.operating_rules ?? [];
 
   const content = `# .cursorrules — NAAvOS Integration
 
@@ -23,16 +31,26 @@ export function cursorAdapter(pkg) {
 
 ## Operating Rules
 
-${rules.map((r) => `- **${r.id || r.statement.slice(0, 30)}:** ${r.statement} (priority: ${r.priority})`).join('\n')}
+${formatRules(rules)}
 
 ## Privacy
 
-- **Cloud sync:** ${pkg.privacy?.consents?.['allow-cloud-sync'] ? 'Allowed' : 'Disabled'}
-- **Telemetry:** ${pkg.privacy?.consents?.['allow-telemetry'] ? 'Allowed' : 'Disabled'}
+- **Cloud sync:** ${fmtBool(pkg.privacy?.consents?.['allow-cloud-sync'])}
+- **Telemetry:** ${fmtBool(pkg.privacy?.consents?.['allow-telemetry'])}
 
 ---
 *Compiled from NAAvOS package ${pkg.metadata?.package_id || 'unknown'} — ${new Date().toISOString()}*
 `;
 
   return new Map([['.cursorrules', content]]);
+}
+
+function formatRules(rules: Rule[]): string {
+  return rules
+    .map((r) => `- **${r.id || r.statement.slice(0, 30)}:** ${r.statement} (priority: ${r.priority})`)
+    .join('\n');
+}
+
+function fmtBool(value: boolean | undefined): 'Allowed' | 'Disabled' {
+  return value ? 'Allowed' : 'Disabled';
 }

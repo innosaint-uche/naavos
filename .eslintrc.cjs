@@ -28,6 +28,12 @@ module.exports = {
     sourceType: 'module',
   },
   plugins: ['@typescript-eslint', 'import', 'unused-imports'],
+  settings: {
+    'import/resolver': {
+      typescript: true,
+      node: true,
+    },
+  },
   rules: {
     // TypeScript
     '@typescript-eslint/consistent-type-imports': 'error',
@@ -70,6 +76,12 @@ module.exports = {
       rules: {
         '@typescript-eslint/no-require-imports': 'off',
         'import/no-extraneous-dependencies': 'off',
+      },
+    },
+    {
+      files: ['packages/cli/**/*.ts'],
+      rules: {
+        'no-console': 'off',
       },
     },
   ],

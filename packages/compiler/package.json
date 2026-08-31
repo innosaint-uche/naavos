@@ -2,20 +2,37 @@
   "name": "@naavos/compiler",
   "version": "1.0.0",
   "description": "NAAvOS avatar compiler - generates host-specific artifacts",
-  "main": "src/index.js",
+  "main": "dist/index.js",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    }
+  },
   "type": "module",
   "scripts": {
-    "lint": "eslint . --ext .js",
-    "test": "node test.js",
-    "typecheck": "node --check src/index.js"
+    "build": "tsc -p tsconfig.json",
+    "lint": "eslint src --ext .ts",
+    "test": "vitest run",
+    "test:watch": "vitest watch",
+    "typecheck": "tsc --noEmit -p tsconfig.json"
   },
   "dependencies": {
     "@naavos/schema": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "typescript": "^5.5.0",
+    "vitest": "^2.0.0"
   },
   "keywords": [
     "naavos",
     "compiler",
     "avatar"
   ],
-  "license": "MIT"
+  "license": "MIT",
+  "prepare": "tsc -p tsconfig.json"
 }

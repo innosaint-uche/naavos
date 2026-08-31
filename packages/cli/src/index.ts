@@ -1,24 +1,21 @@
 #!/usr/bin/env node
-/**
- * NAAvOS CLI - Give Every AI Your Brain
- * Phase 1: Schema + Compiler wired in
- */
+import fs from 'node:fs';
+import path from 'node:path';
+import { PassThrough } from 'node:stream';
+import { pipeline } from 'node:stream/promises';
+import { createGzip } from 'node:zlib';
 
 import { compile, listTargets } from '@naavos/compiler';
+import type { FileMap } from '@naavos/compiler';
 import { listPacks, runEval } from '@naavos/eval-packs';
 import { AvatarPackageSchema } from '@naavos/schema';
+import type { AvatarPackage } from '@naavos/schema';
 import chalk from 'chalk';
 import { Command } from 'commander';
-import fs from 'fs';
 import inquirer from 'inquirer';
 import ora from 'ora';
-import path from 'path';
-import { PassThrough } from 'stream';
-import { pipeline } from 'stream/promises';
-import { fileURLToPath } from 'url';
-import { createGzip } from 'zlib';
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
+import type { JournalEntry } from './types.js';
 
 const program = new Command();
 
@@ -26,17 +23,21 @@ const logo = `
    _   _  ____   ____   ___  ____  
   | \\ | |/ __ \\ / __ \\ / _ \\|  _ \\ 
   |  \\| | |  | | |  | | | | | |_) |
-  |_|\\__|_|  |_|_|  |_|_| |_|_.__/ 
+  | |\\__| |  | |  |  | | | | | |_) |
+  |  \\/|_\\  | |_| |  |_|_| |_|_.__/ 
+  |  |  |  | |_| | |_| | | | |    
+  |  |  |  |  |_| | |_| | |_| |    
+  |__|  |__\\____\\___/ \\___/|____/ 
    AI Avatar OS System
 `;
 
 program.name('naavos').description('NAAvOS: Give Every AI Your Brain').version('1.0.0');
 
-function getAvatarPath() {
-  return path.join(process.env.HOME, '.naavos', 'avatar.json');
+function getAvatarPath(): string {
+  return path.join(process.env['HOME'] ?? '', '.naavos', 'avatar.json');
 }
 
-function loadAvatar() {
+function loadAvatar(): unknown {
   const avatarPath = getAvatarPath();
   if (!fs.existsSync(avatarPath)) {
     throw new Error('No avatar found. Run `naavos init` first.');
@@ -44,28 +45,28 @@ function loadAvatar() {
   return JSON.parse(fs.readFileSync(avatarPath, 'utf-8'));
 }
 
-function getBackupsDir() {
-  return path.join(process.env.HOME, '.naavos', 'backups');
+function getBackupsDir(): string {
+  return path.join(process.env['HOME'] ?? '', '.naavos', 'backups');
 }
 
-function getBackupJournalPath() {
+function getBackupJournalPath(): string {
   return path.join(getBackupsDir(), 'journal.json');
 }
 
-function loadJournal() {
+function loadJournal(): JournalEntry[] {
   const journalPath = getBackupJournalPath();
   if (!fs.existsSync(journalPath)) {
     return [];
   }
-  return JSON.parse(fs.readFileSync(journalPath, 'utf-8'));
+  return JSON.parse(fs.readFileSync(journalPath, 'utf-8')) as JournalEntry[];
 }
 
-function saveJournal(journal) {
+function saveJournal(journal: JournalEntry[]): void {
   fs.mkdirSync(path.dirname(getBackupJournalPath()), { recursive: true });
   fs.writeFileSync(getBackupJournalPath(), JSON.stringify(journal, null, 2));
 }
 
-async function createBackup(target, data) {
+async function createBackup(target: string, data: AvatarPackage): Promise<string> {
   const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
   const backupId = `${timestamp}-${target}`;
   const backupDir = path.join(getBackupsDir(), backupId);
@@ -91,7 +92,7 @@ async function createBackup(target, data) {
   return backupId;
 }
 
-async function restoreBackup(backupId) {
+async function restoreBackup(backupId: string): Promise<string> {
   const backupDir = path.join(getBackupsDir(), backupId);
   if (!fs.existsSync(backupDir)) {
     throw new Error(`Backup not found: ${backupId}`);
@@ -105,7 +106,8 @@ async function restoreBackup(backupId) {
 
   const target = entry.target;
   if (target === 'hermes') {
-    const hermesHome = process.env.HERMES_HOME || path.join(process.env.HOME, '.hermes');
+    const hermesHome =
+      process.env['HERMES_HOME'] || path.join(process.env['HOME'] ?? '', '.hermes');
     const entries = fs.readdirSync(backupDir, { withFileTypes: true, recursive: true });
     for (const entry of entries) {
       if (entry.isFile()) {
@@ -122,12 +124,25 @@ async function restoreBackup(backupId) {
   throw new Error(`Rollback for target "${target}" is not implemented yet.`);
 }
 
-function listBackups() {
+function listBackups(): JournalEntry[] {
   return loadJournal();
 }
 
-async function createTarGz(files, outputPath) {
-  const tarParts = [];
+function walkDir(dir: string, base: string, files: Map<string, string>): void {
+  const entries = fs.readdirSync(dir, { withFileTypes: true });
+  for (const entry of entries) {
+    const fullPath = path.join(dir, entry.name);
+    const relativePath = path.relative(base, fullPath);
+    if (entry.isDirectory()) {
+      walkDir(fullPath, base, files);
+    } else if (entry.isFile()) {
+      files.set(relativePath, fs.readFileSync(fullPath, 'utf-8'));
+    }
+  }
+}
+
+async function createTarGz(files: FileMap, outputPath: string): Promise<void> {
+  const tarParts: Buffer[] = [];
 
   for (const [filePath, content] of files) {
     const contentBuffer = Buffer.from(content, 'utf-8');
@@ -163,7 +178,7 @@ async function createTarGz(files, outputPath) {
 
     let checksum = 0;
     for (let i = 0; i < 512; i++) {
-      checksum += header[i];
+      checksum += header[i] ?? 0;
     }
     const checksumStr = checksum.toString(8).padStart(6, '0');
     header.write(checksumStr, 148, 6, 'ascii');
@@ -217,7 +232,8 @@ program
           type: 'input',
           name: 'rules',
           message: 'Top 3 operating rules (comma-separated):',
-          default: 'Execute 70% faster, Zero fluff, Cite evidence before claiming completion',
+          default:
+            'Execute 70% faster, Zero fluff, Cite evidence before claiming completion',
         },
         {
           type: 'list',
@@ -225,9 +241,14 @@ program
           message: 'Primary AI runtime:',
           choices: listTargets(),
         },
-      ]);
+      ]) as {
+        name: string;
+        style: string;
+        rules: string;
+        target: string;
+      };
 
-      const avatarDir = path.join(process.env.HOME, '.naavos');
+      const avatarDir = path.join(process.env['HOME'] ?? '', '.naavos');
       fs.mkdirSync(avatarDir, { recursive: true });
 
       const schema = {
@@ -275,7 +296,10 @@ program
         evals: [],
       };
 
-      fs.writeFileSync(path.join(avatarDir, 'avatar.json'), JSON.stringify(schema, null, 2));
+      fs.writeFileSync(
+        path.join(avatarDir, 'avatar.json'),
+        JSON.stringify(schema, null, 2),
+      );
 
       spinner.succeed(chalk.green('Avatar initialized!'));
       console.log(chalk.bold('\nNext steps:'));
@@ -283,14 +307,14 @@ program
       console.log(chalk.gray('  naavos compile             # Compile for your target'));
       console.log(chalk.gray('  naavos install             # Install into your AI tool'));
     } catch (error) {
-      spinner.fail(chalk.red('Failed: ' + error.message));
+      spinner.fail(chalk.red('Failed: ' + (error as Error).message));
     }
   });
 
 program
   .command('validate')
   .description('Validate your avatar package')
-  .action(async () => {
+  .action(() => {
     const spinner = ora('Validating avatar...').start();
     try {
       const data = loadAvatar();
@@ -298,9 +322,10 @@ program
       spinner.succeed(chalk.green('Avatar package is valid.'));
     } catch (error) {
       spinner.fail(chalk.red('Validation failed:'));
+      const e = error as { errors?: { path: (string | number)[]; message: string }[] };
       console.error(
-        error.errors?.map((e) => `  - ${e.path.join('.')}: ${e.message}`).join('\n') ||
-          error.message
+        e.errors?.map((err) => `  - ${err.path.join('.')}: ${err.message}`).join('\n') ||
+          (error as Error).message,
       );
       process.exit(1);
     }
@@ -312,18 +337,21 @@ program
   .option('--target <id>', 'Target runtime ID')
   .option('--dry-run', 'Print output without writing files')
   .option('--format <id>', 'Output format: files (default) or tar.gz (Hermes only)')
-  .action(async (options) => {
+  .action(async (options: { target?: string; dryRun?: boolean; format?: string }) => {
     const spinner = ora('Compiling avatar...').start();
     try {
       const data = loadAvatar();
       AvatarPackageSchema.parse(data);
+      const parsed = data as AvatarPackage;
 
-      const target = options.target || data.adapters?.[0]?.host_id;
+      const target = options.target || parsed.adapters?.[0]?.host_id;
       if (!target) {
-        throw new Error('No target specified. Use --target or set adapters in avatar.json.');
+        throw new Error(
+          'No target specified. Use --target or set adapters in avatar.json.',
+        );
       }
 
-      const files = compile(data, target);
+      const files = compile(parsed, target);
 
       if (options.dryRun) {
         console.log(chalk.cyan(`\nCompiled output for target: ${target}\n`));
@@ -339,14 +367,25 @@ program
         if (target !== 'hermes') {
           throw new Error('tar.gz format is only supported for the Hermes target.');
         }
-        const outputPath = path.join(process.env.HOME, '.naavos', 'avatar-profile.tar.gz');
+        const outputPath = path.join(
+          process.env['HOME'] ?? '',
+          '.naavos',
+          'avatar-profile.tar.gz',
+        );
         fs.mkdirSync(path.dirname(outputPath), { recursive: true });
         await createTarGz(files, outputPath);
-        spinner.succeed(chalk.green(`Exported Hermes profile bundle to ${outputPath}`));
+        spinner.succeed(
+          chalk.green(`Exported Hermes profile bundle to ${outputPath}`),
+        );
         return;
       }
 
-      const outputDir = path.join(process.env.HOME, '.naavos', 'compiled', target);
+      const outputDir = path.join(
+        process.env['HOME'] ?? '',
+        '.naavos',
+        'compiled',
+        target,
+      );
       fs.mkdirSync(outputDir, { recursive: true });
 
       for (const [filePath, content] of files) {
@@ -355,9 +394,11 @@ program
         fs.writeFileSync(fullPath, content);
       }
 
-      spinner.succeed(chalk.green(`Compiled ${files.size} files to ${outputDir}`));
+      spinner.succeed(
+        chalk.green(`Compiled ${files.size} files to ${outputDir}`),
+      );
     } catch (error) {
-      spinner.fail(chalk.red('Compilation failed: ' + error.message));
+      spinner.fail(chalk.red('Compilation failed: ' + (error as Error).message));
       process.exit(1);
     }
   });
@@ -367,49 +408,46 @@ program
   .description('Export compiled avatar as a Hermes profile bundle (.tar.gz)')
   .option('--target <id>', 'Target runtime ID (default: hermes)')
   .option('--output <path>', 'Output file path')
-  .action(async (options) => {
+  .action(async (options: { target?: string; output?: string }) => {
     const spinner = ora('Exporting profile bundle...').start();
     try {
       const data = loadAvatar();
-      const target = options.target || data.adapters?.[0]?.host_id || 'hermes';
+      const target = options.target || (data as AvatarPackage).adapters?.[0]?.host_id || 'hermes';
 
       if (target !== 'hermes') {
         throw new Error('Export is only supported for the Hermes target.');
       }
 
-      const compiledDir = path.join(process.env.HOME, '.naavos', 'compiled', target);
+      const compiledDir = path.join(
+        process.env['HOME'] ?? '',
+        '.naavos',
+        'compiled',
+        target,
+      );
       if (!fs.existsSync(compiledDir)) {
-        const files = compile(data, target);
+        const files = compile(data as AvatarPackage, target);
         const outputPath =
-          options.output || path.join(process.env.HOME, '.naavos', 'avatar-profile.tar.gz');
+          options.output ||
+          path.join(process.env['HOME'] ?? '', '.naavos', 'avatar-profile.tar.gz');
         fs.mkdirSync(path.dirname(outputPath), { recursive: true });
         await createTarGz(files, outputPath);
-        spinner.succeed(chalk.green(`Exported Hermes profile bundle to ${outputPath}`));
+        spinner.succeed(
+          chalk.green(`Exported Hermes profile bundle to ${outputPath}`),
+        );
       } else {
-        const files = new Map();
-
-        function walkDir(dir, base) {
-          const entries = fs.readdirSync(dir, { withFileTypes: true });
-          for (const entry of entries) {
-            const fullPath = path.join(dir, entry.name);
-            const relativePath = path.relative(base, fullPath);
-            if (entry.isDirectory()) {
-              walkDir(fullPath, base);
-            } else if (entry.isFile()) {
-              files.set(relativePath, fs.readFileSync(fullPath, 'utf-8'));
-            }
-          }
-        }
-
-        walkDir(compiledDir, compiledDir);
+        const files = new Map<string, string>();
+        walkDir(compiledDir, compiledDir, files);
         const outputPath =
-          options.output || path.join(process.env.HOME, '.naavos', 'avatar-profile.tar.gz');
+          options.output ||
+          path.join(process.env['HOME'] ?? '', '.naavos', 'avatar-profile.tar.gz');
         fs.mkdirSync(path.dirname(outputPath), { recursive: true });
         await createTarGz(files, outputPath);
-        spinner.succeed(chalk.green(`Exported Hermes profile bundle to ${outputPath}`));
+        spinner.succeed(
+          chalk.green(`Exported Hermes profile bundle to ${outputPath}`),
+        );
       }
     } catch (error) {
-      spinner.fail(chalk.red('Export failed: ' + error.message));
+      spinner.fail(chalk.red('Export failed: ' + (error as Error).message));
       process.exit(1);
     }
   });
@@ -419,31 +457,37 @@ program
   .description('Install compiled avatar into target')
   .option('--target <id>', 'Target runtime ID')
   .option('--dry-run', 'Show what would be installed')
-  .action(async (options) => {
+  .action(async (options: { target?: string; dryRun?: boolean }) => {
     const spinner = ora('Installing avatar...').start();
     try {
       const data = loadAvatar();
-      const target = options.target || data.adapters?.[0]?.host_id;
+      const target = options.target || (data as AvatarPackage).adapters?.[0]?.host_id;
       if (!target) {
         throw new Error('No target specified.');
       }
 
-      const compiledDir = path.join(process.env.HOME, '.naavos', 'compiled', target);
+      const compiledDir = path.join(
+        process.env['HOME'] ?? '',
+        '.naavos',
+        'compiled',
+        target,
+      );
       if (!fs.existsSync(compiledDir)) {
         throw new Error(
-          `Nothing compiled for target "${target}". Run naavos compile --target ${target} first.`
+          `Nothing compiled for target "${target}". Run naavos compile --target ${target} first.`,
         );
       }
 
       if (target === 'hermes') {
-        const hermesHome = process.env.HERMES_HOME || path.join(process.env.HOME, '.hermes');
+        const hermesHome =
+          process.env['HERMES_HOME'] || path.join(process.env['HOME'] ?? '', '.hermes');
 
         if (!options.dryRun) {
-          const backupId = await createBackup(target, data);
+          const backupId = await createBackup(target, data as AvatarPackage);
           console.log(chalk.gray(`Backup created: ${backupId}`));
         }
 
-        const files = compile(data, target);
+        const files = compile(data as AvatarPackage, target);
         for (const [relativePath, content] of files) {
           const dest = path.join(hermesHome, relativePath);
           if (options.dryRun) {
@@ -454,11 +498,15 @@ program
           }
         }
         spinner.succeed(
-          chalk.green(options.dryRun ? 'Dry-run complete.' : `Installed into ${hermesHome}`)
+          chalk.green(
+            options.dryRun
+              ? 'Dry-run complete.'
+              : `Installed into ${hermesHome}`,
+          ),
         );
       } else if (target === 'reme') {
         const projectRoot = process.cwd();
-        const files = compile(data, target);
+        const files = compile(data as AvatarPackage, target);
         for (const [relativePath, content] of files) {
           const dest = path.join(projectRoot, relativePath);
           if (options.dryRun) {
@@ -470,28 +518,33 @@ program
         }
 
         const hermesSkill = path.join(projectRoot, 'skills', 'reme_memory', 'SKILL.md');
-        const hermesHome = process.env.HERMES_HOME || path.join(process.env.HOME, '.hermes');
+        const hermesHome =
+          process.env['HERMES_HOME'] || path.join(process.env['HOME'] ?? '', '.hermes');
         const destSkill = path.join(hermesHome, 'skills', 'reme_memory', 'SKILL.md');
         if (fs.existsSync(hermesSkill)) {
           fs.mkdirSync(path.dirname(destSkill), { recursive: true });
           fs.copyFileSync(hermesSkill, destSkill);
-          console.log(chalk.gray(`Installed ReMe skill into Hermes: ${destSkill}`));
+          console.log(
+            chalk.gray(`Installed ReMe skill into Hermes: ${destSkill}`),
+          );
         }
 
         spinner.succeed(
           chalk.green(
-            options.dryRun ? 'Dry-run complete.' : `Installed ReMe config into ${projectRoot}`
-          )
+            options.dryRun
+              ? 'Dry-run complete.'
+              : `Installed ReMe config into ${projectRoot}`,
+          ),
         );
       } else {
         spinner.fail(
           chalk.yellow(
-            `Direct install for target "${target}" is not implemented yet. Copy files from ${compiledDir} manually.`
-          )
+            `Direct install for target "${target}" is not implemented yet. Copy files from ${compiledDir} manually.`,
+          ),
         );
       }
     } catch (error) {
-      spinner.fail(chalk.red('Installation failed: ' + error.message));
+      spinner.fail(chalk.red('Installation failed: ' + (error as Error).message));
       process.exit(1);
     }
   });
@@ -499,16 +552,19 @@ program
 program
   .command('doctor')
   .description('Run health check')
-  .action(async () => {
+  .action(() => {
     console.log(chalk.cyan('=== NAAvOS Health Check ===\n'));
-    const checks = [];
+    const checks: { name: string; pass: boolean }[] = [];
     try {
       const avatarPath = getAvatarPath();
       checks.push({ name: 'Avatar file exists', pass: fs.existsSync(avatarPath) });
       const data = loadAvatar();
       AvatarPackageSchema.parse(data);
       checks.push({ name: 'Avatar schema valid', pass: true });
-      checks.push({ name: 'Target adapters defined', pass: data.adapters?.length > 0 });
+      checks.push({
+        name: 'Target adapters defined',
+        pass: (data as AvatarPackage).adapters?.length > 0,
+      });
     } catch {
       checks.push({ name: 'Avatar schema valid', pass: false });
     }
@@ -527,13 +583,13 @@ program
   .description('Run conformance eval packs against your avatar')
   .option('--pack <id>', 'Specific eval pack to run')
   .option('--json', 'Output results as JSON')
-  .action(async (options) => {
+  .action(async (options: { pack?: string; json?: boolean }) => {
     const spinner = ora('Running conformance tests...').start();
     try {
       const data = loadAvatar();
       AvatarPackageSchema.parse(data);
 
-      const packs = options.pack ? [options.pack] : data.evals || listPacks();
+      const packs = options.pack ? [options.pack] : (data as AvatarPackage).evals || listPacks();
       if (packs.length === 0) {
         spinner.warn('No eval packs specified and none found in avatar.evals.');
         return;
@@ -554,9 +610,13 @@ program
       console.log(chalk.cyan('\n=== Conformance Results ===\n'));
       for (const result of results) {
         const color =
-          result.score === 100 ? chalk.green : result.score >= 80 ? chalk.yellow : chalk.red;
+          result.score === 100
+            ? chalk.green
+            : result.score >= 80
+              ? chalk.yellow
+              : chalk.red;
         console.log(
-          `${color(result.packName)} — ${result.passed}/${result.total} passed (${result.score}%)\n`
+          `${color(result.packName)} — ${result.passed}/${result.total} passed (${result.score}%)\n`,
         );
         for (const r of result.results) {
           const icon = r.pass ? chalk.green('✓') : chalk.red('✗');
@@ -573,10 +633,12 @@ program
         overallScore === 100 ? chalk.green : overallScore >= 80 ? chalk.yellow : chalk.red;
 
       spinner.succeed(
-        overallColor(`Fidelity score: ${overallPassed}/${overallTotal} (${overallScore}%)`)
+        overallColor(
+          `Fidelity score: ${overallPassed}/${overallTotal} (${overallScore}%)`,
+        ),
       );
     } catch (error) {
-      spinner.fail(chalk.red('Test run failed: ' + error.message));
+      spinner.fail(chalk.red('Test run failed: ' + (error as Error).message));
       process.exit(1);
     }
   });
@@ -592,7 +654,7 @@ program
       return;
     }
     for (const backup of backups) {
-      console.log(`${chalk.gray(backup.id)}`);
+      console.log(chalk.gray(backup.id));
       console.log(`  Target: ${backup.target}`);
       console.log(`  Created: ${backup.created_at}`);
       console.log(`  Package: ${backup.package_id || 'unknown'}`);
@@ -605,7 +667,7 @@ program
   .command('rollback')
   .description('Rollback a previous installation')
   .option('--id <backupId>', 'Specific backup ID to restore (default: most recent)')
-  .action(async (options) => {
+  .action(async (options: { id?: string }) => {
     console.log(chalk.cyan('=== NAAvOS Rollback ===\n'));
     try {
       const backups = listBackups();
@@ -614,13 +676,19 @@ program
         return;
       }
 
-      const backupId = options.id || backups[0].id;
+      const backupId = options.id || backups[0]?.id;
+      if (!backupId) {
+        console.log(chalk.red('No backups available.'));
+        return;
+      }
       const backup = backups.find((b) => b.id === backupId);
       if (!backup) {
         console.log(chalk.red(`Backup not found: ${backupId}`));
         console.log(chalk.gray('Available backups:'));
         for (const b of backups.slice(0, 10)) {
-          console.log(chalk.gray(`  - ${b.id} (${b.target}, ${b.created_at})`));
+          console.log(
+            chalk.gray(`  - ${b.id} (${b.target}, ${b.created_at})`),
+          );
         }
         process.exit(1);
       }
@@ -628,16 +696,30 @@ program
       const spinner = ora(`Rolling back to ${backupId}...`).start();
       const target = backup.target;
       if (target !== 'hermes') {
-        spinner.fail(chalk.yellow(`Rollback for target "${target}" is not implemented yet.`));
+        spinner.fail(
+          chalk.yellow(`Rollback for target "${target}" is not implemented yet.`),
+        );
         return;
       }
 
       const dest = await restoreBackup(backupId);
-      spinner.succeed(chalk.green(`Rolled back to ${backupId}. Restored to ${dest}`));
+      spinner.succeed(
+        chalk.green(`Rolled back to ${backupId}. Restored to ${dest}`),
+      );
     } catch (error) {
-      console.log(chalk.red('Rollback failed: ' + error.message));
+      console.log(chalk.red('Rollback failed: ' + (error as Error).message));
       process.exit(1);
     }
   });
 
 export { program };
+export {
+  loadAvatar,
+  loadJournal,
+  saveJournal,
+  createBackup,
+  restoreBackup,
+  listBackups,
+  listTargets,
+  createTarGz,
+};

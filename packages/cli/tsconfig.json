@@ -8,8 +8,8 @@
     "sourceMap": true,
     "allowJs": false,
     "checkJs": false,
-    "tsBuildInfoFile": "../../dist/packages/schema/tsconfig.tsbuildinfo"
+    "tsBuildInfoFile": "../../dist/packages/cli/tsconfig.tsbuildinfo"
   },
   "include": ["src/**/*.ts"],
-  "exclude": ["node_modules", "dist", "src/**/*.test.ts", "src/**/*.test.tsx"]
+  "exclude": ["node_modules", "dist", "src/**/*.test.ts", "src/**/*.test.tsx", "bin"]
 }

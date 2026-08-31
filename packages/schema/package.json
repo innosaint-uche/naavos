@@ -2,21 +2,23 @@
   "name": "@naavos/schema",
   "version": "1.0.0",
   "description": "NAAvOS avatar package schema and validation",
-  "main": "src/index.js",
-  "module": "src/index.js",
+  "main": "dist/index.js",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
   "exports": {
     ".": {
-      "import": "./src/index.js",
-      "default": "./src/index.js"
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
     }
   },
   "type": "module",
   "scripts": {
-    "build": "node ../../scripts/build-schema.mjs",
-    "lint": "eslint src --ext .js",
-    "test": "node test.js",
-    "test:watch": "node --watch test.js",
-    "typecheck": "node --check src/index.js"
+    "build": "tsc -p tsconfig.json",
+    "lint": "eslint src --ext .ts",
+    "test": "vitest run",
+    "test:watch": "vitest watch",
+    "typecheck": "tsc --noEmit -p tsconfig.json"
   },
   "keywords": [
     "naavos",
@@ -30,5 +32,6 @@
   "devDependencies": {
     "@types/node": "^20.0.0",
     "vitest": "^2.0.0"
-  }
+  },
+  "prepare": "tsc -p tsconfig.json"
 }

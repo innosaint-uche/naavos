@@ -2,15 +2,27 @@
   "name": "@naavos/cli",
   "version": "1.0.0",
   "description": "NAAvOS command-line interface",
+  "main": "dist/index.js",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    }
+  },
   "type": "module",
   "bin": {
     "naavos": "./bin/naavos.js"
   },
   "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "lint": "eslint src --ext .ts",
     "start": "node bin/naavos.js",
-    "lint": "eslint . --ext .js",
-    "test": "node --check bin/naavos.js && node --check index.js",
-    "typecheck": "node --check bin/naavos.js && node --check index.js"
+    "test": "vitest run",
+    "test:watch": "vitest watch",
+    "typecheck": "tsc --noEmit -p tsconfig.json"
   },
   "dependencies": {
     "@naavos/schema": "workspace:*",
@@ -21,10 +33,16 @@
     "ora": "^7.0.1",
     "inquirer": "^9.2.12"
   },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "typescript": "^5.5.0",
+    "vitest": "^2.0.0"
+  },
   "keywords": [
     "naavos",
     "cli",
     "avatar"
   ],
-  "license": "MIT"
+  "license": "MIT",
+  "prepare": "tsc -p tsconfig.json"
 }

@@ -19,25 +19,36 @@ export const MetadataSchema = z.object({
     .describe("Origin of the package (e.g., 'created-from-cli', 'imported-from-v0')."),
 });
 
+export type Metadata = z.infer<typeof MetadataSchema>;
+
 export const IdentitySchema = z.object({
   name: z.string().describe('Public display name.'),
   roles: z.array(z.string()).optional().describe("Public roles (e.g., 'Developer', 'Writer')."),
   self_description: z.string().optional().describe('A brief, public self-description.'),
 });
 
+export type Identity = z.infer<typeof IdentitySchema>;
+
 export const CommunicationSchema = z.object({
   tone: z.string().describe("e.g., 'Direct, authoritative, straight-talk'"),
   structure: z.string().describe("e.g., 'Bulleted, action-oriented'"),
   verbosity: z.string().describe("e.g., 'Minimal — no preamble, no fluff'"),
-  accessibility_needs: z.array(z.string()).optional().describe("e.g., 'prefer-tables-over-prose'"),
+  accessibility_needs: z
+    .array(z.string())
+    .optional()
+    .describe("e.g., 'prefer-tables-over-prose'"),
   prohibited_patterns: z
     .array(z.string())
     .optional()
     .describe("Phrases to avoid, e.g., 'As an AI...'"),
 });
 
+export type Communication = z.infer<typeof CommunicationSchema>;
+
 export const RuleSchema = z.object({
-  id: z.string().describe("Unique identifier for the rule (e.g., 'evidence.no_false_completion')."),
+  id: z
+    .string()
+    .describe("Unique identifier for the rule (e.g., 'evidence.no_false_completion')."),
   statement: z.string().describe('The human-readable rule statement.'),
   priority: z.number().int().min(0).max(100).describe('Precedence score (0-100, higher wins).'),
   scope: z
@@ -59,6 +70,8 @@ export const RuleSchema = z.object({
     .describe('Names of conformance tests that verify this rule.'),
 });
 
+export type Rule = z.infer<typeof RuleSchema>;
+
 export const ModeSchema = z.object({
   id: z.string().describe("Unique ID for the mode (e.g., 'cto_mode')."),
   activation_phrases: z.array(z.string()).describe('Phrases that trigger this mode.'),
@@ -74,6 +87,8 @@ export const ModeSchema = z.object({
     .describe('Specific tools or skills enabled by this mode.'),
 });
 
+export type Mode = z.infer<typeof ModeSchema>;
+
 export const RouteSchema = z.object({
   id: z.string().describe('Unique ID for the route.'),
   intent: z.string().describe("The user intent this route handles (e.g., 'create-video')."),
@@ -86,17 +101,24 @@ export const RouteSchema = z.object({
   timeout_ms: z.number().int().optional().describe('Timeout in milliseconds.'),
 });
 
+export type Route = z.infer<typeof RouteSchema>;
+
 export const PrivacySchema = z.object({
   consents: z
     .record(z.boolean())
     .describe('Record of user consents for specific data processing activities.'),
   data_residency: z.string().optional().describe('Preferred geographic region for data storage.'),
-  retention_policy: z.string().optional().describe("e.g., 'delete-after-90-days'"),
+  retention_policy: z
+    .string()
+    .optional()
+    .describe("e.g., 'delete-after-90-days'"),
   redaction_rules: z
     .array(z.string())
     .optional()
     .describe('Patterns to redact from logs and outputs.'),
 });
+
+export type Privacy = z.infer<typeof PrivacySchema>;
 
 export const AdapterTargetSchema = z.object({
   host_id: z.string().describe("The target host ID (e.g., 'claude-code', 'gemini-cli')."),
@@ -110,10 +132,25 @@ export const AdapterTargetSchema = z.object({
     .describe("How to handle rules the host can't support."),
 });
 
+export type AdapterTarget = z.infer<typeof AdapterTargetSchema>;
+
+export const KnowledgeSourceSchema = z.object({
+  uri: z.string().optional().describe('URI or path reference to the knowledge source.'),
+  type: z
+    .string()
+    .optional()
+    .describe('Type of knowledge source (e.g., "git", "http", "connector-reme").'),
+  config: z.record(z.any()).optional().describe('Configuration for this knowledge source.'),
+});
+
+export type KnowledgeSource = z.infer<typeof KnowledgeSourceSchema>;
+
 export const AvatarPackageSchema = z.object({
   metadata: MetadataSchema.describe('Package metadata and versioning.'),
   identity: IdentitySchema.describe('Public identity information.'),
-  communication: CommunicationSchema.describe('Preferred communication style for AI interactions.'),
+  communication: CommunicationSchema.describe(
+    'Preferred communication style for AI interactions.',
+  ),
   operating_rules: z
     .array(RuleSchema)
     .min(1)
@@ -123,9 +160,7 @@ export const AvatarPackageSchema = z.object({
     .array(AdapterTargetSchema)
     .min(1)
     .describe('A list of target AI hosts this package is configured for.'),
-  evals: z
-    .array(z.string())
-    .describe('References to evaluation packs required for release gating.'),
+  evals: z.array(z.string()).describe('References to evaluation packs required for release gating.'),
   modes: z
     .array(ModeSchema)
     .optional()
@@ -135,11 +170,16 @@ export const AvatarPackageSchema = z.object({
     .optional()
     .describe('Rules for routing user intents to specific tools or skills.'),
   knowledge_sources: z
-    .array(z.string())
+    .array(z.union([z.string(), KnowledgeSourceSchema]))
     .optional()
-    .describe('References (URIs/paths) to external knowledge sources. Secrets are never embedded.'),
+    .describe(
+      'References (URIs/paths) to external knowledge sources. Can be plain strings (backward-compatible) or objects with type and config. Secrets are never embedded.',
+    ),
   projects: z
-    .array(z.string())
+    .array(z.union([z.string(), KnowledgeSourceSchema]))
     .optional()
     .describe('References (URIs/paths) to canonical project definitions.'),
 });
+
+export type AvatarPackage = z.infer<typeof AvatarPackageSchema>;
+export { z };

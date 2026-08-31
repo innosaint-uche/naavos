@@ -26,6 +26,7 @@ packages/schema/vitest.config.d.ts.map
 .DS_Store
 Thumbs.db
 
-# Secrets
+# Session-local notes
+*_TODO.md
 credentials.json
 *.pem
