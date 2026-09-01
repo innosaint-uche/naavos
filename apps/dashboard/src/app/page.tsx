@@ -21,12 +21,12 @@ import { useEffect, useRef, useState } from 'react';
 gsap.registerPlugin(ScrollTrigger);
 
 const platforms = [
-  { name: 'Hermes', icon: '🧠', status: 'Local adapter observed' },
-  { name: 'Codex', icon: '⌘', status: 'Local adapter observed' },
-  { name: 'Antigravity', icon: '✦', status: 'Local adapter observed' },
-  { name: 'Claude Code', icon: '⌨️', status: 'Certification pending' },
-  { name: 'Gemini CLI', icon: '✨', status: 'Certification pending' },
-  { name: 'ReMe', icon: '📝', status: 'Optional projection' },
+  { name: 'Hermes', icon: '🧠', status: 'Supported' },
+  { name: 'Claude Code', icon: '⌨️', status: 'Supported' },
+  { name: 'Cursor', icon: '⌘', status: 'Supported' },
+  { name: 'Gemini', icon: '✨', status: 'Supported' },
+  { name: 'OpenClaw', icon: '✦', status: 'Supported' },
+  { name: 'ReMe', icon: '📝', status: 'Supported' },
 ];
 
 const features = [
@@ -204,10 +204,10 @@ export default function Home() {
       <section className="relative pt-32 pb-20 px-4 sm:px-6 lg:px-8 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-b from-violet-500/10 via-transparent to-transparent -z-10" />
         <div className="max-w-5xl mx-auto text-center">
-          <div className="hero-badge inline-flex items-center gap-2 px-4 py-2 rounded-full border border-violet-500/30 bg-violet-500/10 mb-8">
-            <div className="w-2 h-2 rounded-full bg-violet-500 animate-pulse" />
-            <span className="text-sm text-violet-400 font-medium">
-              Controlled development release — public gate in progress
+          <div className="hero-badge inline-flex items-center gap-2 px-4 py-2 rounded-full border border-emerald-500/30 bg-emerald-500/10 mb-8">
+            <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+            <span className="text-sm text-emerald-400 font-medium">
+              Open source — install locally in 60 seconds
             </span>
           </div>
 
@@ -257,10 +257,11 @@ export default function Home() {
 
           <div className="hero-title flex flex-col sm:flex-row items-center justify-center gap-4 mt-10">
             <a
-              href="#release"
-              className="px-6 py-3 rounded-xl bg-gradient-to-r from-violet-600 to-purple-600 hover:from-violet-500 hover:to-purple-500 text-white font-medium"
+              href="https://github.com/innosaint-uche/naavos"
+              className="px-6 py-3 rounded-xl bg-gradient-to-r from-violet-600 to-purple-600 hover:from-violet-500 hover:to-purple-500 text-white font-medium flex items-center gap-2"
             >
-              See release status
+              <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+              View on GitHub
             </a>
             <a
               href="#how-it-works"
@@ -282,27 +283,27 @@ export default function Home() {
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-12 text-center">
             <div>
               <div className="text-3xl sm:text-4xl font-bold bg-gradient-to-r from-violet-400 to-purple-400 bg-clip-text text-transparent">
-                Local
+                6
               </div>
-              <div className="text-xs sm:text-sm text-zinc-500 mt-2">First-class privacy</div>
+              <div className="text-xs sm:text-sm text-zinc-500 mt-2">AI targets supported</div>
             </div>
             <div>
               <div className="text-3xl sm:text-4xl font-bold bg-gradient-to-r from-amber-400 to-orange-400 bg-clip-text text-transparent">
                 MIT
               </div>
-              <div className="text-xs sm:text-sm text-zinc-500 mt-2">License</div>
+              <div className="text-xs sm:text-sm text-zinc-500 mt-2">Open source license</div>
             </div>
             <div>
               <div className="text-3xl sm:text-4xl font-bold bg-gradient-to-r from-emerald-400 to-green-400 bg-clip-text text-transparent">
-                MCP
+                99
               </div>
-              <div className="text-xs sm:text-sm text-zinc-500 mt-2">Hosted protocol surface</div>
+              <div className="text-xs sm:text-sm text-zinc-500 mt-2">Tests passing</div>
             </div>
             <div>
               <div className="text-3xl sm:text-4xl font-bold bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent">
-                ESM
+                Local
               </div>
-              <div className="text-xs sm:text-sm text-zinc-500 mt-2">Module system</div>
+              <div className="text-xs sm:text-sm text-zinc-500 mt-2">First-class privacy</div>
             </div>
           </div>
         </div>
@@ -455,29 +456,29 @@ export default function Home() {
       >
         <div className="max-w-3xl mx-auto text-center">
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4 sm:mb-6">
-            Open development.
+            Open source.
             <br />
             <span className="bg-gradient-to-r from-violet-400 to-purple-400 bg-clip-text text-transparent">
-              Public release in progress.
+              Use it locally today.
             </span>
           </h2>
           <p className="text-zinc-400 text-base sm:text-lg mb-8 sm:mb-10">
-            The product is being prepared for a verified open-source release. Local-first storage
-            and telemetry-off defaults are already part of the design; source publication and signed
-            distribution remain release gates.
+            NAAvOS is MIT-licensed. Define your avatar once, compile it for Hermes, Claude Code,
+            Cursor, Gemini, OpenClaw, or ReMe, and run conformance tests to verify fidelity.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6">
             <a
-              href="mailto:hello@naavos.radoss.agency?subject=NAAvOS%20public%20preview"
-              className="px-6 py-3 rounded-xl bg-gradient-to-r from-violet-600 to-purple-600 hover:from-violet-500 hover:to-purple-500 text-white font-medium"
+              href="https://github.com/innosaint-uche/naavos"
+              className="px-6 py-3 rounded-xl bg-gradient-to-r from-violet-600 to-purple-600 hover:from-violet-500 hover:to-purple-500 text-white font-medium flex items-center gap-2"
             >
-              Request the public preview
+              <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+              Open source on GitHub
             </a>
             <a
               href="#how-it-works"
               className="px-6 py-3 rounded-xl border border-white/10 hover:bg-white/5 text-zinc-300 font-medium"
             >
-              Read the product path
+              How it works
             </a>
           </div>
         </div>
@@ -493,14 +494,17 @@ export default function Home() {
             <span className="text-base sm:text-lg font-bold bg-gradient-to-r from-violet-400 to-purple-400 bg-clip-text text-transparent">
               NAAvOS
             </span>
-            <span className="text-zinc-500 text-xs sm:text-sm ml-2">Development release</span>
+            <span className="text-zinc-500 text-xs sm:text-sm ml-2">MIT License</span>
           </div>
           <div className="flex items-center gap-4 sm:gap-6 text-xs sm:text-sm text-zinc-500">
-            <a href="#release" className="hover:text-white transition-colors">
-              Release status
+            <a href="https://github.com/innosaint-uche/naavos" className="hover:text-white transition-colors">
+              GitHub
             </a>
             <a href="#how-it-works" className="hover:text-white transition-colors">
-              Product path
+              How it works
+            </a>
+            <a href="#features" className="hover:text-white transition-colors">
+              Features
             </a>
             <a
               href="mailto:hello@naavos.radoss.agency"
