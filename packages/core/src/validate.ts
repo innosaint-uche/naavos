@@ -7,9 +7,9 @@ import { defaultSchema, validateSchema } from './index.js';
 
 const result = validateSchema(defaultSchema);
 if (result.valid) {
-  console.log('✓ default schema is valid');
+  process.stdout.write('✓ default schema is valid\n');
   process.exit(0);
 } else {
-  console.error('✗ default schema is invalid:', result.error);
+  process.stderr.write(`✗ default schema is invalid: ${result.error}\n`);
   process.exit(1);
 }

@@ -14,7 +14,7 @@
   },
   "type": "module",
   "scripts": {
-    "build": "tsc -p tsconfig.json",
+    "build": "tsc -p tsconfig.json && cp -r templates dist/templates",
     "lint": "eslint src --ext .ts",
     "test": "vitest run",
     "test:watch": "vitest watch",

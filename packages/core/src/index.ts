@@ -5,13 +5,63 @@
 
 export const AVATAR_SCHEMA_VERSION = '1.0';
 
+export interface FavoriteStack {
+  hosting?: string[];
+  frontend?: string[];
+  secrets?: string[];
+  strategy_framework?: string[];
+}
+
+export interface TriggerMode {
+  condition: string;
+  action: string;
+}
+
+export interface TriggerModes {
+  focused_delivery?: TriggerMode;
+  exploration?: TriggerMode;
+  [key: string]: TriggerMode | undefined;
+}
+
+export interface AvatarApi {
+  version: string;
+  owner: string;
+  endpoint_type: string;
+  description: string;
+  communication_style: {
+    verbosity: string;
+    structure: string;
+    tone: string;
+  };
+  operating_rules: string[];
+  favorite_stack: FavoriteStack;
+  trigger_modes: TriggerModes;
+}
+
+export interface AvatarSchema {
+  avatar_api: AvatarApi;
+}
+
+export interface CreateAvatarConfig {
+  name?: string;
+  description?: string;
+  communication_style?: Partial<AvatarApi['communication_style']>;
+  rules?: string[];
+  stack?: Partial<FavoriteStack>;
+}
+
+export interface ValidationResult {
+  valid: boolean;
+  error?: string;
+}
+
 /**
  * Neutral default avatar schema structure.
  * Copy this to your local avatar package and replace the placeholders
  * with your own preferences. This product default intentionally contains
  * no personal identity, psychological labels, or private stack choices.
  */
-export const defaultSchema = {
+export const defaultSchema: AvatarSchema = {
   avatar_api: {
     version: AVATAR_SCHEMA_VERSION,
     owner: 'YOUR_NAME',
@@ -55,17 +105,20 @@ export const defaultSchema = {
 /**
  * Validate an avatar schema
  */
-export function validateSchema(schema) {
+export function validateSchema(schema: unknown): ValidationResult {
   const required = ['avatar_api', 'avatar_api.version', 'avatar_api.owner'];
 
   for (const path of required) {
     const parts = path.split('.');
-    let current = schema;
+    let current: unknown = schema;
     for (const part of parts) {
-      if (current === undefined || current[part] === undefined) {
+      if (current === undefined || current === null || typeof current !== 'object') {
         return { valid: false, error: `Missing required field: ${path}` };
       }
-      current = current[part];
+      if (!(part in current)) {
+        return { valid: false, error: `Missing required field: ${path}` };
+      }
+      current = (current as Record<string, unknown>)[part];
     }
   }
 
@@ -75,7 +128,7 @@ export function validateSchema(schema) {
 /**
  * Create a new avatar schema from template
  */
-export function createAvatar(userConfig = {}) {
+export function createAvatar(userConfig: CreateAvatarConfig = {}): AvatarSchema {
   return {
     avatar_api: {
       ...defaultSchema.avatar_api,

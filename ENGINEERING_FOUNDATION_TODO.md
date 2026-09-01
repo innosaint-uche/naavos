@@ -44,7 +44,12 @@
   - `default` case uses `as ScenarioType` type assertion (union type not discriminant)
   - `process.env.HOME` / `process.env.HERMES_HOME` use bracket notation
   - Lint clean, typecheck clean, all tests passing
-- [ ] `@naavos/core` → TS + vitest (or remove if shim)
+- [x] `@naavos/core` → TS + vitest
+  - Migrated `index.js` → `src/index.ts` (typed `validateSchema`/`createAvatar`/`defaultSchema`)
+  - 15 Vitest tests covering schema validation, creation, and edge cases
+  - `dist/` output with type declarations, `prepare` script auto-compiles on install
+  - `bin` entry for `naavos-validate` CLI
+  - Lint clean, typecheck clean
 
 ## Secret Scanning Integration
 
@@ -55,13 +60,21 @@
 
 ## Template Extraction
 
-- [ ] Extract Hermes adapter templates to `.eta` files
-- [ ] Add template override mechanism (`--template-dir`)
+- [x] Extract Hermes adapter templates to `.md` files
+  - `packages/compiler/templates/hermes/{SOUL.md,SKILL.md,sub-agent.md}`
+  - `hermesAdapter()` loads templates from disk via `loadTemplate()` + `render()`
+  - `{{placeholder}}` syntax with dot-notation support (`{{identity.name}}`)
+  - Override via `NAAVOS_TEMPLATE_DIR` env var or `--template-dir` CLI flag on `naavos compile`
+  - Templates copied to `dist/` during build
 
 ## Generic Rollback
 
-- [ ] Snapshot pre-install state for all targets
-- [ ] Implement `rollback` for non-Hermes targets
+- [x] Generic rollback for all targets
+  - `restoreBackup()` now handles Hermes + all other targets generically
+  - Uses `project_root` stored in journal (captured at backup time for non-Hermes targets)
+  - Falls back to `process.cwd()` if no project root recorded
+  - Hermes-only guard removed from rollback CLI command
+  - `JournalEntry` type extended with `project_root?: string | null`
 
 ---
 

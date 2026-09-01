@@ -8,6 +8,8 @@ export interface JournalEntry {
   created_at: string;
   package_id?: string;
   files: string[];
+  /** Project root for non-Hermes targets (null for Hermes) */
+  project_root?: string | null;
 }
 
 export interface CompileOptions {

@@ -86,6 +86,7 @@ async function createBackup(target: string, data: AvatarPackage): Promise<string
     created_at: new Date().toISOString(),
     package_id: data.metadata?.package_id,
     files: Array.from(files.keys()),
+    project_root: target === 'hermes' ? null : process.cwd(),
   });
   saveJournal(journal);
 
@@ -99,29 +100,42 @@ async function restoreBackup(backupId: string): Promise<string> {
   }
 
   const journal = loadJournal();
-  const entry = journal.find((j) => j.id === backupId);
-  if (!entry) {
+  const journalEntry = journal.find((j) => j.id === backupId);
+  if (!journalEntry) {
     throw new Error(`Backup not found in journal: ${backupId}`);
   }
 
-  const target = entry.target;
+  const target = journalEntry.target;
+
+  // Determine restore destination based on target
+  let destRoot: string;
   if (target === 'hermes') {
-    const hermesHome =
-      process.env['HERMES_HOME'] || path.join(process.env['HOME'] ?? '', '.hermes');
-    const entries = fs.readdirSync(backupDir, { withFileTypes: true, recursive: true });
-    for (const entry of entries) {
-      if (entry.isFile()) {
-        const fullPath = path.join(entry.parentPath || backupDir, entry.name);
-        const relativePath = path.relative(backupDir, fullPath);
-        const dest = path.join(hermesHome, relativePath);
-        fs.mkdirSync(path.dirname(dest), { recursive: true });
-        fs.writeFileSync(dest, fs.readFileSync(fullPath, 'utf-8'));
-      }
-    }
-    return hermesHome;
+    destRoot = process.env['HERMES_HOME'] || path.join(process.env['HOME'] ?? '', '.hermes');
+  } else if (journalEntry.project_root) {
+    destRoot = journalEntry.project_root;
+  } else {
+    // Fallback: use current working directory for non-Hermes targets
+    destRoot = process.cwd();
   }
 
-  throw new Error(`Rollback for target "${target}" is not implemented yet.`);
+  const entries = fs.readdirSync(backupDir, { withFileTypes: true, recursive: true });
+  let restoredCount = 0;
+  for (const fsEntry of entries) {
+    if (fsEntry.isFile()) {
+      const fullPath = path.join(fsEntry.parentPath || backupDir, fsEntry.name);
+      const relativePath = path.relative(backupDir, fullPath);
+      const dest = path.join(destRoot, relativePath);
+      fs.mkdirSync(path.dirname(dest), { recursive: true });
+      fs.writeFileSync(dest, fs.readFileSync(fullPath, 'utf-8'));
+      restoredCount++;
+    }
+  }
+
+  if (restoredCount === 0) {
+    throw new Error(`No files found in backup ${backupId}`);
+  }
+
+  return destRoot;
 }
 
 function listBackups(): JournalEntry[] {
@@ -337,9 +351,13 @@ program
   .option('--target <id>', 'Target runtime ID')
   .option('--dry-run', 'Print output without writing files')
   .option('--format <id>', 'Output format: files (default) or tar.gz (Hermes only)')
-  .action(async (options: { target?: string; dryRun?: boolean; format?: string }) => {
+  .option('--template-dir <path>', 'Override Hermes template directory')
+  .action(async (options: { target?: string; dryRun?: boolean; format?: string; templateDir?: string }) => {
     const spinner = ora('Compiling avatar...').start();
     try {
+      if (options.templateDir) {
+        process.env['NAAVOS_TEMPLATE_DIR'] = options.templateDir;
+      }
       const data = loadAvatar();
       AvatarPackageSchema.parse(data);
       const parsed = data as AvatarPackage;
@@ -694,13 +712,6 @@ program
       }
 
       const spinner = ora(`Rolling back to ${backupId}...`).start();
-      const target = backup.target;
-      if (target !== 'hermes') {
-        spinner.fail(
-          chalk.yellow(`Rollback for target "${target}" is not implemented yet.`),
-        );
-        return;
-      }
 
       const dest = await restoreBackup(backupId);
       spinner.succeed(
