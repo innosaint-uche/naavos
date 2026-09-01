@@ -30,3 +30,4 @@ Thumbs.db
 *_TODO.md
 credentials.json
 *.pem
+memory/
