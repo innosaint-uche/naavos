@@ -22,6 +22,14 @@
       "last_verified": "2026-09-07",
       "evidence": "central QA artifact naas-og-fix-2026-09-07/naas-public/evidence.json; live banner probe; Coolify deployment queue and container image readback",
       "status": "verified",
+      "deployment_automation": {
+        "status": "verified",
+        "provider": "coolify",
+        "webhook_url": "https://radoss.cloud/webhooks/source/github/events/manual",
+        "event": "push",
+        "last_deployment_id": "oxqrc2tbziakxt41cstn8p0e",
+        "last_deployed_commit": "5dc11bf12f1e2d883ddb561597322eba1b240f12"
+      },
       "known_limits": [
         "The dashboard is an informational surface; it does not itself prove authenticated Avatar tenant behavior"
       ]

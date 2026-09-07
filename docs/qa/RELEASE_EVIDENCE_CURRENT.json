@@ -52,6 +52,16 @@
     "deployment_id": "cdk1f1yui9fei6c3sklrln2l",
     "status": "verified"
   },
+  "deployment_automation": {
+    "status": "verified",
+    "provider": "coolify",
+    "github_hook_id": 675916315,
+    "webhook_url": "https://radoss.cloud/webhooks/source/github/events/manual",
+    "event": "push",
+    "last_verified_delivery": "hmac_signed_push",
+    "last_deployment_id": "oxqrc2tbziakxt41cstn8p0e",
+    "last_deployed_commit": "5dc11bf12f1e2d883ddb561597322eba1b240f12"
+  },
   "release_identity": {
     "source_marker": "e79819d414731cda4d6cc25726842c94621e059c37ee523191bd5e7b68ec84aa",
     "worker_version": "d683a9ac-bafb-454c-86eb-a81a94d19b29",

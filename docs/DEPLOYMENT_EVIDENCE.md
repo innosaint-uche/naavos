@@ -14,6 +14,10 @@ relevant official documentation whenever a host/provider version changes. The ma
 - Dashboard source/deployment identity: source commit `6608993f8d7987188afa1c133221e58a13e728b2`, Coolify deployment
   `cdk1f1yui9fei6c3sklrln2l`, running container image `a1rpkpmda1lhxn2kyxvvnmpm:6608993f8d7987188afa1c133221e58a13e728b2`
   (application `4`, `naavos-dashboard`).
+- Deployment automation: GitHub hook `675916315` targets Coolify's verified manual route
+  `https://radoss.cloud/webhooks/source/github/events/manual` for `push` events. A correctly HMAC-signed push payload was
+  accepted with HTTP 200 and queued deployment `oxqrc2tbziakxt41cstn8p0e`, which finished with the exact `5dc11bf12f1e2d883ddb561597322eba1b240f12`
+  commit running in the dashboard container.
 - Hosted MCP Worker: `https://naavos-mcp.innosaint-uche.workers.dev/mcp`.
 - Worker deployment version: `d683a9ac-bafb-454c-86eb-a81a94d19b29` (latest verified deployment; tenant-owner
   enforcement and branded OAuth metadata).
