@@ -226,7 +226,7 @@ contract, formatting gate, and CLI target-state rollback semantics:
 | Customer/public production gate   | BLOCKED: live-user, named-host and signed-distribution evidence                                                                   |
 | Live dashboard release identity   | PASS: `/release.json` product/surface/marker shape in central QA; exact source-marker match verified by `pnpm verify:live-marker` |
 
-Evidence is stored in: `/Users/radossagency/.radoss-qa/artifacts/naavos-central-release-marker-2026-09-08/`.
+Evidence is stored in: `/Users/radossagency/.radoss-qa/artifacts/naavos-production-contract-2026-09-08/`.
 
 The current live dashboard reconciliation is PASS: `naavos.radoss.agency/release.json` served the content-derived marker
 `fa2b4c2160292bb712501497c59e62da562ee6ce9cbd6999a8b02de3d432d837`, matching the reviewed source inputs. The exact
