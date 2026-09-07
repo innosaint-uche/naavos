@@ -224,6 +224,7 @@ contract, formatting gate, and CLI target-state rollback semantics:
 | Local Codex/Antigravity/Hermes QA | PASS; two pre-existing credential field warnings recorded by name                                                          |
 | Packaged Tauri macOS E2E          | PASS: launch, sidecar, privacy, persistence, backup, hostile-origin rejection, retry blocking, rollback and hosting choice |
 | Customer/public production gate   | BLOCKED: live-user, named-host and signed-distribution evidence                                                            |
+| Live dashboard release identity   | PASS: `/release.json` product/surface/marker shape in central QA; exact source-marker match verified by `pnpm verify:live-marker` |
 
 Evidence is stored in: `/Users/radossagency/.radoss-qa/artifacts/naavos-central-release-marker-2026-09-08/`.
 
