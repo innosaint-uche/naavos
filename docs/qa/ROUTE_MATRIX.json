@@ -22,7 +22,7 @@
       "auth_boundary": "public informational page; no authenticated Avatar data",
       "health_command": "central ~/.radoss-qa adapter naas-public browser.dashboard",
       "last_verified": "2026-09-08",
-      "evidence": "central QA artifact naavos-release-identity-2026-09-08/naas-public/evidence.json; live /release.json marker check; rendered claim probe",
+      "evidence": "central QA artifact naavos-central-release-marker-2026-09-08/naas-public/evidence.json; live /release.json marker check; rendered claim probe",
       "status": "content_verified",
       "deployment_automation": {
         "status": "verified",
