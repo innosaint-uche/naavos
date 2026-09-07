@@ -21,12 +21,12 @@ import { useEffect, useRef, useState } from 'react';
 gsap.registerPlugin(ScrollTrigger);
 
 const platforms = [
-  { name: 'Hermes', icon: '🧠', status: 'Supported' },
-  { name: 'Claude Code', icon: '⌨️', status: 'Supported' },
-  { name: 'Cursor', icon: '⌘', status: 'Supported' },
-  { name: 'Gemini', icon: '✨', status: 'Supported' },
-  { name: 'OpenClaw', icon: '✦', status: 'Supported' },
-  { name: 'ReMe', icon: '📝', status: 'Supported' },
+  { name: 'Hermes', icon: '🧠', status: 'Local verified' },
+  { name: 'Claude Code', icon: '⌨️', status: 'Adapter available' },
+  { name: 'Cursor', icon: '⌘', status: 'Adapter available' },
+  { name: 'Gemini', icon: '✨', status: 'Adapter available' },
+  { name: 'OpenClaw', icon: '✦', status: 'Adapter available' },
+  { name: 'ReMe', icon: '📝', status: 'Optional projection' },
 ];
 
 const features = [
@@ -431,8 +431,12 @@ export default function Home() {
       <section className="py-16 sm:py-24 px-4 sm:px-6 lg:px-8 border-t border-white/5">
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-12 sm:mb-16">
-            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-4">Supported targets</h2>
-            <p className="text-zinc-400 text-sm sm:text-base">Compile once. Install anywhere.</p>
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-4">
+              Integration evidence
+            </h2>
+            <p className="text-zinc-400 text-sm sm:text-base">
+              Compile once for available adapters; host certification is verified separately.
+            </p>
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4">
             {platforms.map((platform) => (
