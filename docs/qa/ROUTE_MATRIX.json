@@ -7,8 +7,8 @@
       "service": "public-dashboard",
       "environment": "production-facing-development",
       "release_identity": {
-        "source_marker": "6608993f8d7987188afa1c133221e58a13e728b2",
-        "deployment_id": "cdk1f1yui9fei6c3sklrln2l"
+        "source_marker": "97d9950b8d27cf041862de9089d0fbf2633984ef",
+        "deployment_id": "kw8a7b2bvtzemlqo8vf19eki"
       },
       "hostname": "naavos.radoss.agency",
       "path": "/",

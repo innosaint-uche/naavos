@@ -11,8 +11,8 @@ relevant official documentation whenever a host/provider version changes. The ma
 
 - Public dashboard: `https://naavos.radoss.agency` — HTTP 200, Next.js response, valid TLS certificate, and the
   corrected open-source release copy is live.
-- Dashboard source/deployment identity: source commit `6608993f8d7987188afa1c133221e58a13e728b2`, Coolify deployment
-  `cdk1f1yui9fei6c3sklrln2l`, running container image `a1rpkpmda1lhxn2kyxvvnmpm:6608993f8d7987188afa1c133221e58a13e728b2`
+- Dashboard source/deployment identity: source commit `97d9950b8d27cf041862de9089d0fbf2633984ef`, Coolify deployment
+  `kw8a7b2bvtzemlqo8vf19eki`, running container image `a1rpkpmda1lhxn2kyxvvnmpm:97d9950b8d27cf041862de9089d0fbf2633984ef`
   (application `4`, `naavos-dashboard`).
 - Deployment automation: GitHub hook `675916315` targets Coolify's verified manual route
   `https://radoss.cloud/webhooks/source/github/events/manual` for `push` events. A correctly HMAC-signed push payload was
