@@ -30,7 +30,7 @@ assert(release.dashboard_release_identity?.status === 'verified', 'dashboard dep
 assert(release.deployment_automation?.status === 'verified', 'deployment automation is not verified');
 assert(release.deployment_automation?.webhook_url === 'https://radoss.cloud/webhooks/source/github/events/manual', 'Coolify webhook route is not canonical');
 assert(release.deployment_automation?.event === 'push', 'deployment automation must listen for push events');
-assert(release.deployment_automation?.last_deployed_commit === '5dc11bf12f1e2d883ddb561597322eba1b240f12', 'last automated deployment commit is not recorded');
+assert(release.deployment_automation?.last_verified_deployed_commit === '518783b977857534ab9b1937eff8dd1fa7267e1a', 'last verified automated deployment commit is not recorded');
 assert(new RegExp('source commit `' + release.dashboard_release_identity.source_marker + '`').test(deploymentEvidence), 'deployment evidence does not contain the current dashboard source marker');
 assert(new RegExp('Coolify deployment\\s+`' + release.dashboard_release_identity.deployment_id + '`').test(deploymentEvidence), 'deployment evidence does not contain the current dashboard deployment id');
 assert(release.current_qa?.status === 'pass', 'current central QA status is not pass');

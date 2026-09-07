@@ -27,8 +27,8 @@
         "provider": "coolify",
         "webhook_url": "https://radoss.cloud/webhooks/source/github/events/manual",
         "event": "push",
-        "last_deployment_id": "oxqrc2tbziakxt41cstn8p0e",
-        "last_deployed_commit": "5dc11bf12f1e2d883ddb561597322eba1b240f12"
+        "last_verified_deployment_id": "d5b8vqbh9br09t4qq9tn8nam",
+        "last_verified_deployed_commit": "518783b977857534ab9b1937eff8dd1fa7267e1a"
       },
       "known_limits": [
         "The dashboard is an informational surface; it does not itself prove authenticated Avatar tenant behavior"

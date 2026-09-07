@@ -16,7 +16,7 @@ relevant official documentation whenever a host/provider version changes. The ma
   (application `4`, `naavos-dashboard`).
 - Deployment automation: GitHub hook `675916315` targets Coolify's verified manual route
   `https://radoss.cloud/webhooks/source/github/events/manual` for `push` events. A correctly HMAC-signed push payload was
-  accepted with HTTP 200 and queued deployment `oxqrc2tbziakxt41cstn8p0e`, which finished with the exact `5dc11bf12f1e2d883ddb561597322eba1b240f12`
+  accepted with HTTP 200 and queued deployment `d5b8vqbh9br09t4qq9tn8nam`, which finished with the exact `518783b977857534ab9b1937eff8dd1fa7267e1a`
   commit running in the dashboard container.
 - Hosted MCP Worker: `https://naavos-mcp.innosaint-uche.workers.dev/mcp`.
 - Worker deployment version: `d683a9ac-bafb-454c-86eb-a81a94d19b29` (latest verified deployment; tenant-owner
