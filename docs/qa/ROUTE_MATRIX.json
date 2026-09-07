@@ -7,8 +7,10 @@
       "service": "public-dashboard",
       "environment": "production-facing-development",
       "release_identity": {
-        "source_marker": "97d9950b8d27cf041862de9089d0fbf2633984ef",
-        "deployment_id": "kw8a7b2bvtzemlqo8vf19eki"
+        "source_marker": "fa2b4c2160292bb712501497c59e62da562ee6ce9cbd6999a8b02de3d432d837",
+        "source_marker_kind": "content-derived",
+        "deployment_id": null,
+        "deployment_id_status": "not_independently_verified"
       },
       "hostname": "naavos.radoss.agency",
       "path": "/",
@@ -19,9 +21,9 @@
       "runtime": "Next.js",
       "auth_boundary": "public informational page; no authenticated Avatar data",
       "health_command": "central ~/.radoss-qa adapter naas-public browser.dashboard",
-      "last_verified": "2026-09-07",
-      "evidence": "central QA artifact naavos-claims-2026-09-08/naas-public/evidence.json; live rendered claim probe; Coolify deployment queue and container image readback",
-      "status": "verified",
+      "last_verified": "2026-09-08",
+      "evidence": "central QA artifact naavos-claims-2026-09-08/naas-public/evidence.json; live /release.json marker check; rendered claim probe",
+      "status": "content_verified",
       "deployment_automation": {
         "status": "verified",
         "provider": "coolify",
@@ -31,7 +33,8 @@
         "last_verified_deployed_commit": "518783b977857534ab9b1937eff8dd1fa7267e1a"
       },
       "known_limits": [
-        "The dashboard is an informational surface; it does not itself prove authenticated Avatar tenant behavior"
+        "The dashboard is an informational surface; it does not itself prove authenticated Avatar tenant behavior",
+        "The exact Coolify deployment ID for the current content marker is not independently verified"
       ]
     },
     {

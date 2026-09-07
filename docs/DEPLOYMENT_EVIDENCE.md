@@ -11,9 +11,14 @@ relevant official documentation whenever a host/provider version changes. The ma
 
 - Public dashboard: `https://naavos.radoss.agency` — HTTP 200, Next.js response, valid TLS certificate, and the
   corrected open-source release copy is live.
-- Dashboard source/deployment identity: source commit `97d9950b8d27cf041862de9089d0fbf2633984ef`, Coolify deployment
-  `kw8a7b2bvtzemlqo8vf19eki`, running container image `a1rpkpmda1lhxn2kyxvvnmpm:97d9950b8d27cf041862de9089d0fbf2633984ef`
-  (application `4`, `naavos-dashboard`).
+- Dashboard content identity: the live `/release.json` marker is the content-derived source marker
+  `fa2b4c2160292bb712501497c59e62da562ee6ce9cbd6999a8b02de3d432d837` (SHA-256), matching the reviewed source inputs. This was
+  verified by `pnpm verify:live-marker` after the standalone Docker image and live deployment were checked.
+- Coolify deployment ID for this marker: not independently verified. The public marker proves the served content
+  matches the reviewed source inputs; it does not prove the platform's internal deployment identifier.
+- Last independently verified dashboard deployment: source commit `97d9950b8d27cf041862de9089d0fbf2633984ef`, Coolify
+  deployment `kw8a7b2bvtzemlqo8vf19eki`, running container image
+  `a1rpkpmda1lhxn2kyxvvnmpm:97d9950b8d27cf041862de9089d0fbf2633984ef` (application `4`, `naavos-dashboard`).
 - Deployment automation: GitHub hook `675916315` targets Coolify's verified manual route
   `https://radoss.cloud/webhooks/source/github/events/manual` for `push` events. A correctly HMAC-signed push payload was
   accepted with HTTP 200 and queued deployment `d5b8vqbh9br09t4qq9tn8nam`, which finished with the exact `518783b977857534ab9b1937eff8dd1fa7267e1a`
@@ -55,9 +60,9 @@ relevant official documentation whenever a host/provider version changes. The ma
 - Public source repository: verified public at `https://github.com/innosaint-uche/naavos`.
 - Universal Avatar source repository: verified public at `https://github.com/innosaint-uche/radoss-universal-avatar`.
 - Clean source baselines: `naavos` tag `v0.1.0-public-source`; Universal Avatar tag `v0.2.0-public-source`.
-- Release evidence identity: the live deployment version, source marker and clean public source tags are reconciled in
-  the machine-readable manifest; none of these substitutes for tenant, host-account, credential, or signed-distribution
-  evidence.
+- Release evidence identity: the current live content marker and clean public source tags are reconciled in the
+  machine-readable manifest. The internal Coolify deployment ID remains a separate unverified field; none of these
+  substitutes for tenant, host-account, credential, or signed-distribution evidence.
 - Canonical local registry: the verified hosted gateway is registered as `naavos_gateway` with no
   Codex/Antigravity/Hermes targets; local agents remain on the guarded `radoss_avatar` stdio control plane.
 - NAAS monorepo: test, typecheck, lint, and build pass.

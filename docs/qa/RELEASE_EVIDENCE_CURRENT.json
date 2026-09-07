@@ -48,9 +48,11 @@
   },
   "endpoint": "https://mcp.naavos.radoss.agency/mcp",
   "dashboard_release_identity": {
-    "source_marker": "97d9950b8d27cf041862de9089d0fbf2633984ef",
-    "deployment_id": "kw8a7b2bvtzemlqo8vf19eki",
-    "status": "verified"
+    "source_marker": "fa2b4c2160292bb712501497c59e62da562ee6ce9cbd6999a8b02de3d432d837",
+    "source_marker_kind": "content-derived",
+    "deployment_id": null,
+    "deployment_id_status": "not_independently_verified",
+    "status": "content_verified"
   },
   "deployment_automation": {
     "status": "verified",
