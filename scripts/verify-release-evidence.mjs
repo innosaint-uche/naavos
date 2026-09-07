@@ -61,6 +61,26 @@ const validateQaArtifact = () => {
       failures.push(`QA adapter evidence is not valid JSON (${adapter.adapter}): ${error.message}`);
     }
   }
+  const publicAdapter = (summary.adapters || []).find((adapter) => adapter.adapter === 'naas-public');
+  if (publicAdapter?.evidence) {
+    try {
+      const evidencePath = path.resolve(root, publicAdapter.evidence);
+      const evidence = JSON.parse(fs.readFileSync(evidencePath, 'utf8'));
+      const checkNames = new Set((evidence.checks || []).filter((check) => check.status === 'pass').map((check) => check.name));
+      for (const requiredCheck of [
+        'browser.dashboard',
+        'http.mcp-health',
+        'http.oauth-protected-resource',
+        'http.oauth-authorization-server',
+        'http.release-identity',
+        'mcp.unauthenticated-fail-closed',
+      ]) {
+        assert(checkNames.has(requiredCheck), `NAAvOS public QA is missing required check: ${requiredCheck}`);
+      }
+    } catch (error) {
+      failures.push(`NAAvOS public QA contract could not be inspected: ${error.message}`);
+    }
+  }
 };
 
 assert(release.endpoint === canonicalEndpoint, `release endpoint must be ${canonicalEndpoint}`);
