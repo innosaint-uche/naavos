@@ -118,6 +118,7 @@ jobs:
       - name: Verify CLI works
         run: |
           pnpm verify:cli
+          pnpm verify:evidence
           pnpm exec naavos doctor
 
   secrets-scan:
