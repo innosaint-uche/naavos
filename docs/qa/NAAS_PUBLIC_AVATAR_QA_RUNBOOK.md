@@ -227,8 +227,7 @@ contract, formatting gate, and CLI target-state rollback semantics:
 
 Evidence is stored in: `/Users/radossagency/.radoss-qa/artifacts/naavos-release-identity-2026-09-08/`.
 
-The last independently verified dashboard reconciliation is PASS: `naavos.radoss.agency` served the corrected
-open-source release copy from source marker `97d9950b8d27cf041862de9089d0fbf2633984ef`, Coolify deployment
-`kw8a7b2bvtzemlqo8vf19eki`, and container image `a1rpkpmda1lhxn2kyxvvnmpm:97d9950b8d27cf041862de9089d0fbf2633984ef`.
-Later documentation-only commits are not treated as deployment-identity evidence until the running container is
-independently read back.
+The current live dashboard reconciliation is PASS: `naavos.radoss.agency/release.json` served the content-derived marker
+`fa2b4c2160292bb712501497c59e62da562ee6ce9cbd6999a8b02de3d432d837`, matching the reviewed source inputs. The exact
+Coolify deployment ID for this marker remains not independently verified. The last independently verified Coolify
+identity is retained in `docs/DEPLOYMENT_EVIDENCE.md`.

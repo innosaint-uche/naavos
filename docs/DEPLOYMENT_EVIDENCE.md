@@ -51,7 +51,7 @@ relevant official documentation whenever a host/provider version changes. The ma
 - Central packaged no-code QA: PASS — the real Tauri macOS bundle launched with isolated temporary state; Playwright
   verified the setup UI, privacy mutation/readback, backup action, hostile-origin rejection, privacy pause/retry block,
   rollback readback, user-owned hosting selection, and clean sidecar lifecycle. Evidence:
-  `/Users/radossagency/.radoss-qa/artifacts/naavos-claims-2026-09-08/universal-tauri-macos/evidence.json`.
+  `/Users/radossagency/.radoss-qa/artifacts/naavos-release-identity-2026-09-08/universal-tauri-macos/evidence.json`.
 - Central all-adapter QA: PASS — `local-agents`, `naas-public` and `universal-tauri-macos` all passed in the same run;
   aggregate evidence is under `/Users/radossagency/.radoss-qa/artifacts/naavos-release-identity-2026-09-08/`.
 - Central local-agent QA: PASS — Codex, Antigravity and Hermes adapter markers were present; `radoss doctor` confirmed

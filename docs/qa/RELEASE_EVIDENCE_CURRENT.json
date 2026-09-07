@@ -106,7 +106,7 @@
     "cli_contract": "pass",
     "format_check": "pass",
     "secret_scan": "pass",
-    "live_dashboard": "verified_source_97d9950b"
+    "live_dashboard": "verified_content_marker_fa2b4c21"
   },
   "dns": {
     "authoritative_mcp_radoss_agency": "no_record",
