@@ -16,6 +16,8 @@
     "secrets:scan": "gitleaks detect --source . --config .gitleaks.toml -v",
     "verify:cli": "node scripts/verify-cli-entrypoint.mjs",
     "verify:claims": "node scripts/verify-public-claims.mjs",
+    "release:marker": "node scripts/write-release-manifest.mjs --print",
+    "verify:live-marker": "node scripts/verify-live-release-marker.mjs",
     "verify:evidence": "node scripts/verify-release-evidence.mjs",
     "verify:live-tenants": "node scripts/verify-live-tenants.mjs",
     "prepare": "husky install"

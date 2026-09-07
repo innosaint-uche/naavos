@@ -8,6 +8,7 @@ build/
 .turbo/
 *.local
 *.tsbuildinfo
+apps/dashboard/public/release.json
 tmp/
 
 # Generated test/build output
