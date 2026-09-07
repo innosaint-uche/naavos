@@ -115,6 +115,22 @@ assert(
   'Claude acceptance must remain explicit until named-host proof exists'
 );
 assert(
+  release.distribution?.signing === 'ad_hoc_local_only',
+  'distribution signing must remain explicit until production signing is evidenced'
+);
+assert(
+  release.distribution?.notarization === 'not_verified',
+  'notarization must remain explicit until production notarization is evidenced'
+);
+assert(
+  release.distribution?.platforms === 'not_verified',
+  'cross-platform distribution must remain explicit until each advertised platform is evidenced'
+);
+assert(
+  release.customer_release === null,
+  'customer release must remain unset until every external release gate passes'
+);
+assert(
   ['verified', 'content_verified'].includes(release.dashboard_release_identity?.status),
   'dashboard release identity is not verified at any accepted evidence level'
 );

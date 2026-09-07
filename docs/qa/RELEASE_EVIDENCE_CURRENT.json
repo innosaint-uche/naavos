@@ -1,5 +1,6 @@
 {
   "as_of": "2026-09-08",
+  "customer_release": null,
   "evidence_standard": {
     "version": "1.0",
     "source_authority": "docs/design/NAAS-Avatar-OS-Productisation-System-Design.pdf#page=18",
