@@ -43,8 +43,8 @@ export default function OgImage() {
           gap: '8px',
           padding: '8px 20px',
           borderRadius: '999px',
-          border: '1px solid rgba(139,92,246,0.4)',
-          background: 'rgba(139,92,246,0.1)',
+          border: '1px solid rgba(16,185,129,0.4)',
+          background: 'rgba(16,185,129,0.1)',
           marginBottom: '32px',
         }}
       >
@@ -53,11 +53,11 @@ export default function OgImage() {
             width: '8px',
             height: '8px',
             borderRadius: '50%',
-            background: '#8b5cf6',
+            background: '#10b981',
           }}
         />
-        <span style={{ color: '#a78bfa', fontSize: '18px', fontWeight: 500 }}>
-          Controlled development release — public gate in progress
+        <span style={{ color: '#6ee7b7', fontSize: '18px', fontWeight: 500 }}>
+          Open source — install locally in 60 seconds
         </span>
       </div>
 
