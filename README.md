@@ -52,16 +52,20 @@ pnpm exec naavos test
 pnpm exec naavos doctor
 ```
 
-## Supported Targets
+## Available Adapters and Evidence Status
 
-| Target      | Output                                                       | Install Method                                       |
-| ----------- | ------------------------------------------------------------ | ---------------------------------------------------- |
-| Hermes      | `SOUL.md`, `SKILL.md`, `sub-agents/*.md`, `memories/**/*.md` | `naavos install --target hermes` or `.tar.gz` bundle |
-| Claude Code | `CLAUDE.md`                                                  | `naavos install --target claude-code`                |
-| Gemini      | `GEMINI.md`                                                  | `naavos install --target gemini`                     |
-| Cursor      | `.cursorrules`                                               | `naavos install --target cursor`                     |
-| OpenClaw    | `AGENTS.md`                                                  | `naavos install --target openclaw`                   |
-| ReMe        | `.remerc`, `skills/reme_memory/SKILL.md`, `CLAUDE-reme.md`   | `naavos install --target reme`                       |
+The adapters below generate target-specific output. An available adapter is not the same as named-host certification;
+the current evidence level is recorded explicitly in the status column and in
+[`docs/contracts/capability-status.json`](docs/contracts/capability-status.json).
+
+| Target      | Evidence status     | Output                                                       | Install Method                                       |
+| ----------- | ------------------- | ------------------------------------------------------------ | ---------------------------------------------------- |
+| Hermes      | Local verified      | `SOUL.md`, `SKILL.md`, `sub-agents/*.md`, `memories/**/*.md` | `naavos install --target hermes` or `.tar.gz` bundle |
+| Claude Code | Adapter available   | `CLAUDE.md`                                                  | `naavos install --target claude-code`                |
+| Gemini      | Adapter available   | `GEMINI.md`                                                  | `naavos install --target gemini`                     |
+| Cursor      | Adapter available   | `.cursorrules`                                               | `naavos install --target cursor`                     |
+| OpenClaw    | Adapter available   | `AGENTS.md`                                                  | `naavos install --target openclaw`                   |
+| ReMe        | Optional projection | `.remerc`, `skills/reme_memory/SKILL.md`, `CLAUDE-reme.md`   | `naavos install --target reme`                       |
 
 ## What's Included
 
