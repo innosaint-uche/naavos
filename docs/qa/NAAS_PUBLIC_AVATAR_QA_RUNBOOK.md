@@ -211,19 +211,19 @@ Evidence is stored in the central run directory:
 The current fix loop reran the repository gates and the central all-adapter E2E harness after repairing the root CLI
 contract, formatting gate, and CLI target-state rollback semantics:
 
-| Check                             | Result                                                                                                                     |
-| --------------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
-| Root `pnpm exec naavos --version` | PASS: `1.0.0`                                                                                                              |
-| Frozen-lockfile install           | PASS                                                                                                                       |
-| Repository tests                  | PASS                                                                                                                       |
-| Typecheck and lint                | PASS                                                                                                                       |
-| Prettier format check             | PASS                                                                                                                       |
-| Gitleaks secret scan              | PASS                                                                                                                       |
-| CLI backup/rollback regression    | PASS: Hermes, ReMe multi-root, and file-target journeys restore pre-existing files and remove new managed files            |
-| Public NAAvOS route QA            | PASS                                                                                                                       |
-| Local Codex/Antigravity/Hermes QA | PASS; two pre-existing credential field warnings recorded by name                                                          |
-| Packaged Tauri macOS E2E          | PASS: launch, sidecar, privacy, persistence, backup, hostile-origin rejection, retry blocking, rollback and hosting choice |
-| Customer/public production gate   | BLOCKED: live-user, named-host and signed-distribution evidence                                                            |
+| Check                             | Result                                                                                                                            |
+| --------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- |
+| Root `pnpm exec naavos --version` | PASS: `1.0.0`                                                                                                                     |
+| Frozen-lockfile install           | PASS                                                                                                                              |
+| Repository tests                  | PASS                                                                                                                              |
+| Typecheck and lint                | PASS                                                                                                                              |
+| Prettier format check             | PASS                                                                                                                              |
+| Gitleaks secret scan              | PASS                                                                                                                              |
+| CLI backup/rollback regression    | PASS: Hermes, ReMe multi-root, and file-target journeys restore pre-existing files and remove new managed files                   |
+| Public NAAvOS route QA            | PASS                                                                                                                              |
+| Local Codex/Antigravity/Hermes QA | PASS; two pre-existing credential field warnings recorded by name                                                                 |
+| Packaged Tauri macOS E2E          | PASS: launch, sidecar, privacy, persistence, backup, hostile-origin rejection, retry blocking, rollback and hosting choice        |
+| Customer/public production gate   | BLOCKED: live-user, named-host and signed-distribution evidence                                                                   |
 | Live dashboard release identity   | PASS: `/release.json` product/surface/marker shape in central QA; exact source-marker match verified by `pnpm verify:live-marker` |
 
 Evidence is stored in: `/Users/radossagency/.radoss-qa/artifacts/naavos-central-release-marker-2026-09-08/`.
