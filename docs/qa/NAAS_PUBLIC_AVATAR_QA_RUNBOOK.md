@@ -223,10 +223,9 @@ contract, formatting gate, and CLI target-state rollback semantics:
 | Public NAAvOS route QA            | PASS                                                                                                                       |
 | Local Codex/Antigravity/Hermes QA | PASS; two pre-existing credential field warnings recorded by name                                                          |
 | Packaged Tauri macOS E2E          | PASS: launch, sidecar, privacy, persistence, backup, hostile-origin rejection, retry blocking, rollback and hosting choice |
-| Customer/public production gate   | BLOCKED: live-user, named-host, signed-distribution and live-dashboard reconciliation evidence                             |
+| Customer/public production gate   | BLOCKED: live-user, named-host and signed-distribution evidence                                                            |
 
-Evidence is stored in: `/Users/radossagency/.radoss-qa/artifacts/naas-analysis-2026-09-07/`.
+Evidence is stored in: `/Users/radossagency/.radoss-qa/artifacts/naas-release-2026-09-07-rerun/`.
 
-The live dashboard probe also detected deployment drift: `naavos.radoss.agency` still serves the prior controlled-
-development banner while the current checkout contains the corrected open-source release copy. This is a release
-identity failure and must be resolved before the dashboard can be marked verified.
+The live dashboard reconciliation gate is now PASS: `naavos.radoss.agency` serves the corrected open-source release copy
+and the running Coolify container is tagged with commit `27ec8279bacf5c5aef6c54a058b6403fbf823942`.

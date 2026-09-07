@@ -9,11 +9,11 @@ relevant official documentation whenever a host/provider version changes. The ma
 
 ## Verified
 
-- Public dashboard: `https://naavos.radoss.agency` — HTTP 200, Next.js response, and valid TLS certificate. The
-  currently deployed dashboard is an older source revision and still serves the prior controlled-development banner;
-  the local corrected open-source release copy is not yet deployed.
-- Dashboard source/deployment identity: source commit `ec8dd39433a565a39cfc493f9cc31b23f7c20600`, Coolify application
-  container `a1rpkpmda1lhxn2kyxvvnmpm:ec8dd39` (application `4`, `naavos-dashboard`).
+- Public dashboard: `https://naavos.radoss.agency` — HTTP 200, Next.js response, valid TLS certificate, and the
+  corrected open-source release copy is live.
+- Dashboard source/deployment identity: source commit `27ec8279bacf5c5aef6c54a058b6403fbf823942`, Coolify deployment
+  `o14esu0tefimipp1f39oke4p`, running container image `a1rpkpmda1lhxn2kyxvvnmpm:27ec8279bacf5c5aef6c54a058b6403fbf823942`
+  (application `4`, `naavos-dashboard`).
 - Hosted MCP Worker: `https://naavos-mcp.innosaint-uche.workers.dev/mcp`.
 - Worker deployment version: `d683a9ac-bafb-454c-86eb-a81a94d19b29` (latest verified deployment; tenant-owner
   enforcement and branded OAuth metadata).
@@ -56,10 +56,10 @@ relevant official documentation whenever a host/provider version changes. The ma
 - Canonical local registry: the verified hosted gateway is registered as `naavos_gateway` with no
   Codex/Antigravity/Hermes targets; local agents remain on the guarded `radoss_avatar` stdio control plane.
 - NAAS monorepo: test, typecheck, lint, and build pass.
-- Current central QA run: `naas-analysis-2026-09-07` passed the local-agent, public-route, and packaged macOS
+- Current central QA run: `naas-release-2026-09-07-rerun` passed the local-agent, public-route, and packaged macOS
   Tauri adapters; the Tauri journey additionally verified hostile-origin rejection, privacy pause/retry blocking,
   rollback readback, and user-owned hosting selection. CLI contract, formatting, and secret scan also passed. Evidence
-  is under `/Users/radossagency/.radoss-qa/artifacts/naas-analysis-2026-09-07/`. The NAAvOS CLI rollback
+  is under `/Users/radossagency/.radoss-qa/artifacts/naas-release-2026-09-07-rerun/`. The NAAvOS CLI rollback
   regression now snapshots pre-install target files, supports ReMe's project and Hermes roots, and removes only
   newly-created managed files on restore; its regression and process-level tests pass.
 

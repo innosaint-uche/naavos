@@ -47,6 +47,11 @@
     ]
   },
   "endpoint": "https://mcp.naavos.radoss.agency/mcp",
+  "dashboard_release_identity": {
+    "source_marker": "27ec8279bacf5c5aef6c54a058b6403fbf823942",
+    "deployment_id": "o14esu0tefimipp1f39oke4p",
+    "status": "verified"
+  },
   "release_identity": {
     "source_marker": "e79819d414731cda4d6cc25726842c94621e059c37ee523191bd5e7b68ec84aa",
     "worker_version": "d683a9ac-bafb-454c-86eb-a81a94d19b29",
@@ -84,12 +89,12 @@
   "current_qa": {
     "status": "pass",
     "verified_at": "2026-09-07",
-    "artifact": "/Users/radossagency/.radoss-qa/artifacts/naas-analysis-2026-09-07/summary.json",
+    "artifact": "/Users/radossagency/.radoss-qa/artifacts/naas-release-2026-09-07-rerun/summary.json",
     "adapters": ["local-agents", "naas-public", "universal-tauri-macos"],
     "cli_contract": "pass",
     "format_check": "pass",
     "secret_scan": "pass",
-    "live_dashboard": "stale_deployment_local_source_not_live"
+    "live_dashboard": "verified_source_27ec8279"
   },
   "dns": {
     "authoritative_mcp_radoss_agency": "no_record",
