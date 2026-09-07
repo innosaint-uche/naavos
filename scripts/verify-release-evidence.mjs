@@ -16,6 +16,49 @@ const assert = (condition, message) => {
   if (!condition) failures.push(message);
 };
 
+const validateQaArtifact = () => {
+  const artifactPath = release.current_qa?.artifact;
+  if (!requireArtifact || typeof artifactPath !== 'string' || !fs.existsSync(artifactPath)) return;
+
+  let summary;
+  try {
+    summary = JSON.parse(fs.readFileSync(artifactPath, 'utf8'));
+  } catch (error) {
+    failures.push(`current QA artifact is not valid JSON: ${error.message}`);
+    return;
+  }
+
+  assert(summary.status === 'pass', 'current QA artifact status is not pass');
+  assert(Array.isArray(summary.adapters), 'current QA artifact has no adapter results');
+  const declaredAdapters = [...new Set(release.current_qa.adapters || [])].sort();
+  const recordedAdapters = Array.isArray(summary.adapters)
+    ? summary.adapters.map((adapter) => adapter.adapter).sort()
+    : [];
+  assert(
+    JSON.stringify(recordedAdapters) === JSON.stringify(declaredAdapters),
+    `current QA adapters do not match the release manifest: ${recordedAdapters.join(', ')}`
+  );
+
+  for (const adapter of summary.adapters || []) {
+    assert(adapter.status === 'pass', `QA adapter ${adapter.adapter} did not pass`);
+    assert(adapter.exit_code === 0, `QA adapter ${adapter.adapter} did not exit successfully`);
+    if (typeof adapter.evidence !== 'string') {
+      failures.push(`QA adapter ${adapter.adapter} has no evidence path`);
+      continue;
+    }
+    const evidencePath = path.resolve(root, adapter.evidence);
+    assert(fs.existsSync(evidencePath), `QA adapter evidence is missing: ${evidencePath}`);
+    if (!fs.existsSync(evidencePath)) continue;
+    try {
+      const evidence = JSON.parse(fs.readFileSync(evidencePath, 'utf8'));
+      assert(evidence.status === 'pass', `QA evidence ${adapter.adapter} status is not pass`);
+      assert(evidence.token_values_written !== true, `QA evidence ${adapter.adapter} reports token values written`);
+    } catch (error) {
+      failures.push(`QA adapter evidence is not valid JSON (${adapter.adapter}): ${error.message}`);
+    }
+  }
+};
+
 assert(release.endpoint === canonicalEndpoint, `release endpoint must be ${canonicalEndpoint}`);
 assert(!release.endpoint.includes(retiredEndpoint), 'release endpoint uses the retired api.naavos.io route');
 assert(hostedRoute?.hostname === 'mcp.naavos.radoss.agency', 'hosted route hostname is not canonical');
@@ -36,6 +79,7 @@ assert(new RegExp('Coolify deployment\\s+`' + release.dashboard_release_identity
 assert(release.current_qa?.status === 'pass', 'current central QA status is not pass');
 assert(typeof release.current_qa?.artifact === 'string' && release.current_qa.artifact.includes('/.radoss-qa/artifacts/'), 'current QA artifact must point to the central QA store');
 if (requireArtifact) assert(fs.existsSync(release.current_qa.artifact), `current QA artifact is missing: ${release.current_qa.artifact}`);
+validateQaArtifact();
 
 if (failures.length) {
   console.error(JSON.stringify({ status: 'fail', failures }, null, 2));
