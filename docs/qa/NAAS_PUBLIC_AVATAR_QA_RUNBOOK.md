@@ -227,8 +227,8 @@ contract, formatting gate, and CLI target-state rollback semantics:
 
 Evidence is stored in: `/Users/radossagency/.radoss-qa/artifacts/naavos-tauri-warning-fix-2026-09-07/`.
 
-The last independently verified dashboard reconciliation is PASS: `naavos.radoss.agency` served the corrected open-source
-release copy from source marker `97d9950b8d27cf041862de9089d0fbf2633984ef`, Coolify deployment
-`kw8a7b2bvtzemlqo8vf19eki`, and container image
-`a1rpkpmda1lhxn2kyxvvnmpm:97d9950b8d27cf041862de9089d0fbf2633984ef`. Later documentation-only commits are not treated as
-deployment-identity evidence until the running container is independently read back.
+The last independently verified dashboard reconciliation is PASS: `naavos.radoss.agency` served the corrected
+open-source release copy from source marker `97d9950b8d27cf041862de9089d0fbf2633984ef`, Coolify deployment
+`kw8a7b2bvtzemlqo8vf19eki`, and container image `a1rpkpmda1lhxn2kyxvvnmpm:97d9950b8d27cf041862de9089d0fbf2633984ef`.
+Later documentation-only commits are not treated as deployment-identity evidence until the running container is
+independently read back.
