@@ -7,8 +7,8 @@
       "service": "public-dashboard",
       "environment": "production-facing-development",
       "release_identity": {
-        "source_marker": "27ec8279bacf5c5aef6c54a058b6403fbf823942",
-        "deployment_id": "o14esu0tefimipp1f39oke4p"
+        "source_marker": "6608993f8d7987188afa1c133221e58a13e728b2",
+        "deployment_id": "cdk1f1yui9fei6c3sklrln2l"
       },
       "hostname": "naavos.radoss.agency",
       "path": "/",
@@ -20,7 +20,7 @@
       "auth_boundary": "public informational page; no authenticated Avatar data",
       "health_command": "central ~/.radoss-qa adapter naas-public browser.dashboard",
       "last_verified": "2026-09-07",
-      "evidence": "central QA artifact naas-release-2026-09-07-rerun/naas-public/evidence.json; live banner probe; Coolify deployment queue and container image readback",
+      "evidence": "central QA artifact naas-og-fix-2026-09-07/naas-public/evidence.json; live banner probe; Coolify deployment queue and container image readback",
       "status": "verified",
       "known_limits": [
         "The dashboard is an informational surface; it does not itself prove authenticated Avatar tenant behavior"
@@ -44,7 +44,7 @@
       "auth_boundary": "Hugging Face OAuth bearer; tenant-owner enforcement",
       "health_command": "central ~/.radoss-qa public and authenticated adapters",
       "last_verified": "2026-09-07",
-      "evidence": "central QA artifact naas-release-2026-09-07-rerun/naas-public/evidence.json and docs/DEPLOYMENT_EVIDENCE.md",
+      "evidence": "central QA artifact naas-og-fix-2026-09-07/naas-public/evidence.json and docs/DEPLOYMENT_EVIDENCE.md",
       "status": "protocol_verified",
       "known_limits": [
         "two independent live-user tenant isolation is not yet accepted",
