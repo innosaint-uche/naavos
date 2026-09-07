@@ -33,10 +33,7 @@ export const CommunicationSchema = z.object({
   tone: z.string().describe("e.g., 'Direct, authoritative, straight-talk'"),
   structure: z.string().describe("e.g., 'Bulleted, action-oriented'"),
   verbosity: z.string().describe("e.g., 'Minimal — no preamble, no fluff'"),
-  accessibility_needs: z
-    .array(z.string())
-    .optional()
-    .describe("e.g., 'prefer-tables-over-prose'"),
+  accessibility_needs: z.array(z.string()).optional().describe("e.g., 'prefer-tables-over-prose'"),
   prohibited_patterns: z
     .array(z.string())
     .optional()
@@ -46,9 +43,7 @@ export const CommunicationSchema = z.object({
 export type Communication = z.infer<typeof CommunicationSchema>;
 
 export const RuleSchema = z.object({
-  id: z
-    .string()
-    .describe("Unique identifier for the rule (e.g., 'evidence.no_false_completion')."),
+  id: z.string().describe("Unique identifier for the rule (e.g., 'evidence.no_false_completion')."),
   statement: z.string().describe('The human-readable rule statement.'),
   priority: z.number().int().min(0).max(100).describe('Precedence score (0-100, higher wins).'),
   scope: z
@@ -108,10 +103,7 @@ export const PrivacySchema = z.object({
     .record(z.boolean())
     .describe('Record of user consents for specific data processing activities.'),
   data_residency: z.string().optional().describe('Preferred geographic region for data storage.'),
-  retention_policy: z
-    .string()
-    .optional()
-    .describe("e.g., 'delete-after-90-days'"),
+  retention_policy: z.string().optional().describe("e.g., 'delete-after-90-days'"),
   redaction_rules: z
     .array(z.string())
     .optional()
@@ -148,9 +140,7 @@ export type KnowledgeSource = z.infer<typeof KnowledgeSourceSchema>;
 export const AvatarPackageSchema = z.object({
   metadata: MetadataSchema.describe('Package metadata and versioning.'),
   identity: IdentitySchema.describe('Public identity information.'),
-  communication: CommunicationSchema.describe(
-    'Preferred communication style for AI interactions.',
-  ),
+  communication: CommunicationSchema.describe('Preferred communication style for AI interactions.'),
   operating_rules: z
     .array(RuleSchema)
     .min(1)
@@ -160,7 +150,9 @@ export const AvatarPackageSchema = z.object({
     .array(AdapterTargetSchema)
     .min(1)
     .describe('A list of target AI hosts this package is configured for.'),
-  evals: z.array(z.string()).describe('References to evaluation packs required for release gating.'),
+  evals: z
+    .array(z.string())
+    .describe('References to evaluation packs required for release gating.'),
   modes: z
     .array(ModeSchema)
     .optional()
@@ -173,7 +165,7 @@ export const AvatarPackageSchema = z.object({
     .array(z.union([z.string(), KnowledgeSourceSchema]))
     .optional()
     .describe(
-      'References (URIs/paths) to external knowledge sources. Can be plain strings (backward-compatible) or objects with type and config. Secrets are never embedded.',
+      'References (URIs/paths) to external knowledge sources. Can be plain strings (backward-compatible) or objects with type and config. Secrets are never embedded.'
     ),
   projects: z
     .array(z.union([z.string(), KnowledgeSourceSchema]))

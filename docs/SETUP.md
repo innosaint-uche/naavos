@@ -16,6 +16,7 @@
 git clone https://github.com/innosaint-uche/naavos.git
 cd naavos
 pnpm install
+pnpm build
 ```
 
 ### Step 2: Initialize Your Avatar
@@ -25,6 +26,7 @@ pnpm exec naavos init
 ```
 
 You'll be prompted for:
+
 - Your name
 - Communication style
 - Top operating rules
@@ -53,6 +55,12 @@ pnpm exec naavos compile --target reme
 ```bash
 # Install into Hermes (with automatic backup)
 pnpm exec naavos install --target hermes
+
+# Install file-based targets into the current project (with automatic backup)
+pnpm exec naavos install --target claude-code
+pnpm exec naavos install --target gemini
+pnpm exec naavos install --target cursor
+pnpm exec naavos install --target openclaw
 
 # Install ReMe config into current project
 pnpm exec naavos install --target reme

@@ -1,17 +1,5 @@
 import { describe, expect, it } from 'vitest';
 
-import {
-  AdapterTargetSchema,
-  AvatarPackageSchema,
-  CommunicationSchema,
-  IdentitySchema,
-  KnowledgeSourceSchema,
-  MetadataSchema,
-  ModeSchema,
-  PrivacySchema,
-  RouteSchema,
-  RuleSchema,
-} from './index.js';
 import type {
   AdapterTarget,
   AvatarPackage,
@@ -23,6 +11,18 @@ import type {
   Privacy,
   Route,
   Rule,
+} from './index.js';
+import {
+  AdapterTargetSchema,
+  AvatarPackageSchema,
+  CommunicationSchema,
+  IdentitySchema,
+  KnowledgeSourceSchema,
+  MetadataSchema,
+  ModeSchema,
+  PrivacySchema,
+  RouteSchema,
+  RuleSchema,
 } from './index.js';
 
 function makeValidPackage(): AvatarPackage {
@@ -58,7 +58,11 @@ function makeValidPackage(): AvatarPackage {
     },
     adapters: [
       { host_id: 'hermes', min_adapter_version: '1.0.0', unsupported_behaviour_policy: 'warn' },
-      { host_id: 'claude-code', min_adapter_version: '1.0.0', unsupported_behaviour_policy: 'warn' },
+      {
+        host_id: 'claude-code',
+        min_adapter_version: '1.0.0',
+        unsupported_behaviour_policy: 'warn',
+      },
     ],
     evals: ['eval-pack-core-v1', 'eval-pack-safety-v1'],
   };
@@ -170,9 +174,7 @@ describe('CommunicationSchema', () => {
   });
 
   it('rejects missing tone', () => {
-    expect(() =>
-      CommunicationSchema.parse({ structure: 'x', verbosity: 'x' }),
-    ).toThrow();
+    expect(() => CommunicationSchema.parse({ structure: 'x', verbosity: 'x' })).toThrow();
   });
 });
 
@@ -192,15 +194,11 @@ describe('RuleSchema', () => {
   });
 
   it('rejects priority > 100', () => {
-    expect(() =>
-      RuleSchema.parse({ id: 'r1', statement: 'test', priority: 101 }),
-    ).toThrow();
+    expect(() => RuleSchema.parse({ id: 'r1', statement: 'test', priority: 101 })).toThrow();
   });
 
   it('rejects priority < 0', () => {
-    expect(() =>
-      RuleSchema.parse({ id: 'r1', statement: 'test', priority: -1 }),
-    ).toThrow();
+    expect(() => RuleSchema.parse({ id: 'r1', statement: 'test', priority: -1 })).toThrow();
   });
 
   it('accepts priority 0 and 100 (boundaries)', () => {
@@ -209,9 +207,7 @@ describe('RuleSchema', () => {
   });
 
   it('rejects non-integer priority', () => {
-    expect(() =>
-      RuleSchema.parse({ id: 'r1', statement: 'x', priority: 50.5 }),
-    ).toThrow();
+    expect(() => RuleSchema.parse({ id: 'r1', statement: 'x', priority: 50.5 })).toThrow();
   });
 });
 
@@ -238,7 +234,7 @@ describe('ModeSchema', () => {
         activation_phrases: ['x'],
         deactivation_phrases: ['x'],
         persistence: 'global_forever',
-      }),
+      })
     ).toThrow();
   });
 
@@ -276,7 +272,7 @@ describe('RouteSchema', () => {
         intent: 'x',
         skill_or_tool: 'x',
         approval_class: 'maybe',
-      }),
+      })
     ).toThrow();
   });
 });
@@ -297,9 +293,7 @@ describe('PrivacySchema', () => {
   });
 
   it('rejects non-boolean consent values', () => {
-    expect(() =>
-      PrivacySchema.parse({ consents: { 'bad-key': 'yes' } }),
-    ).toThrow();
+    expect(() => PrivacySchema.parse({ consents: { 'bad-key': 'yes' } })).toThrow();
   });
 
   it('requires consents to be present', () => {
@@ -330,9 +324,7 @@ describe('AdapterTargetSchema', () => {
   });
 
   it('rejects invalid version format', () => {
-    expect(() =>
-      AdapterTargetSchema.parse({ host_id: 'x', min_adapter_version: '1.2' }),
-    ).toThrow();
+    expect(() => AdapterTargetSchema.parse({ host_id: 'x', min_adapter_version: '1.2' })).toThrow();
   });
 
   it('rejects invalid unsupported_behaviour_policy', () => {
@@ -341,7 +333,7 @@ describe('AdapterTargetSchema', () => {
         host_id: 'x',
         min_adapter_version: '1.0.0',
         unsupported_behaviour_policy: 'maybe',
-      }),
+      })
     ).toThrow();
   });
 });

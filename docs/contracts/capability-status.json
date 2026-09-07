@@ -1,14 +1,14 @@
 {
-  "as_of": "2026-08-25",
+  "as_of": "2026-09-07",
   "status_vocabulary": ["observed", "partial", "target", "blocked", "not-started"],
   "compile": {
     "status": "partial",
-    "evidence": "packages/compiler/test.js and pnpm build pass in the current checkout",
+    "evidence": "packages/compiler/src/index.test.ts and pnpm build pass in the current checkout",
     "known_limits": ["clean public source release and all target certification are not verified"]
   },
   "safeInstall": {
     "status": "partial",
-    "evidence": "local compiler and Universal setup flows have backup/rollback tests",
+    "evidence": "packages/cli/src/index.test.ts and process-level Hermes, ReMe multi-root, and file-target install rollback journeys pass",
     "known_limits": ["NAAS target-by-target mutation/reload/rollback evidence is incomplete"]
   },
   "hermesTarget": {
@@ -17,29 +17,31 @@
     "known_limits": ["public NAAS bundle release is not certified"]
   },
   "claudeCodeTarget": {
-    "status": "target",
-    "evidence": "adapter design exists; named host acceptance is not recorded",
-    "known_limits": ["host-managed acceptance required"]
+    "status": "partial",
+    "evidence": "adapter compilation and process-level install/rollback pass; named host acceptance is not recorded",
+    "known_limits": ["host-managed reload and behavioral acceptance required"]
   },
   "geminiTarget": {
     "status": "partial",
-    "evidence": "Antigravity/Gemini-family local adapter is observed in the Universal setup",
-    "known_limits": ["public NAAS target certification is not complete"]
+    "evidence": "Antigravity/Gemini-family local adapter and process-level install/rollback pass",
+    "known_limits": ["host-managed reload and behavioral acceptance required"]
   },
   "openclawTarget": {
-    "status": "target",
-    "evidence": "compiler target exists in source",
-    "known_limits": ["mutation, reload, rollback and behavioral acceptance are not verified"]
+    "status": "partial",
+    "evidence": "adapter compilation and process-level install/rollback pass",
+    "known_limits": ["host-managed reload and behavioral acceptance are not verified"]
   },
   "cursorTarget": {
-    "status": "target",
-    "evidence": "compiler target exists in source",
-    "known_limits": ["mutation, reload, rollback and behavioral acceptance are not verified"]
+    "status": "partial",
+    "evidence": "adapter compilation and process-level install/rollback pass",
+    "known_limits": ["host-managed reload and behavioral acceptance are not verified"]
   },
   "remeTarget": {
     "status": "partial",
     "evidence": "credential-free local ReMe projection path is verified in the Universal project",
-    "known_limits": ["ReMe remains an optional projection, not canonical identity or memory authority"]
+    "known_limits": [
+      "ReMe remains an optional projection, not canonical identity or memory authority"
+    ]
   },
   "conformance": {
     "status": "partial",
@@ -55,5 +57,8 @@
   "memuAdapter": { "status": "not-started", "evidence": "no current canonical adapter" },
   "researchPack": { "status": "not-started", "evidence": "no current implementation" },
   "providerBenchmark": { "status": "not-started", "evidence": "no current implementation" },
-  "cloudSync": { "status": "not-started", "evidence": "opt-in cloud sync is not implemented in the public mirror" }
+  "cloudSync": {
+    "status": "not-started",
+    "evidence": "opt-in cloud sync is not implemented in the public mirror"
+  }
 }

@@ -1,6 +1,6 @@
 # NAAvOS deployment evidence
 
-Updated: 2026-08-26 (Africa/Lagos)
+Updated: 2026-09-07 (Africa/Lagos)
 
 The productisation design's page-18 **Evidence Standard** is enforced by the Universal release gate. Facts and
 recommendations are recorded separately; host-specific claims remain adapter-owned and must be reverified against the
@@ -9,8 +9,9 @@ relevant official documentation whenever a host/provider version changes. The ma
 
 ## Verified
 
-- Public dashboard: `https://naavos.radoss.agency` — HTTP 200, Next.js response, valid TLS certificate, and the
-  corrected evidence-gated release copy is live.
+- Public dashboard: `https://naavos.radoss.agency` — HTTP 200, Next.js response, and valid TLS certificate. The
+  currently deployed dashboard is an older source revision and still serves the prior controlled-development banner;
+  the local corrected open-source release copy is not yet deployed.
 - Dashboard source/deployment identity: source commit `ec8dd39433a565a39cfc493f9cc31b23f7c20600`, Coolify application
   container `a1rpkpmda1lhxn2kyxvvnmpm:ec8dd39` (application `4`, `naavos-dashboard`).
 - Hosted MCP Worker: `https://naavos-mcp.innosaint-uche.workers.dev/mcp`.
@@ -41,14 +42,13 @@ relevant official documentation whenever a host/provider version changes. The ma
 - Central packaged no-code QA: PASS — the real Tauri macOS bundle launched with isolated temporary state; Playwright
   verified the setup UI, privacy mutation/readback, backup action and clean sidecar lifecycle. Evidence:
   `/Users/radossagency/.radoss-qa/artifacts/run-2026-08-26T00-34-56-912Z/universal-tauri-macos/evidence.json`.
-- Central all-adapter QA: PASS — `local-agents`, `naas-public` and `universal-tauri-macos` all passed in the same run; aggregate
-  evidence is under `/Users/radossagency/.radoss-qa/artifacts/run-2026-08-26T00-34-56-912Z/`.
-- Central local-agent QA: PASS — Codex, Antigravity and Hermes adapter markers were present; `radoss doctor`
-  confirmed local MCP health and Hermes OAuth state. Evidence is under
+- Central all-adapter QA: PASS — `local-agents`, `naas-public` and `universal-tauri-macos` all passed in the same run;
+  aggregate evidence is under `/Users/radossagency/.radoss-qa/artifacts/run-2026-08-26T00-34-56-912Z/`.
+- Central local-agent QA: PASS — Codex, Antigravity and Hermes adapter markers were present; `radoss doctor` confirmed
+  local MCP health and Hermes OAuth state. Evidence is under
   `/Users/radossagency/.radoss-qa/artifacts/run-2026-08-26T00-34-56-912Z/local-agents/`.
 - Public source repository: verified public at `https://github.com/innosaint-uche/naavos`.
-- Universal Avatar source repository: verified public at
-  `https://github.com/innosaint-uche/radoss-universal-avatar`.
+- Universal Avatar source repository: verified public at `https://github.com/innosaint-uche/radoss-universal-avatar`.
 - Clean source baselines: `naavos` tag `v0.1.0-public-source`; Universal Avatar tag `v0.2.0-public-source`.
 - Release evidence identity: the live deployment version, source marker and clean public source tags are reconciled in
   the machine-readable manifest; none of these substitutes for tenant, host-account, credential, or signed-distribution
@@ -56,6 +56,12 @@ relevant official documentation whenever a host/provider version changes. The ma
 - Canonical local registry: the verified hosted gateway is registered as `naavos_gateway` with no
   Codex/Antigravity/Hermes targets; local agents remain on the guarded `radoss_avatar` stdio control plane.
 - NAAS monorepo: test, typecheck, lint, and build pass.
+- Current central QA run: `naas-analysis-2026-09-07` passed the local-agent, public-route, and packaged macOS
+  Tauri adapters; the Tauri journey additionally verified hostile-origin rejection, privacy pause/retry blocking,
+  rollback readback, and user-owned hosting selection. CLI contract, formatting, and secret scan also passed. Evidence
+  is under `/Users/radossagency/.radoss-qa/artifacts/naas-analysis-2026-09-07/`. The NAAvOS CLI rollback
+  regression now snapshots pre-install target files, supports ReMe's project and Hermes roots, and removes only
+  newly-created managed files on restore; its regression and process-level tests pass.
 
 ## Not yet verified
 

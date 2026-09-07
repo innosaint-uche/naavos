@@ -3,8 +3,8 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 import { compile } from '@naavos/compiler';
-import { AvatarPackageSchema } from '@naavos/schema';
 import type { AvatarPackage } from '@naavos/schema';
+import { AvatarPackageSchema } from '@naavos/schema';
 
 import type { EvalPack, EvalResult, Scenario, ScenarioResult } from './types.js';
 
@@ -69,10 +69,7 @@ export async function runEval(packId: string, avatarData: unknown): Promise<Eval
  * All other scenarios require a schema-valid avatar; if parsing fails,
  * they report the parse error as a scenario failure.
  */
-export async function runScenario(
-  scenario: Scenario,
-  avatar: unknown,
-): Promise<ScenarioResult> {
+export async function runScenario(scenario: Scenario, avatar: unknown): Promise<ScenarioResult> {
   // schema_valid tests parsing independently
   if (scenario.type === 'schema_valid') {
     try {
@@ -122,9 +119,7 @@ export async function runScenario(
       }
       pass = failures.length === 0;
       evidence.push(
-        failures.length
-          ? failures.join('; ')
-          : `All adapters compiled: ${targets.join(', ')}`,
+        failures.length ? failures.join('; ') : `All adapters compiled: ${targets.join(', ')}`
       );
       break;
     }
@@ -147,9 +142,7 @@ export async function runScenario(
       }
       pass = hits.length === 0;
       evidence.push(
-        pass
-          ? `No forbidden pattern in ${target}`
-          : `Forbidden pattern found in ${hits.join(', ')}`,
+        pass ? `No forbidden pattern in ${target}` : `Forbidden pattern found in ${hits.join(', ')}`
       );
       break;
     }

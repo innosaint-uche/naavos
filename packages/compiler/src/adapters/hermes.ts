@@ -90,7 +90,8 @@ function generateSoul(pkg: AvatarPackage): string {
       tone: pkg.communication?.tone || 'Direct',
       structure: pkg.communication?.structure || 'Bulleted, action-oriented',
       verbosity: pkg.communication?.verbosity || 'Minimal',
-      prohibited_patterns: (pkg.communication?.prohibited_patterns || []).join(', ') || 'None specified',
+      prohibited_patterns:
+        (pkg.communication?.prohibited_patterns || []).join(', ') || 'None specified',
     },
     operating_rules: formatRulesWithPriority(pkg.operating_rules || []),
     privacy: {
@@ -115,7 +116,10 @@ function generateSkill(pkg: AvatarPackage): string {
   });
 }
 
-function generateSubAgent(pkg: AvatarPackage, mode: NonNullable<AvatarPackage['modes']>[number]): string {
+function generateSubAgent(
+  pkg: AvatarPackage,
+  mode: NonNullable<AvatarPackage['modes']>[number]
+): string {
   const capabilities = mode.permitted_capabilities || [];
 
   return render(loadTemplate('sub-agent.md'), {
@@ -124,8 +128,12 @@ function generateSubAgent(pkg: AvatarPackage, mode: NonNullable<AvatarPackage['m
       activation_phrases: mode.activation_phrases.join(', '),
       deactivation_phrases: mode.deactivation_phrases.join(', '),
       persistence: mode.persistence,
-      conflicts: mode.conflicts?.length ? 'This mode conflicts with: ' + mode.conflicts.join(', ') : 'None',
-      permitted_capabilities: capabilities.length ? capabilities.join('\n') : 'All capabilities permitted',
+      conflicts: mode.conflicts?.length
+        ? 'This mode conflicts with: ' + mode.conflicts.join(', ')
+        : 'None',
+      permitted_capabilities: capabilities.length
+        ? capabilities.join('\n')
+        : 'All capabilities permitted',
     },
     metadata: {
       package_id: pkg.metadata?.package_id || 'unknown',
@@ -178,7 +186,9 @@ This file is maintained by the Hermes runtime. Do not edit manually.
  */
 function formatRulesWithPriority(rules: Rule[]): string {
   return rules
-    .map((r) => `- **${r.id || r.statement.slice(0, 30)}:** ${r.statement} (priority: ${r.priority})`)
+    .map(
+      (r) => `- **${r.id || r.statement.slice(0, 30)}:** ${r.statement} (priority: ${r.priority})`
+    )
     .join('\n');
 }
 
@@ -186,9 +196,7 @@ function formatRulesWithPriority(rules: Rule[]): string {
  * Format rules as a bulleted list without priority: "- **id:** statement"
  */
 function formatRules(rules: Rule[]): string {
-  return rules
-    .map((r) => `- **${r.id || r.statement.slice(0, 30)}:** ${r.statement}`)
-    .join('\n');
+  return rules.map((r) => `- **${r.id || r.statement.slice(0, 30)}:** ${r.statement}`).join('\n');
 }
 
 function fmtBool(value: boolean | undefined): 'Allowed' | 'Disabled' {

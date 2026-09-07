@@ -33,6 +33,9 @@ The complete product request and non-negotiable release rules are in the
 # Install dependencies
 pnpm install
 
+# Build the workspace binaries
+pnpm build
+
 # Initialize your avatar
 pnpm exec naavos init
 
@@ -54,10 +57,10 @@ pnpm exec naavos doctor
 | Target      | Output                                                       | Install Method                                       |
 | ----------- | ------------------------------------------------------------ | ---------------------------------------------------- |
 | Hermes      | `SOUL.md`, `SKILL.md`, `sub-agents/*.md`, `memories/**/*.md` | `naavos install --target hermes` or `.tar.gz` bundle |
-| Claude Code | `CLAUDE.md`                                                  | Copy to project root                                 |
-| Gemini      | `GEMINI.md`                                                  | Copy to project root                                 |
-| Cursor      | `.cursorrules`                                               | Copy to project root or `~/.cursorrules`             |
-| OpenClaw    | `AGENTS.md`                                                  | Copy to project root                                 |
+| Claude Code | `CLAUDE.md`                                                  | `naavos install --target claude-code`                |
+| Gemini      | `GEMINI.md`                                                  | `naavos install --target gemini`                     |
+| Cursor      | `.cursorrules`                                               | `naavos install --target cursor`                     |
+| OpenClaw    | `AGENTS.md`                                                  | `naavos install --target openclaw`                   |
 | ReMe        | `.remerc`, `skills/reme_memory/SKILL.md`, `CLAUDE-reme.md`   | `naavos install --target reme`                       |
 
 ## What's Included

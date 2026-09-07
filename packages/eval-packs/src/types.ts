@@ -21,18 +21,16 @@ export type Scenario =
   | (ScenarioBase & { type: 'uuid_fields_present' })
   | (ScenarioBase & { type: 'adapter_compiles'; targets?: string[] })
   | (ScenarioBase & { type: 'rule_present'; rule_id: string })
-  | (ScenarioBase &
-      {
-        type: 'forbidden_pattern_absent';
-        adapter?: string;
-        pattern: string;
-      })
-  | (ScenarioBase &
-      {
-        type: 'privacy_consent_set';
-        consent_key: string;
-        expected: boolean;
-      });
+  | (ScenarioBase & {
+      type: 'forbidden_pattern_absent';
+      adapter?: string;
+      pattern: string;
+    })
+  | (ScenarioBase & {
+      type: 'privacy_consent_set';
+      consent_key: string;
+      expected: boolean;
+    });
 
 export interface EvalPack {
   name: string;

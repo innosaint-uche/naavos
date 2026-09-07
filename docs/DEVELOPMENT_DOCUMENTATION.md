@@ -2,21 +2,29 @@
 
 > Authoritative product, experience and engineering baseline for the NAAvOS repository.
 
-| Field | Value |
-|---|---|
-| Product | NAAvOS |
-| Repository scope | `/Users/radossagency/Documents/NAAS` only |
-| Status | Development baseline, not a release declaration |
-| Decision date | 13 August 2026 |
-| Architecture strategy | Controlled rebuild of the prototype |
-| Delivery strategy | Local-first compiler and conformance platform, then governed memory, then optional cloud |
-| Intended readers | Product, design, engineering, security, open-source contributors and technical partners |
+| Field                 | Value                                                                                    |
+| --------------------- | ---------------------------------------------------------------------------------------- |
+| Product               | NAAvOS                                                                                   |
+| Repository scope      | `/Users/radossagency/Documents/NAAS` only                                                |
+| Status                | Development baseline, not a release declaration                                          |
+| Decision date         | 13 August 2026                                                                           |
+| Architecture strategy | Controlled rebuild of the prototype                                                      |
+| Delivery strategy     | Local-first compiler and conformance platform, then governed memory, then optional cloud |
+| Intended readers      | Product, design, engineering, security, open-source contributors and technical partners  |
+
+> **Evidence note (2026-09-07):** This document is the dated architecture baseline from 13 August 2026. Its original
+> Section 2 release statement describes the pre-rebuild state. Current implementation and release status are governed by
+> [`docs/qa/RELEASE_EVIDENCE_CURRENT.json`](qa/RELEASE_EVIDENCE_CURRENT.json) and
+> [`docs/DEPLOYMENT_EVIDENCE.md`](DEPLOYMENT_EVIDENCE.md).
 
 ## 1. Purpose and authority
 
-This document converts the existing NAAvOS research, productisation design and live repository evidence into one buildable development specification. It defines what the product is, how it should feel, how it should work, what is currently implemented, what is only proposed, and the release gates that prevent claims from getting ahead of reality.
+This document converts the existing NAAvOS research, productisation design and live repository evidence into one
+buildable development specification. It defines what the product is, how it should feel, how it should work, what is
+currently implemented, what is only proposed, and the release gates that prevent claims from getting ahead of reality.
 
-This document applies only to the NAAvOS product repository. It does not authorise edits to any personal or local Avatar OS, shared runtime skill, agent configuration or external project.
+This document applies only to the NAAvOS product repository. It does not authorise edits to any personal or local Avatar
+OS, shared runtime skill, agent configuration or external project.
 
 ### 1.1 Source-of-authority order
 
@@ -36,14 +44,14 @@ Code reality wins when answering, "What works today?" An accepted decision wins 
 
 Every future product or technical report should use these labels:
 
-| Label | Meaning |
-|---|---|
-| **Observed** | Directly verified in the current checkout or a running environment. |
-| **Decision** | Approved direction that implementation must follow. |
-| **Target** | Designed future state that is not yet fully implemented. |
-| **Assumption** | Belief requiring validation. |
-| **Risk** | Condition that can damage safety, quality, adoption or delivery. |
-| **Blocked** | Cannot proceed without a named dependency or decision. |
+| Label          | Meaning                                                             |
+| -------------- | ------------------------------------------------------------------- |
+| **Observed**   | Directly verified in the current checkout or a running environment. |
+| **Decision**   | Approved direction that implementation must follow.                 |
+| **Target**     | Designed future state that is not yet fully implemented.            |
+| **Assumption** | Belief requiring validation.                                        |
+| **Risk**       | Condition that can damage safety, quality, adoption or delivery.    |
+| **Blocked**    | Cannot proceed without a named dependency or decision.              |
 
 Marketing must never present a **Target** as **Observed**.
 
@@ -54,35 +62,44 @@ Marketing must never present a **Target** as **Observed**.
 Build NAAvOS as an open-source cognitive operating system with two explicit planes:
 
 1. A **control plane** that validates, compiles, installs and verifies governed avatar context across AI hosts.
-2. A **cognitive data plane** that preserves evidence-backed identity, project continuity, memory and learning without allowing a third-party memory engine to become the source of truth.
+2. A **cognitive data plane** that preserves evidence-backed identity, project continuity, memory and learning without
+   allowing a third-party memory engine to become the source of truth.
 
-The first shippable product is the local control plane. The first memory implementation is a local, canonical SQLite ledger. Cognee, memU, LightRAG, Honcho and future engines are optional adapters or derived indexes, not NAAvOS itself and not canonical authority.
+The first shippable product is the local control plane. The first memory implementation is a local, canonical SQLite
+ledger. Cognee, memU, LightRAG, Honcho and future engines are optional adapters or derived indexes, not NAAvOS itself
+and not canonical authority.
 
 ### Why this is the right sequence
 
-| Sequence | Value | Failure prevented |
-|---|---|---|
-| Canonical schema first | One inspectable truth model | Conflicting host instructions |
-| Compiler second | Deterministic host outputs | Brittle file copying |
-| Safe installer third | Reversible adoption | Broken user configuration |
-| Conformance fourth | Behavioural evidence | "Installed" being mistaken for "works" |
-| Canonical memory fifth | Durable continuity | Vendor lock-in and unverifiable learning |
-| Optional engines sixth | Better retrieval and graph reasoning | Premature infrastructure complexity |
-| Cloud last | Multi-device scale | Privacy and security debt before product truth |
+| Sequence               | Value                                | Failure prevented                              |
+| ---------------------- | ------------------------------------ | ---------------------------------------------- |
+| Canonical schema first | One inspectable truth model          | Conflicting host instructions                  |
+| Compiler second        | Deterministic host outputs           | Brittle file copying                           |
+| Safe installer third   | Reversible adoption                  | Broken user configuration                      |
+| Conformance fourth     | Behavioural evidence                 | "Installed" being mistaken for "works"         |
+| Canonical memory fifth | Durable continuity                   | Vendor lock-in and unverifiable learning       |
+| Optional engines sixth | Better retrieval and graph reasoning | Premature infrastructure complexity            |
+| Cloud last             | Multi-device scale                   | Privacy and security debt before product truth |
 
 ### Current release decision
 
-**NO-GO for public product release.** The current checkout contains valuable design work and a compilable landing page, but it does not yet implement the compiler, safe installer, real doctor, conformance harness, persistent memory or standards-compliant MCP server described by its public copy.
+**Historical baseline decision:** **NO-GO for public product release** at the time this document was written. The
+current checkout has since implemented and locally verified the compiler, CLI installer/rollback paths, conformance
+fixtures and standards-based MCP gateway; the remaining release gates are recorded in the current evidence manifest.
 
 ## 3. Product definition
 
 ### 3.1 Category statement
 
-**NAAvOS is an open-source cognitive operating system that turns a governed avatar source package into portable, inspectable and testable context for AI systems, while preserving correctable memory, project continuity and provenance.**
+**NAAvOS is an open-source cognitive operating system that turns a governed avatar source package into portable,
+inspectable and testable context for AI systems, while preserving correctable memory, project continuity and
+provenance.**
 
 ### 3.2 Product promise
 
-The user defines who they are, how they work, what is true, what remains uncertain, and what each project requires once. NAAvOS safely translates the relevant subset for each supported AI host, verifies the installation and measures whether the resulting agent behaviour respects the contract.
+The user defines who they are, how they work, what is true, what remains uncertain, and what each project requires once.
+NAAvOS safely translates the relevant subset for each supported AI host, verifies the installation and measures whether
+the resulting agent behaviour respects the contract.
 
 ### 3.3 What NAAvOS is
 
@@ -124,19 +141,20 @@ The user defines who they are, how they work, what is true, what remains uncerta
 
 ### 4.1 Primary users
 
-| User | Main job | Current pain | NAAvOS outcome |
-|---|---|---|---|
-| AI power user | Carry working context between agents | Repeated explanation and inconsistent behaviour | One governed source, multiple verified outputs |
-| Developer | Make coding agents follow project and personal rules | Each host uses different files and precedence | Certified adapters and project-aware compilation |
-| Founder or operator | Preserve decisions and continuity across initiatives | Context fragmentation and false assumptions | Evidence-backed project state and transfer learning |
-| Knowledge worker | Reuse preferences, methods and verified knowledge | Notes are disconnected from agent behaviour | Permissioned retrieval with provenance |
-| Team administrator, later | Govern shared and personal context | Policy leakage and unclear ownership | Scoped packages, roles and auditability |
-| Extension developer | Add a host or memory provider | Ad hoc integration contracts | Stable adapter SDK and conformance suite |
+| User                      | Main job                                             | Current pain                                    | NAAvOS outcome                                      |
+| ------------------------- | ---------------------------------------------------- | ----------------------------------------------- | --------------------------------------------------- |
+| AI power user             | Carry working context between agents                 | Repeated explanation and inconsistent behaviour | One governed source, multiple verified outputs      |
+| Developer                 | Make coding agents follow project and personal rules | Each host uses different files and precedence   | Certified adapters and project-aware compilation    |
+| Founder or operator       | Preserve decisions and continuity across initiatives | Context fragmentation and false assumptions     | Evidence-backed project state and transfer learning |
+| Knowledge worker          | Reuse preferences, methods and verified knowledge    | Notes are disconnected from agent behaviour     | Permissioned retrieval with provenance              |
+| Team administrator, later | Govern shared and personal context                   | Policy leakage and unclear ownership            | Scoped packages, roles and auditability             |
+| Extension developer       | Add a host or memory provider                        | Ad hoc integration contracts                    | Stable adapter SDK and conformance suite            |
 
 ### 4.2 Jobs to be done
 
 - When I start with a new AI host, configure it without rewriting my operating context.
-- When I enter a project, load the project's current state, decisions and constraints without contaminating it with unrelated projects.
+- When I enter a project, load the project's current state, decisions and constraints without contaminating it with
+  unrelated projects.
 - When rules conflict, show which rule won and why.
 - Before NAAvOS changes a host configuration, show an exact diff and recovery path.
 - When an agent claims completion, require evidence appropriate to the action.
@@ -145,7 +163,8 @@ The user defines who they are, how they work, what is true, what remains uncerta
 
 ### 4.3 North-star outcome
 
-**Verified continuity:** the percentage of supported sessions in which the correct identity, project and safety context is available, relevant, current and behaviourally respected without manual re-explanation.
+**Verified continuity:** the percentage of supported sessions in which the correct identity, project and safety context
+is available, relevant, current and behaviourally respected without manual re-explanation.
 
 Supporting measures:
 
@@ -245,38 +264,38 @@ NAAS/
 
 ### 6.2 Observed executable state
 
-| Surface | Observed result | Interpretation |
-|---|---|---|
-| Root `npm test` | Fails: `turbo: command not found` | No working repository test gate |
-| Root `npm run lint` | Fails: `turbo: command not found` | No working repository lint gate |
-| Root `npm run build` | Fails: `turbo: command not found` | No working repository build gate |
-| Core package test | Fails: `packages/core/test.js` missing | Package advertises a nonexistent test target |
-| Dashboard build | Next.js compilation and static generation complete, process exits 0 | Landing page is the strongest executable surface |
-| Dashboard build warnings | Next cannot repair missing SWC lockfile entries and emits stack traces | Dependency and lockfile state is inconsistent |
-| Workspace discovery | Dashboard and MCP packages appear extraneous | Root workspace globs exclude the current root-level app folders |
-| CLI `sync` | Simulated delay and success message | No synchronisation occurs |
-| CLI `connect` | Checks a hard-coded name and prints success | No host configuration is changed or verified |
-| CLI `doctor` | Hard-coded passing checks | Health claim is not evidence-backed |
-| MCP server | REST-like `/load`, `/sync`, `/health`, `/avatar` routes | Not a compliant MCP implementation |
-| Memory | No canonical persistent cognitive store | Product continuity is not implemented |
-| Conformance | No harness or model-host test runner | Fidelity cannot be claimed |
+| Surface                  | Observed result                                                        | Interpretation                                                  |
+| ------------------------ | ---------------------------------------------------------------------- | --------------------------------------------------------------- |
+| Root `npm test`          | Fails: `turbo: command not found`                                      | No working repository test gate                                 |
+| Root `npm run lint`      | Fails: `turbo: command not found`                                      | No working repository lint gate                                 |
+| Root `npm run build`     | Fails: `turbo: command not found`                                      | No working repository build gate                                |
+| Core package test        | Fails: `packages/core/test.js` missing                                 | Package advertises a nonexistent test target                    |
+| Dashboard build          | Next.js compilation and static generation complete, process exits 0    | Landing page is the strongest executable surface                |
+| Dashboard build warnings | Next cannot repair missing SWC lockfile entries and emits stack traces | Dependency and lockfile state is inconsistent                   |
+| Workspace discovery      | Dashboard and MCP packages appear extraneous                           | Root workspace globs exclude the current root-level app folders |
+| CLI `sync`               | Simulated delay and success message                                    | No synchronisation occurs                                       |
+| CLI `connect`            | Checks a hard-coded name and prints success                            | No host configuration is changed or verified                    |
+| CLI `doctor`             | Hard-coded passing checks                                              | Health claim is not evidence-backed                             |
+| MCP server               | REST-like `/load`, `/sync`, `/health`, `/avatar` routes                | Not a compliant MCP implementation                              |
+| Memory                   | No canonical persistent cognitive store                                | Product continuity is not implemented                           |
+| Conformance              | No harness or model-host test runner                                   | Fidelity cannot be claimed                                      |
 
 ### 6.3 Critical mismatches
 
-| Conflict | Current state | Required resolution |
-|---|---|---|
-| Product promise versus CLI | Website and README show `compile` and `install`; CLI does not implement them | Quarantine the claims until vertical slice passes |
-| Controlled rebuild versus retained prototype | Accepted ADR replaces `connect` and `sync`; prototype still exposes them | Move prototype to explicit legacy fixture or remove during rebuild |
-| Monorepo decision versus layout | Workspaces are `apps/*` and `packages/*`; apps remain at repository root | Move dashboard and MCP service under `apps/` |
-| Package manager | `packageManager` says pnpm 8.6.0; npm lockfile and npm instructions are used; installed pnpm is 9.15.9 | Select and pin pnpm 9.15.9, generate one lockfile |
-| Turborepo decision versus configuration | Root scripts call Turbo; no usable local binary and no `turbo.json` is present | Complete ADR-001 implementation before package work |
-| Universal product versus private defaults | Core and templates contain Uchenna-specific traits | Replace product defaults with neutral synthetic fixtures |
-| MCP label versus protocol | Current server lacks JSON-RPC lifecycle and MCP primitives | Rebuild on the official SDK, STDIO first |
-| Authentication | `X-NAAVOS-User-ID` is described as an API key and accepted without verification | Remove; use local OS boundary or proper OAuth for remote HTTP |
-| Persistence | Worker responses simulate state | Add durable storage only after local canonical data model exists |
-| Documentation quality | Setup/API copy describes undeployed or unimplemented capabilities | Add claim gates and generated command reference |
-| Styling architecture | Tailwind, MUI/Emotion, Framer Motion and GSAP overlap | Standardise the design system and one primary motion library |
-| Host templates | Stale `N-A-A-S`, `~/.naass`, duplicate/corrupted content and unsafe autonomy language | Regenerate from adapters, never hand-maintain as authority |
+| Conflict                                     | Current state                                                                                          | Required resolution                                                |
+| -------------------------------------------- | ------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------ |
+| Product promise versus CLI                   | Website and README show `compile` and `install`; CLI does not implement them                           | Quarantine the claims until vertical slice passes                  |
+| Controlled rebuild versus retained prototype | Accepted ADR replaces `connect` and `sync`; prototype still exposes them                               | Move prototype to explicit legacy fixture or remove during rebuild |
+| Monorepo decision versus layout              | Workspaces are `apps/*` and `packages/*`; apps remain at repository root                               | Move dashboard and MCP service under `apps/`                       |
+| Package manager                              | `packageManager` says pnpm 8.6.0; npm lockfile and npm instructions are used; installed pnpm is 9.15.9 | Select and pin pnpm 9.15.9, generate one lockfile                  |
+| Turborepo decision versus configuration      | Root scripts call Turbo; no usable local binary and no `turbo.json` is present                         | Complete ADR-001 implementation before package work                |
+| Universal product versus private defaults    | Core and templates contain Uchenna-specific traits                                                     | Replace product defaults with neutral synthetic fixtures           |
+| MCP label versus protocol                    | Current server lacks JSON-RPC lifecycle and MCP primitives                                             | Rebuild on the official SDK, STDIO first                           |
+| Authentication                               | `X-NAAVOS-User-ID` is described as an API key and accepted without verification                        | Remove; use local OS boundary or proper OAuth for remote HTTP      |
+| Persistence                                  | Worker responses simulate state                                                                        | Add durable storage only after local canonical data model exists   |
+| Documentation quality                        | Setup/API copy describes undeployed or unimplemented capabilities                                      | Add claim gates and generated command reference                    |
+| Styling architecture                         | Tailwind, MUI/Emotion, Framer Motion and GSAP overlap                                                  | Standardise the design system and one primary motion library       |
+| Host templates                               | Stale `N-A-A-S`, `~/.naass`, duplicate/corrupted content and unsafe autonomy language                  | Regenerate from adapters, never hand-maintain as authority         |
 
 ### 6.4 Immediate repository hygiene risks
 
@@ -291,7 +310,8 @@ NAAS/
 
 ### 7.1 Experience principle
 
-The product should feel like a trusted configuration and continuity instrument, not a mystical personality clone. Every important state should answer four questions:
+The product should feel like a trusted configuration and continuity instrument, not a mystical personality clone. Every
+important state should answer four questions:
 
 1. What does NAAvOS know?
 2. Where did it come from?
@@ -307,15 +327,15 @@ flowchart LR
     Operate -->|rollback| Preview
 ```
 
-| Stage | User question | Required interface response |
-|---|---|---|
-| Define | What am I configuring? | Guided source package with advanced code view |
-| Validate | Is it safe and coherent? | Errors, warnings, conflicts, provenance and secret findings |
-| Preview | What will change? | Host-by-host diff, rule trace and impact summary |
-| Install | Is the write controlled? | Explicit target, backup point and progress journal |
-| Verify | Did it work? | Structural checks and behavioural fidelity, separately |
-| Operate | What context is active? | Current host, project, package version and retrieval trace |
-| Review | What has NAAvOS learned? | Proposed assertions with accept, edit, reject and expiry actions |
+| Stage    | User question            | Required interface response                                      |
+| -------- | ------------------------ | ---------------------------------------------------------------- |
+| Define   | What am I configuring?   | Guided source package with advanced code view                    |
+| Validate | Is it safe and coherent? | Errors, warnings, conflicts, provenance and secret findings      |
+| Preview  | What will change?        | Host-by-host diff, rule trace and impact summary                 |
+| Install  | Is the write controlled? | Explicit target, backup point and progress journal               |
+| Verify   | Did it work?             | Structural checks and behavioural fidelity, separately           |
+| Operate  | What context is active?  | Current host, project, package version and retrieval trace       |
+| Review   | What has NAAvOS learned? | Proposed assertions with accept, edit, reject and expiry actions |
 
 ### 7.3 Primary journey: first local install
 
@@ -364,50 +384,53 @@ Each assertion card contains:
 
 Recommended local dashboard navigation:
 
-| Area | Purpose | Release priority |
-|---|---|---|
-| Overview | System state, active package, hosts, critical issues | MVP |
-| Source | Human-readable package editor and validation | MVP |
-| Builds | Build history, manifests, diffs and reproducibility | MVP |
-| Hosts | Detection, adapter support, install, drift and rollback | MVP |
-| Projects | Project registry, authority, continuity and isolation | MVP |
-| Knowledge | Sources, assertions, conflicts, provenance and expiry | MVP |
-| Tests | Golden scenarios, fidelity dimensions and run evidence | MVP |
-| Activity | Append-only audit events and recovery actions | MVP |
-| Connectors | Optional memory and knowledge engines | Post-MVP |
-| Cloud and team | Devices, sharing, roles and billing | Post-MVP |
+| Area           | Purpose                                                 | Release priority |
+| -------------- | ------------------------------------------------------- | ---------------- |
+| Overview       | System state, active package, hosts, critical issues    | MVP              |
+| Source         | Human-readable package editor and validation            | MVP              |
+| Builds         | Build history, manifests, diffs and reproducibility     | MVP              |
+| Hosts          | Detection, adapter support, install, drift and rollback | MVP              |
+| Projects       | Project registry, authority, continuity and isolation   | MVP              |
+| Knowledge      | Sources, assertions, conflicts, provenance and expiry   | MVP              |
+| Tests          | Golden scenarios, fidelity dimensions and run evidence  | MVP              |
+| Activity       | Append-only audit events and recovery actions           | MVP              |
+| Connectors     | Optional memory and knowledge engines                   | Post-MVP         |
+| Cloud and team | Devices, sharing, roles and billing                     | Post-MVP         |
 
 ### 7.7 Status vocabulary
 
 Do not use one green check for multiple meanings.
 
-| Status | Definition |
-|---|---|
-| Detected | A supported host location was found. |
-| Compiled | A build exists for the selected host and source digest. |
-| Installed | The expected managed artefact was written. |
-| Healthy | Structure, permissions, version and drift checks pass. |
-| Conformant | Behavioural test thresholds pass. |
-| Degraded | Non-critical checks fail but safe operation remains possible. |
-| Drifted | Managed output differs from its build manifest. |
-| Blocked | A safety or authority rule prevents the requested action. |
-| Rolled back | The prior journal state was restored and verified. |
+| Status      | Definition                                                    |
+| ----------- | ------------------------------------------------------------- |
+| Detected    | A supported host location was found.                          |
+| Compiled    | A build exists for the selected host and source digest.       |
+| Installed   | The expected managed artefact was written.                    |
+| Healthy     | Structure, permissions, version and drift checks pass.        |
+| Conformant  | Behavioural test thresholds pass.                             |
+| Degraded    | Non-critical checks fail but safe operation remains possible. |
+| Drifted     | Managed output differs from its build manifest.               |
+| Blocked     | A safety or authority rule prevents the requested action.     |
+| Rolled back | The prior journal state was restored and verified.            |
 
 ### 7.8 Visual design direction
 
-The current landing page demonstrates strong ambition, but the product UI should prioritise trust, legibility and evidence over animation density.
+The current landing page demonstrates strong ambition, but the product UI should prioritise trust, legibility and
+evidence over animation density.
 
 Recommended system:
 
 - **Typography:** one variable sans family, tabular numerals for evidence and status.
-- **Colour:** neutral surfaces; violet for product identity; green only for verified success; amber for drift or review; red for blocked or unsafe state.
+- **Colour:** neutral surfaces; violet for product identity; green only for verified success; amber for drift or review;
+  red for blocked or unsafe state.
 - **Spacing:** 4 px base grid with restrained density presets.
 - **Components:** buttons, tabs, cards, data tables, diffs, callouts, stepper, command panel and provenance drawer.
 - **Motion:** Framer Motion only for meaningful state transitions; respect `prefers-reduced-motion`.
 - **Code and evidence:** monospaced face, copy controls, line references and checksum truncation with reveal.
 - **Icons:** one icon family; icons must not carry meaning without text.
 
-Reduce the UI stack to Tailwind CSS, CSS custom properties and a small accessible primitive layer. Remove MUI/Emotion and GSAP unless an approved component or interaction cannot be implemented without them.
+Reduce the UI stack to Tailwind CSS, CSS custom properties and a small accessible primitive layer. Remove MUI/Emotion
+and GSAP unless an approved component or interaction cannot be implemented without them.
 
 ### 7.9 Accessibility requirements
 
@@ -536,7 +559,8 @@ NAAS/
 └── pnpm-lock.yaml
 ```
 
-Private profiles must live outside the public product repository. A sanitised reference profile may be included only as an explicit synthetic or public fixture.
+Private profiles must live outside the public product repository. A sanitised reference profile may be included only as
+an explicit synthetic or public fixture.
 
 ### 8.3 Package dependency rule
 
@@ -592,8 +616,8 @@ Top-level contract:
 
 ```ts
 type AvatarPackage = {
-  apiVersion: "naavos.dev/v1alpha1";
-  kind: "AvatarPackage";
+  apiVersion: 'naavos.dev/v1alpha1';
+  kind: 'AvatarPackage';
   metadata: PackageMetadata;
   identity: IdentityContract;
   communication: CommunicationContract;
@@ -614,9 +638,9 @@ type AvatarPackage = {
 type Rule = {
   id: string;
   statement: string;
-  priority: "critical" | "high" | "normal" | "low";
-  scope: "system" | "user" | "host" | "project" | "task" | "session";
-  effect: "require" | "prefer" | "forbid";
+  priority: 'critical' | 'high' | 'normal' | 'low';
+  scope: 'system' | 'user' | 'host' | 'project' | 'task' | 'session';
+  effect: 'require' | 'prefer' | 'forbid';
   trigger?: Condition;
   exceptions?: Exception[];
   evidence?: EvidenceRef[];
@@ -625,7 +649,8 @@ type Rule = {
 };
 ```
 
-Rules must be atomic, testable and uniquely identified. Prose paragraphs containing several hidden obligations are invalid for critical rules.
+Rules must be atomic, testable and uniquely identified. Prose paragraphs containing several hidden obligations are
+invalid for critical rules.
 
 ### 9.3 Rule precedence
 
@@ -696,7 +721,8 @@ Every build produces:
 }
 ```
 
-The `buildId` is content-addressed. The timestamp is metadata and must not make otherwise identical content produce different output digests.
+The `buildId` is content-addressed. The timestamp is metadata and must not make otherwise identical content produce
+different output digests.
 
 ## 10. Compiler design
 
@@ -733,7 +759,7 @@ Diagnostic format:
 ```ts
 type Diagnostic = {
   code: string;
-  severity: "error" | "warning" | "info";
+  severity: 'error' | 'warning' | 'info';
   message: string;
   source?: { file: string; line?: number; column?: number };
   ruleId?: string;
@@ -782,7 +808,8 @@ Adapters declare whether a host supports:
 - Structured metadata.
 - Automatic loading guarantees.
 
-If a critical source requirement cannot be represented, the compiler blocks that host unless an explicit approved degradation policy exists.
+If a critical source requirement cannot be represented, the compiler blocks that host unless an explicit approved
+degradation policy exists.
 
 ### 11.3 Adapter certification
 
@@ -825,6 +852,7 @@ Where hosts require shared files, NAAvOS owns only delimited regions:
 
 ```md
 <!-- NAAVOS:BEGIN build=sha256:... adapter=codex -->
+
 Generated managed content
 <!-- NAAVOS:END -->
 ```
@@ -839,13 +867,16 @@ Rules:
 
 ### 12.4 Rollback
 
-`naavos rollback <transaction-id>` must restore content, permissions and ownership where supported, then verify the restored digest. Rollback success is an observed post-condition, not the absence of an exception.
+`naavos rollback <transaction-id>` must restore content, permissions and ownership where supported, then verify the
+restored digest. Rollback success is an observed post-condition, not the absence of an exception.
 
 ## 13. Project continuity architecture
 
 ### 13.1 Project boundary
 
-Projects contain project facts, decisions, paths, current state, unresolved risks, hand-off notes and approved transferable insights. They do not contain universal identity rules merely because those rules were discovered during project work.
+Projects contain project facts, decisions, paths, current state, unresolved risks, hand-off notes and approved
+transferable insights. They do not contain universal identity rules merely because those rules were discovered during
+project work.
 
 ### 13.2 Project record
 
@@ -855,7 +886,7 @@ type ProjectRecord = {
   name: string;
   canonicalPath?: string;
   repository?: string;
-  status: "planned" | "active" | "paused" | "completed" | "archived";
+  status: 'planned' | 'active' | 'paused' | 'completed' | 'archived';
   authorityFiles: SourceRef[];
   summary: string;
   currentState: ProjectState;
@@ -892,26 +923,29 @@ This prevents one project's temporary workaround from becoming a global doctrine
 
 ### 14.1 Canonical storage decision
 
-Use SQLite as the local canonical ledger for the MVP, with strict tables, versioned SQL migrations, JSON fields for extensible metadata and FTS5 for local full-text retrieval. SQLite documents FTS5 as its full-text virtual table module and provides native JSON functions, making it sufficient for a private, inspectable first version without mandatory external infrastructure.
+Use SQLite as the local canonical ledger for the MVP, with strict tables, versioned SQL migrations, JSON fields for
+extensible metadata and FTS5 for local full-text retrieval. SQLite documents FTS5 as its full-text virtual table module
+and provides native JSON functions, making it sufficient for a private, inspectable first version without mandatory
+external infrastructure.
 
 The canonical ledger stores source records and accepted state. Vector and graph stores are rebuildable projections.
 
 ### 14.2 Core entities
 
-| Entity | Purpose |
-|---|---|
-| `subjects` | People, organisations, projects, tools and concepts |
-| `assertions` | Versioned statements about a subject |
-| `evidence` | Source pointers supporting or contradicting assertions |
-| `assertion_evidence` | Many-to-many support or contradiction relationship |
-| `episodes` | Time-bounded interactions or events |
-| `decisions` | Chosen actions, alternatives, rationale and status |
-| `preferences` | Scoped behavioural preferences with provenance |
-| `conflicts` | Competing assertions or rules and their resolution |
-| `projects` | Project identity, authority and continuity state |
-| `sources` | Files, URLs, APIs or imports and their freshness |
-| `proposals` | Unaccepted knowledge assertions |
-| `audit_events` | Append-only state transitions and actor identity |
+| Entity               | Purpose                                                |
+| -------------------- | ------------------------------------------------------ |
+| `subjects`           | People, organisations, projects, tools and concepts    |
+| `assertions`         | Versioned statements about a subject                   |
+| `evidence`           | Source pointers supporting or contradicting assertions |
+| `assertion_evidence` | Many-to-many support or contradiction relationship     |
+| `episodes`           | Time-bounded interactions or events                    |
+| `decisions`          | Chosen actions, alternatives, rationale and status     |
+| `preferences`        | Scoped behavioural preferences with provenance         |
+| `conflicts`          | Competing assertions or rules and their resolution     |
+| `projects`           | Project identity, authority and continuity state       |
+| `sources`            | Files, URLs, APIs or imports and their freshness       |
+| `proposals`          | Unaccepted knowledge assertions                        |
+| `audit_events`       | Append-only state transitions and actor identity       |
 
 ### 14.3 Assertion model
 
@@ -921,9 +955,9 @@ type KnowledgeAssertion = {
   subjectId: string;
   predicate: string;
   object: unknown;
-  status: "proposed" | "accepted" | "rejected" | "superseded" | "expired";
+  status: 'proposed' | 'accepted' | 'rejected' | 'superseded' | 'expired';
   confidence: number;
-  scope: "global" | "host" | "project" | "task" | "session";
+  scope: 'global' | 'host' | 'project' | 'task' | 'session';
   classification: DataClass;
   validFrom?: string;
   validTo?: string;
@@ -943,7 +977,9 @@ NAAvOS must distinguish:
 - **Supersession:** a later assertion replaces an earlier one without deleting history.
 - **Expiry:** a policy marks time-sensitive knowledge for review.
 
-Example: "Project X deploys to Vercel" may be accepted on one date and superseded by "Project X deploys to Coolify" later. Retrieval for a historical question can use valid time; current context uses the latest accepted, non-expired assertion.
+Example: "Project X deploys to Vercel" may be accepted on one date and superseded by "Project X deploys to Coolify"
+later. Retrieval for a historical question can use valid time; current context uses the latest accepted, non-expired
+assertion.
 
 ### 14.5 Memory lifecycle
 
@@ -977,16 +1013,18 @@ No model-generated inference enters the accepted knowledge graph merely because 
 
 ### 14.7 Connector recommendation
 
-| Engine | Recommended role | Decision |
-|---|---|---|
-| Local SQLite + FTS5 | Canonical ledger and baseline retrieval | Required for MVP |
-| Cognee | First advanced graph and semantic projection | Build after canonical ledger and conformance |
-| memU | Optional session-memory and reusable-skill capture adapter | Evaluate second; import only through proposals |
-| LightRAG | Optional high-control RAG projection | Defer until a measured retrieval gap exists |
-| Honcho | Managed hosted memory option | Commercial fallback, never source authority |
-| Slim tools | Context compression or tool-layer optimisation | Evaluate independently; not core memory |
+| Engine              | Recommended role                                           | Decision                                       |
+| ------------------- | ---------------------------------------------------------- | ---------------------------------------------- |
+| Local SQLite + FTS5 | Canonical ledger and baseline retrieval                    | Required for MVP                               |
+| Cognee              | First advanced graph and semantic projection               | Build after canonical ledger and conformance   |
+| memU                | Optional session-memory and reusable-skill capture adapter | Evaluate second; import only through proposals |
+| LightRAG            | Optional high-control RAG projection                       | Defer until a measured retrieval gap exists    |
+| Honcho              | Managed hosted memory option                               | Commercial fallback, never source authority    |
+| Slim tools          | Context compression or tool-layer optimisation             | Evaluate independently; not core memory        |
 
-Cognee is the strongest first advanced connector because its open-source architecture combines graph and vector approaches and supports local operation, dataset scoping and traceability. memU is attractive for easy cross-agent session capture, but its distilled output must enter NAAvOS as proposed assertions, not silent truth.
+Cognee is the strongest first advanced connector because its open-source architecture combines graph and vector
+approaches and supports local operation, dataset scoping and traceability. memU is attractive for easy cross-agent
+session capture, but its distilled output must enter NAAvOS as proposed assertions, not silent truth.
 
 ### 14.8 Projection contract
 
@@ -1004,13 +1042,16 @@ interface CognitiveProjection {
 }
 ```
 
-Projection results are candidates. The NAAvOS retrieval layer applies policy, authority and canonical-state validation before context delivery.
+Projection results are candidates. The NAAvOS retrieval layer applies policy, authority and canonical-state validation
+before context delivery.
 
 ## 15. MCP architecture
 
 ### 15.1 Protocol decision
 
-Implement the local server with the official MCP TypeScript SDK and STDIO first. MCP requires JSON-RPC 2.0, lifecycle initialisation and capability negotiation. Its standard transports are STDIO and Streamable HTTP; the current custom REST routes do not satisfy that contract.
+Implement the local server with the official MCP TypeScript SDK and STDIO first. MCP requires JSON-RPC 2.0, lifecycle
+initialisation and capability negotiation. Its standard transports are STDIO and Streamable HTTP; the current custom
+REST routes do not satisfy that contract.
 
 ### 15.2 Local transport
 
@@ -1032,19 +1073,22 @@ Resources:
 
 Tools:
 
-| Tool | Behaviour | Mutation policy |
-|---|---|---|
-| `get_context` | Assemble scoped, provenance-backed context | Read-only |
-| `search_knowledge` | Search accepted knowledge within policy | Read-only |
-| `get_project` | Return current project continuity state | Read-only |
-| `explain_rule` | Show precedence and winning rule | Read-only |
-| `propose_learning` | Create an unaccepted assertion proposal | Append proposal only |
+| Tool               | Behaviour                                  | Mutation policy      |
+| ------------------ | ------------------------------------------ | -------------------- |
+| `get_context`      | Assemble scoped, provenance-backed context | Read-only            |
+| `search_knowledge` | Search accepted knowledge within policy    | Read-only            |
+| `get_project`      | Return current project continuity state    | Read-only            |
+| `explain_rule`     | Show precedence and winning rule           | Read-only            |
+| `propose_learning` | Create an unaccepted assertion proposal    | Append proposal only |
 
-Do not expose direct `accept_learning`, installer or destructive tools in the first MCP release. Those actions remain human-controlled through CLI or dashboard.
+Do not expose direct `accept_learning`, installer or destructive tools in the first MCP release. Those actions remain
+human-controlled through CLI or dashboard.
 
 ### 15.4 Remote transport, later
 
-Remote MCP uses one Streamable HTTP endpoint, protocol-version negotiation, session controls and standards-based authorisation. For HTTP, follow the MCP authorisation specification based on OAuth 2.1 and protected-resource metadata. Never treat a user ID header as an API key.
+Remote MCP uses one Streamable HTTP endpoint, protocol-version negotiation, session controls and standards-based
+authorisation. For HTTP, follow the MCP authorisation specification based on OAuth 2.1 and protected-resource metadata.
+Never treat a user ID header as an API key.
 
 ### 15.5 MCP security
 
@@ -1082,27 +1126,29 @@ naavos version
 - Mutations support `--dry-run` where meaningful.
 - Exit codes are stable and documented.
 - A success message appears only after post-condition verification.
-- Destructive operations name the exact target and require explicit confirmation unless a valid automation token and policy allow them.
+- Destructive operations name the exact target and require explicit confirmation unless a valid automation token and
+  policy allow them.
 - Secret values are never echoed.
 - Errors include diagnostic code, source and remediation.
 
 ### 16.3 Suggested exit codes
 
-| Code | Meaning |
-|---:|---|
-| 0 | Success and verified post-condition |
-| 1 | General failure |
-| 2 | Invalid arguments or schema |
-| 3 | Policy or privacy block |
-| 4 | Host unsupported or incompatible |
-| 5 | Install collision or drift |
-| 6 | Conformance threshold failed |
-| 7 | Connector unavailable |
-| 8 | Partial result; no unsafe mutation occurred |
+| Code | Meaning                                     |
+| ---: | ------------------------------------------- |
+|    0 | Success and verified post-condition         |
+|    1 | General failure                             |
+|    2 | Invalid arguments or schema                 |
+|    3 | Policy or privacy block                     |
+|    4 | Host unsupported or incompatible            |
+|    5 | Install collision or drift                  |
+|    6 | Conformance threshold failed                |
+|    7 | Connector unavailable                       |
+|    8 | Partial result; no unsafe mutation occurred |
 
 ## 17. Local API and runtime contracts
 
-The dashboard should call a versioned local runtime API, separate from MCP. MCP is an agent protocol, not the dashboard's internal CRUD API.
+The dashboard should call a versioned local runtime API, separate from MCP. MCP is an agent protocol, not the
+dashboard's internal CRUD API.
 
 Recommended local routes:
 
@@ -1124,36 +1170,38 @@ GET  /api/v1/knowledge/proposals
 POST /api/v1/knowledge/proposals/:id/decision
 ```
 
-Local binding defaults to loopback only. Any state-changing endpoint uses a short-lived local session token and origin validation. File paths returned to the browser are redacted or made relative where full disclosure is unnecessary.
+Local binding defaults to loopback only. Any state-changing endpoint uses a short-lived local session token and origin
+validation. File paths returned to the browser are redacted or made relative where full disclosure is unnecessary.
 
 ## 18. Security, privacy and trust
 
 ### 18.1 Data classification
 
-| Class | Examples | Default policy |
-|---|---|---|
-| Public | Published biography, public portfolio | May compile when relevant |
-| Personal | Preferences, private work patterns | Local; explicit host disclosure policy |
-| Sensitive | Health, finances, private relationships | Deny by default; purpose-limited consent |
-| Confidential | Client material, internal strategy | Project-scoped, least disclosure |
-| Secret | Passwords, API keys, private keys, tokens | Prohibited from source packages and memory |
+| Class        | Examples                                  | Default policy                             |
+| ------------ | ----------------------------------------- | ------------------------------------------ |
+| Public       | Published biography, public portfolio     | May compile when relevant                  |
+| Personal     | Preferences, private work patterns        | Local; explicit host disclosure policy     |
+| Sensitive    | Health, finances, private relationships   | Deny by default; purpose-limited consent   |
+| Confidential | Client material, internal strategy        | Project-scoped, least disclosure           |
+| Secret       | Passwords, API keys, private keys, tokens | Prohibited from source packages and memory |
 
-Secrets may be referenced by environment-variable name or secret-manager identifier. They are never stored as source-package values.
+Secrets may be referenced by environment-variable name or secret-manager identifier. They are never stored as
+source-package values.
 
 ### 18.2 Threat model priorities
 
-| Threat | Control |
-|---|---|
-| Secret ingestion | Pre-commit and compile-time scanning; prohibited schema fields |
+| Threat                        | Control                                                                        |
+| ----------------------------- | ------------------------------------------------------------------------------ |
+| Secret ingestion              | Pre-commit and compile-time scanning; prohibited schema fields                 |
 | Prompt injection in knowledge | Source trust labels, content isolation, retrieval policy and conformance tests |
-| Cross-project leakage | Project scopes, authority filters and negative retrieval tests |
-| Malicious adapter | Signed package, capability limits, sandboxed fixtures and certification |
-| Host file corruption | Dry-run, managed blocks, atomic writes, backup and rollback |
-| Silent behavioural drift | Version-aware conformance runs and fidelity history |
-| Cloud account takeover | OAuth, short-lived tokens, rotation and audit log |
-| Memory poisoning | Proposed assertion workflow, evidence and correction history |
-| Telemetry leakage | Metadata-only default, explicit opt-in and redaction tests |
-| Dependency compromise | Lockfile, provenance, audit, update policy and release signing |
+| Cross-project leakage         | Project scopes, authority filters and negative retrieval tests                 |
+| Malicious adapter             | Signed package, capability limits, sandboxed fixtures and certification        |
+| Host file corruption          | Dry-run, managed blocks, atomic writes, backup and rollback                    |
+| Silent behavioural drift      | Version-aware conformance runs and fidelity history                            |
+| Cloud account takeover        | OAuth, short-lived tokens, rotation and audit log                              |
+| Memory poisoning              | Proposed assertion workflow, evidence and correction history                   |
+| Telemetry leakage             | Metadata-only default, explicit opt-in and redaction tests                     |
+| Dependency compromise         | Lockfile, provenance, audit, update policy and release signing                 |
 
 ### 18.3 Privacy controls
 
@@ -1175,7 +1223,7 @@ type AuditEvent = {
   actor: ActorRef;
   action: string;
   target: ResourceRef;
-  outcome: "succeeded" | "failed" | "blocked";
+  outcome: 'succeeded' | 'failed' | 'blocked';
   reason?: string;
   correlationId: string;
   beforeDigest?: string;
@@ -1190,18 +1238,18 @@ Raw secrets, full prompts and private document bodies are prohibited from audit 
 
 ### 19.1 Quality layers
 
-| Layer | Proves |
-|---|---|
-| Schema tests | Inputs conform to versioned contracts |
-| Policy tests | Scope and precedence resolve deterministically |
-| Compiler snapshots | Outputs are stable and reviewed |
-| Adapter tests | Host syntax and capability mapping are correct |
-| Installer tests | Writes are controlled and reversible |
-| Protocol tests | MCP and local APIs meet their contracts |
-| Retrieval tests | Relevant, authorised and current context is returned |
-| Behavioural evals | Configured host follows critical and normal rules |
-| Security tests | Adversarial inputs do not bypass controls |
-| UI tests | Key journeys remain accessible and usable |
+| Layer              | Proves                                               |
+| ------------------ | ---------------------------------------------------- |
+| Schema tests       | Inputs conform to versioned contracts                |
+| Policy tests       | Scope and precedence resolve deterministically       |
+| Compiler snapshots | Outputs are stable and reviewed                      |
+| Adapter tests      | Host syntax and capability mapping are correct       |
+| Installer tests    | Writes are controlled and reversible                 |
+| Protocol tests     | MCP and local APIs meet their contracts              |
+| Retrieval tests    | Relevant, authorised and current context is returned |
+| Behavioural evals  | Configured host follows critical and normal rules    |
+| Security tests     | Adversarial inputs do not bypass controls            |
+| UI tests           | Key journeys remain accessible and usable            |
 
 ### 19.2 Fidelity dimensions
 
@@ -1258,21 +1306,21 @@ It must report **not checked**, **pass**, **warn**, **fail** and **blocked** sep
 
 ### 20.1 Recommended baseline
 
-| Concern | Decision | Reason |
-|---|---|---|
-| Runtime | Node.js 22.x, pinned in CI and local tooling initially | Matches observed environment and stable ecosystem support |
-| Language | TypeScript strict mode | Contract-heavy system benefits from static checks |
-| Package manager | pnpm 9.15.9, one lockfile | Matches installed environment and efficient workspaces |
-| Monorepo | pnpm workspaces + Turborepo | Accepted ADR and clear package graph |
-| Schema | Zod plus generated JSON Schema | Runtime validation and ecosystem portability |
-| Tests | Vitest, Playwright and protocol/eval fixtures | Unit, UI and conformance coverage |
-| Local database | SQLite with FTS5 and versioned SQL migrations | Inspectable, local-first and sufficient for MVP |
-| MCP | Official TypeScript SDK | Protocol correctness and future compatibility |
-| CLI | Commander retained, with core logic moved to packages | Existing fit without architectural ownership |
-| Dashboard | Next.js, Tailwind and accessible primitives | Existing surface with a simplified design stack |
-| Logging | Structured JSON via Pino-compatible interface | Correlation and redaction support |
-| Secrets | Environment or secret-manager references | No secret persistence in NAAvOS packages |
-| CI/CD | GitHub Actions, signed artefacts and release provenance | Open-source contributor and release discipline |
+| Concern         | Decision                                                | Reason                                                    |
+| --------------- | ------------------------------------------------------- | --------------------------------------------------------- |
+| Runtime         | Node.js 22.x, pinned in CI and local tooling initially  | Matches observed environment and stable ecosystem support |
+| Language        | TypeScript strict mode                                  | Contract-heavy system benefits from static checks         |
+| Package manager | pnpm 9.15.9, one lockfile                               | Matches installed environment and efficient workspaces    |
+| Monorepo        | pnpm workspaces + Turborepo                             | Accepted ADR and clear package graph                      |
+| Schema          | Zod plus generated JSON Schema                          | Runtime validation and ecosystem portability              |
+| Tests           | Vitest, Playwright and protocol/eval fixtures           | Unit, UI and conformance coverage                         |
+| Local database  | SQLite with FTS5 and versioned SQL migrations           | Inspectable, local-first and sufficient for MVP           |
+| MCP             | Official TypeScript SDK                                 | Protocol correctness and future compatibility             |
+| CLI             | Commander retained, with core logic moved to packages   | Existing fit without architectural ownership              |
+| Dashboard       | Next.js, Tailwind and accessible primitives             | Existing surface with a simplified design stack           |
+| Logging         | Structured JSON via Pino-compatible interface           | Correlation and redaction support                         |
+| Secrets         | Environment or secret-manager references                | No secret persistence in NAAvOS packages                  |
+| CI/CD           | GitHub Actions, signed artefacts and release provenance | Open-source contributor and release discipline            |
 
 ### 20.2 Dependency rules
 
@@ -1285,7 +1333,9 @@ It must report **not checked**, **pass**, **warn**, **fail** and **blocked** sep
 
 ### 20.3 Monorepo correction
 
-Official Turborepo guidance requires package-manager workspaces, a root lockfile, root `package.json`, root `turbo.json` and a `package.json` in each package. The current repository satisfies only part of this. The first implementation change must complete the workspace skeleton before feature development.
+Official Turborepo guidance requires package-manager workspaces, a root lockfile, root `package.json`, root `turbo.json`
+and a `package.json` in each package. The current repository satisfies only part of this. The first implementation
+change must complete the workspace skeleton before feature development.
 
 ## 21. CI/CD and release engineering
 
@@ -1322,16 +1372,17 @@ Maintain `docs/contracts/capability-status.json`:
 }
 ```
 
-Website and README capability components should be generated from or tested against this contract. A planned capability cannot render as available.
+Website and README capability components should be generated from or tested against this contract. A planned capability
+cannot render as available.
 
 ### 21.3 Release channels
 
-| Channel | Purpose | Evidence required |
-|---|---|---|
-| `dev` | Internal integration | CI passes on current commit |
-| `alpha` | Technical testers | Local vertical slice and rollback proven |
-| `beta` | Broader users | Three certified hosts, migrations and support process |
-| `stable` | Public production | Security review, compatibility policy and upgrade path |
+| Channel  | Purpose              | Evidence required                                      |
+| -------- | -------------------- | ------------------------------------------------------ |
+| `dev`    | Internal integration | CI passes on current commit                            |
+| `alpha`  | Technical testers    | Local vertical slice and rollback proven               |
+| `beta`   | Broader users        | Three certified hosts, migrations and support process  |
+| `stable` | Public production    | Security review, compatibility policy and upgrade path |
 
 ### 21.4 Artefacts
 
@@ -1357,7 +1408,8 @@ Website and README capability components should be generated from or tested agai
 
 ### 22.2 Correlation
 
-One correlation ID follows a request across CLI, runtime, compiler, installer, ledger and tests. Logs record resource identifiers and digests, not sensitive content.
+One correlation ID follows a request across CLI, runtime, compiler, installer, ledger and tests. Logs record resource
+identifiers and digests, not sensitive content.
 
 ### 22.3 Backup and recovery
 
@@ -1580,18 +1632,18 @@ Exit criteria:
 
 ### 25.2 Major risks
 
-| Risk | Probability | Impact | Response |
-|---|---|---|---|
-| Scope expands into every memory and integration product | High | Critical | Enforce planes, MVP exclusions and connector interface |
-| Marketing outruns product truth | High | High | Capability contract and claim tests |
-| Personal source leaks into open-source defaults | Medium | Critical | Neutral fixtures, classification and secret scanning |
-| Host behaviour remains nondeterministic | High | High | Fidelity thresholds, repeated runs and honest limits |
-| Installer damages existing agent configuration | Medium | Critical | Managed blocks, dry-run, atomic write and rollback tests |
-| External memory engine becomes canonical | Medium | High | SQLite authority and rebuildable projections |
-| Project knowledge contaminates universal policy | High | High | Scope classification and approval workflow |
-| MCP implementation drifts from specification | Medium | High | Official SDK and protocol conformance tests |
-| Monorepo migration destroys current work | Medium | High | Narrow commits, inventory and no broad destructive commands |
-| UI complexity delays core product | High | Medium | Core-first milestone gates and simplified component stack |
+| Risk                                                    | Probability | Impact   | Response                                                    |
+| ------------------------------------------------------- | ----------- | -------- | ----------------------------------------------------------- |
+| Scope expands into every memory and integration product | High        | Critical | Enforce planes, MVP exclusions and connector interface      |
+| Marketing outruns product truth                         | High        | High     | Capability contract and claim tests                         |
+| Personal source leaks into open-source defaults         | Medium      | Critical | Neutral fixtures, classification and secret scanning        |
+| Host behaviour remains nondeterministic                 | High        | High     | Fidelity thresholds, repeated runs and honest limits        |
+| Installer damages existing agent configuration          | Medium      | Critical | Managed blocks, dry-run, atomic write and rollback tests    |
+| External memory engine becomes canonical                | Medium      | High     | SQLite authority and rebuildable projections                |
+| Project knowledge contaminates universal policy         | High        | High     | Scope classification and approval workflow                  |
+| MCP implementation drifts from specification            | Medium      | High     | Official SDK and protocol conformance tests                 |
+| Monorepo migration destroys current work                | Medium      | High     | Narrow commits, inventory and no broad destructive commands |
+| UI complexity delays core product                       | High        | Medium   | Core-first milestone gates and simplified component stack   |
 
 ## 26. Definition of done
 
@@ -1641,4 +1693,7 @@ Each question should become an experiment with a success metric, not an architec
 
 ## 29. Final product principle
 
-NAAvOS wins by becoming the trusted translation, governance and continuity layer between a person and many AI systems. Its advantage is not that it owns every memory engine or host. Its advantage is that it preserves an inspectable source of truth, compiles only the right context, installs it safely, verifies the behaviour and lets every derived system be replaced without losing the person.
+NAAvOS wins by becoming the trusted translation, governance and continuity layer between a person and many AI systems.
+Its advantage is not that it owns every memory engine or host. Its advantage is that it preserves an inspectable source
+of truth, compiles only the right context, installs it safely, verifies the behaviour and lets every derived system be
+replaced without losing the person.

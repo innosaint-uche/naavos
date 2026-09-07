@@ -1,5 +1,5 @@
-import { AvatarPackageSchema } from '@naavos/schema';
 import type { AvatarPackage } from '@naavos/schema';
+import { AvatarPackageSchema } from '@naavos/schema';
 
 import { claudeCodeAdapter } from './adapters/claude-code.js';
 import { cursorAdapter } from './adapters/cursor.js';
@@ -42,9 +42,7 @@ export function compile(packageData: unknown, target: string): FileMap {
   const adapter = ADAPTERS[target];
 
   if (!adapter) {
-    throw new Error(
-      `Unknown target: ${target}. Supported: ${Object.keys(ADAPTERS).join(', ')}`,
-    );
+    throw new Error(`Unknown target: ${target}. Supported: ${Object.keys(ADAPTERS).join(', ')}`);
   }
 
   return adapter(parsed);

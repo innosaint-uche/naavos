@@ -40,3 +40,6 @@ reads tokens from the process environment, never from arguments, logs, or
 evidence. It requires the verified branded endpoint, checks distinct owners,
 performs a unique confirmed mutation for tenant A, verifies tenant B cannot see
 it or reuse tenant A's session, and restores tenant A before reporting PASS.
+Requests are bounded to 15 seconds, restoration is retried once if necessary,
+and active MCP sessions are closed on exit. A restoration failure remains a
+hard failure and must be investigated before the acceptance account is reused.

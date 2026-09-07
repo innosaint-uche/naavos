@@ -32,8 +32,8 @@ advertise a placeholder test or lint script as a release gate.
 ## 2. Schema and neutral fixture gates
 
 ```bash
-node packages/core/test.js
-node packages/schema/test.js
+pnpm --filter @naavos/core test
+pnpm --filter @naavos/schema test
 ```
 
 Add fixtures for:
@@ -186,7 +186,7 @@ The following record is retained as incident history. It is not the current impl
 | Behavioral conformance         | NOT PROVEN                                              |
 | Public release                 | NO-GO                                                   |
 
-## Current run record — 2026-08-26
+## Historical run record — 2026-08-26
 
 The current implementation was rechecked after the public-source, evidence, and central local-agent QA updates:
 
@@ -205,3 +205,28 @@ The current implementation was rechecked after the public-source, evidence, and 
 
 Evidence is stored in the central run directory:
 `/Users/radossagency/.radoss-qa/artifacts/run-2026-08-26T00-34-56-912Z/`.
+
+## Current run record — 2026-09-07
+
+The current fix loop reran the repository gates and the central all-adapter E2E harness after repairing the root CLI
+contract, formatting gate, and CLI target-state rollback semantics:
+
+| Check                             | Result                                                                                                                     |
+| --------------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
+| Root `pnpm exec naavos --version` | PASS: `1.0.0`                                                                                                              |
+| Frozen-lockfile install           | PASS                                                                                                                       |
+| Repository tests                  | PASS                                                                                                                       |
+| Typecheck and lint                | PASS                                                                                                                       |
+| Prettier format check             | PASS                                                                                                                       |
+| Gitleaks secret scan              | PASS                                                                                                                       |
+| CLI backup/rollback regression    | PASS: Hermes, ReMe multi-root, and file-target journeys restore pre-existing files and remove new managed files            |
+| Public NAAvOS route QA            | PASS                                                                                                                       |
+| Local Codex/Antigravity/Hermes QA | PASS; two pre-existing credential field warnings recorded by name                                                          |
+| Packaged Tauri macOS E2E          | PASS: launch, sidecar, privacy, persistence, backup, hostile-origin rejection, retry blocking, rollback and hosting choice |
+| Customer/public production gate   | BLOCKED: live-user, named-host, signed-distribution and live-dashboard reconciliation evidence                             |
+
+Evidence is stored in: `/Users/radossagency/.radoss-qa/artifacts/naas-analysis-2026-09-07/`.
+
+The live dashboard probe also detected deployment drift: `naavos.radoss.agency` still serves the prior controlled-
+development banner while the current checkout contains the corrected open-source release copy. This is a release
+identity failure and must be resolved before the dashboard can be marked verified.

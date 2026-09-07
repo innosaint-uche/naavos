@@ -55,7 +55,7 @@ describe('compile — target availability', () => {
 
   it('throws on unknown target with helpful message', () => {
     expect(() => compile(makeValidPackage(), 'unknown')).toThrow(
-      /Unknown target: unknown\. Supported:/,
+      /Unknown target: unknown\. Supported:/
     );
   });
 });

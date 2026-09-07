@@ -6,7 +6,7 @@ import path from 'node:path';
 import { compile } from '@naavos/compiler';
 import { describe, expect, it } from 'vitest';
 
-import { createTarGz, listTargets } from './index.js';
+import { createBackup, createTarGz, listTargets, restoreBackup, saveJournal } from './index.js';
 
 // A minimal valid avatar package that all CLI tests build on
 function makeValidAvatar(overrides: Record<string, unknown> = {}): Record<string, unknown> {
@@ -59,7 +59,7 @@ describe('createTarGz', () => {
     const contents = fs.readFileSync(outputPath);
     assert.ok(
       contents[0] === 0x1f && contents[1] === 0x8b,
-      'should be gzip format (magic 0x1f 0x8b)',
+      'should be gzip format (magic 0x1f 0x8b)'
     );
 
     fs.rmSync(tmpDir, { recursive: true, force: true });
@@ -100,5 +100,132 @@ describe('compile integration', () => {
     const avatar = makeValidAvatar() as Parameters<typeof compile>[0];
     const files = compile(avatar, 'cursor');
     expect(files.has('.cursorrules')).toBe(true);
+  });
+});
+
+describe('backup and rollback', () => {
+  it('snapshots the existing Hermes files and removes newly-created files on rollback', async () => {
+    const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), 'naavos-rollback-'));
+    const hermesHome = path.join(tmpDir, 'hermes');
+    const backupHome = path.join(tmpDir, '.naavos', 'backups');
+    fs.mkdirSync(hermesHome, { recursive: true });
+    fs.writeFileSync(path.join(hermesHome, 'SOUL.md'), '# User-authored previous soul\n');
+
+    const previousHome = process.env['HERMES_HOME'];
+    const previousHomeDir = process.env['HOME'];
+    process.env['HERMES_HOME'] = hermesHome;
+    process.env['HOME'] = tmpDir;
+    try {
+      const avatar = makeValidAvatar() as Parameters<typeof compile>[0];
+      const backupId = await createBackup('hermes', avatar);
+      const generated = compile(avatar, 'hermes');
+      for (const [relativePath, content] of generated) {
+        const destination = path.join(hermesHome, relativePath);
+        fs.mkdirSync(path.dirname(destination), { recursive: true });
+        fs.writeFileSync(destination, content);
+      }
+
+      await restoreBackup(backupId);
+
+      expect(fs.readFileSync(path.join(hermesHome, 'SOUL.md'), 'utf8')).toBe(
+        '# User-authored previous soul\n'
+      );
+      expect(fs.existsSync(path.join(hermesHome, 'SKILL.md'))).toBe(false);
+      expect(fs.existsSync(path.join(hermesHome, 'memories', 'MEMORY.md'))).toBe(false);
+      expect(fs.existsSync(path.join(backupHome, backupId, 'primary', 'SOUL.md'))).toBe(true);
+    } finally {
+      if (previousHome === undefined) delete process.env['HERMES_HOME'];
+      else process.env['HERMES_HOME'] = previousHome;
+      if (previousHomeDir === undefined) delete process.env['HOME'];
+      else process.env['HOME'] = previousHomeDir;
+      fs.rmSync(tmpDir, { recursive: true, force: true });
+    }
+  });
+
+  it('restores ReMe project files and its Hermes skill across both managed roots', async () => {
+    const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), 'naavos-reme-rollback-'));
+    const projectRoot = path.join(tmpDir, 'project');
+    const hermesHome = path.join(tmpDir, 'hermes');
+    fs.mkdirSync(projectRoot, { recursive: true });
+    fs.mkdirSync(path.join(hermesHome, 'skills', 'reme_memory'), { recursive: true });
+    fs.writeFileSync(path.join(projectRoot, '.remerc'), '# Existing ReMe config\n');
+    fs.writeFileSync(
+      path.join(hermesHome, 'skills', 'reme_memory', 'SKILL.md'),
+      '# Existing ReMe skill\n'
+    );
+
+    const previousCwd = process.cwd();
+    const previousHome = process.env['HOME'];
+    const previousHermesHome = process.env['HERMES_HOME'];
+    process.chdir(projectRoot);
+    process.env['HOME'] = tmpDir;
+    process.env['HERMES_HOME'] = hermesHome;
+    try {
+      const avatar = makeValidAvatar() as Parameters<typeof compile>[0];
+      const generated = compile(avatar, 'reme');
+      const skill = generated.get('skills/reme_memory/SKILL.md');
+      expect(skill).toBeDefined();
+      const backupId = await createBackup(
+        'reme',
+        avatar,
+        skill
+          ? [{ root: hermesHome, files: new Map([['skills/reme_memory/SKILL.md', skill]]) }]
+          : []
+      );
+
+      for (const [relativePath, content] of generated) {
+        const destination = path.join(projectRoot, relativePath);
+        fs.mkdirSync(path.dirname(destination), { recursive: true });
+        fs.writeFileSync(destination, content);
+      }
+      fs.writeFileSync(path.join(hermesHome, 'skills', 'reme_memory', 'SKILL.md'), skill || '');
+
+      await restoreBackup(backupId);
+
+      expect(fs.readFileSync(path.join(projectRoot, '.remerc'), 'utf8')).toBe(
+        '# Existing ReMe config\n'
+      );
+      expect(fs.existsSync(path.join(projectRoot, 'CLAUDE-reme.md'))).toBe(false);
+      expect(fs.existsSync(path.join(projectRoot, 'skills', 'reme_memory', 'SKILL.md'))).toBe(
+        false
+      );
+      expect(
+        fs.readFileSync(path.join(hermesHome, 'skills', 'reme_memory', 'SKILL.md'), 'utf8')
+      ).toBe('# Existing ReMe skill\n');
+    } finally {
+      process.chdir(previousCwd);
+      if (previousHome === undefined) delete process.env['HOME'];
+      else process.env['HOME'] = previousHome;
+      if (previousHermesHome === undefined) delete process.env['HERMES_HOME'];
+      else process.env['HERMES_HOME'] = previousHermesHome;
+      fs.rmSync(tmpDir, { recursive: true, force: true });
+    }
+  });
+
+  it('rejects a legacy backup without a managed-file manifest', async () => {
+    const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), 'naavos-legacy-backup-'));
+    const previousHome = process.env['HOME'];
+    process.env['HOME'] = tmpDir;
+    try {
+      const backupId = 'legacy-hermes-backup';
+      const backupDir = path.join(tmpDir, '.naavos', 'backups', backupId);
+      fs.mkdirSync(backupDir, { recursive: true });
+      fs.writeFileSync(path.join(backupDir, 'SOUL.md'), '# Generated state\n');
+      saveJournal([
+        {
+          id: backupId,
+          target: 'hermes',
+          created_at: new Date().toISOString(),
+          files: ['SOUL.md'],
+          snapshot_version: 2,
+        },
+      ]);
+
+      await expect(restoreBackup(backupId)).rejects.toThrow('cannot be restored safely');
+    } finally {
+      if (previousHome === undefined) delete process.env['HOME'];
+      else process.env['HOME'] = previousHome;
+      fs.rmSync(tmpDir, { recursive: true, force: true });
+    }
   });
 });

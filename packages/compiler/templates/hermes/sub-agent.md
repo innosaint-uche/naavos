@@ -17,4 +17,5 @@
 {{mode.permitted_capabilities}}
 
 ---
-*Compiled from NAAvOS package {{metadata.package_id}}*
+
+_Compiled from NAAvOS package {{metadata.package_id}}_

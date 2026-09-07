@@ -1,5 +1,5 @@
 {
-  "as_of": "2026-08-26",
+  "as_of": "2026-09-07",
   "evidence_standard": {
     "version": "1.0",
     "source_authority": "docs/design/NAAS-Avatar-OS-Productisation-System-Design.pdf#page=18",
@@ -15,7 +15,7 @@
           "docs/DEPLOYMENT_EVIDENCE.md",
           "docs/qa/ROUTE_MATRIX.json"
         ],
-        "verified_at": "2026-08-26",
+        "verified_at": "2026-09-07",
         "recommendations": [
           "Reverify DNS, TLS, metadata, and authenticated protocol behavior after any host or proxy change."
         ]
@@ -27,7 +27,7 @@
           "docs/design/NAAS-Avatar-OS-Productisation-System-Design.pdf#page=18",
           "docs/NO_CODE_SETUP.md"
         ],
-        "verified_at": "2026-08-26",
+        "verified_at": "2026-09-07",
         "recommendations": [
           "Re-run the adapter-specific official documentation check whenever the host changes."
         ]
@@ -79,11 +79,21 @@
   "security": {
     "secret_scan": "pass",
     "distribution_review": "pending",
-    "personal_environment_warning": "pending"
+    "personal_environment_warning": "present_preexisting_antigravity_fields"
+  },
+  "current_qa": {
+    "status": "pass",
+    "verified_at": "2026-09-07",
+    "artifact": "/Users/radossagency/.radoss-qa/artifacts/naas-analysis-2026-09-07/summary.json",
+    "adapters": ["local-agents", "naas-public", "universal-tauri-macos"],
+    "cli_contract": "pass",
+    "format_check": "pass",
+    "secret_scan": "pass",
+    "live_dashboard": "stale_deployment_local_source_not_live"
   },
   "dns": {
     "authoritative_mcp_radoss_agency": "no_record",
-    "authoritative_mcp_naavos_radoss_agency": "verified_A_141.136.35.208_2026-08-26",
+    "authoritative_mcp_naavos_radoss_agency": "verified_A_141.136.35.208_2026-09-07",
     "retired_api_naavos_io": "not_configured"
   }
 }

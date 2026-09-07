@@ -1,5 +1,5 @@
 {
-  "as_of": "2026-08-26",
+  "as_of": "2026-09-07",
   "authority": "docs/DEPLOYMENT_EVIDENCE.md and .shared-ai-skills/DEPLOYMENT_TRUTH_PROTOCOL.md",
   "routes": [
     {
@@ -19,10 +19,11 @@
       "runtime": "Next.js",
       "auth_boundary": "public informational page; no authenticated Avatar data",
       "health_command": "central ~/.radoss-qa adapter naas-public browser.dashboard",
-      "last_verified": "2026-08-26",
-      "evidence": "central QA artifact run-2026-08-26T00-34-56-912Z/naas-public/evidence.json; Coolify container image and SOURCE_COMMIT readback",
-      "status": "verified",
+      "last_verified": "2026-09-07",
+      "evidence": "central QA artifact naas-analysis-2026-09-07/naas-public/evidence.json; live banner probe; Coolify container image and SOURCE_COMMIT readback",
+      "status": "stale_deployment",
       "known_limits": [
+        "Live dashboard serves the prior controlled-development banner and does not yet match the current local open-source source",
         "Coolify control-plane deployment record was not used; the labeled application container was reconciled directly with a rollback copy"
       ]
     },
@@ -43,8 +44,8 @@
       "runtime": "Cloudflare Worker + D1",
       "auth_boundary": "Hugging Face OAuth bearer; tenant-owner enforcement",
       "health_command": "central ~/.radoss-qa public and authenticated adapters",
-      "last_verified": "2026-08-26",
-      "evidence": "central QA artifact run-2026-08-26T00-34-56-912Z/naas-public/evidence.json and docs/DEPLOYMENT_EVIDENCE.md",
+      "last_verified": "2026-09-07",
+      "evidence": "central QA artifact naas-analysis-2026-09-07/naas-public/evidence.json and docs/DEPLOYMENT_EVIDENCE.md",
       "status": "protocol_verified",
       "known_limits": [
         "two independent live-user tenant isolation is not yet accepted",
@@ -86,7 +87,7 @@
       "runtime": "none verified",
       "auth_boundary": "invalid legacy header must not be used",
       "health_command": "DNS resolution check",
-      "last_verified": "2026-08-26",
+      "last_verified": "2026-09-07",
       "evidence": "ENOTFOUND; docs/DEPLOYMENT_EVIDENCE.md",
       "status": "blocked"
     }

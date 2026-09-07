@@ -47,7 +47,9 @@ ${formatRules(rules)}
 
 function formatRules(rules: Rule[]): string {
   return rules
-    .map((r) => `- **${r.id || r.statement.slice(0, 30)}:** ${r.statement} (priority: ${r.priority})`)
+    .map(
+      (r) => `- **${r.id || r.statement.slice(0, 30)}:** ${r.statement} (priority: ${r.priority})`
+    )
     .join('\n');
 }
 

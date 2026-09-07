@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest';
+import { describe, expect, it } from 'vitest';
 
 import {
   AVATAR_SCHEMA_VERSION,
@@ -87,9 +87,7 @@ describe('createAvatar', () => {
     });
     expect(custom.avatar_api.favorite_stack.hosting).toEqual(['Vercel']);
     // Other fields preserved
-    expect(custom.avatar_api.favorite_stack.frontend).toEqual([
-      'YOUR_FRONTEND_FRAMEWORK',
-    ]);
+    expect(custom.avatar_api.favorite_stack.frontend).toEqual(['YOUR_FRONTEND_FRAMEWORK']);
   });
 
   it('produces a valid schema', () => {

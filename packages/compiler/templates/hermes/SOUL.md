@@ -27,4 +27,5 @@
 - **Retention:** {{privacy.retention_policy}}
 
 ---
-*Compiled from NAAvOS package {{metadata.package_id}} — {{compiled_at}}*
+
+_Compiled from NAAvOS package {{metadata.package_id}} — {{compiled_at}}_
