@@ -225,7 +225,7 @@ contract, formatting gate, and CLI target-state rollback semantics:
 | Packaged Tauri macOS E2E          | PASS: launch, sidecar, privacy, persistence, backup, hostile-origin rejection, retry blocking, rollback and hosting choice |
 | Customer/public production gate   | BLOCKED: live-user, named-host and signed-distribution evidence                                                            |
 
-Evidence is stored in: `/Users/radossagency/.radoss-qa/artifacts/naavos-claims-2026-09-08/`.
+Evidence is stored in: `/Users/radossagency/.radoss-qa/artifacts/naavos-release-identity-2026-09-08/`.
 
 The last independently verified dashboard reconciliation is PASS: `naavos.radoss.agency` served the corrected
 open-source release copy from source marker `97d9950b8d27cf041862de9089d0fbf2633984ef`, Coolify deployment

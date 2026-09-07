@@ -22,7 +22,7 @@
       "auth_boundary": "public informational page; no authenticated Avatar data",
       "health_command": "central ~/.radoss-qa adapter naas-public browser.dashboard",
       "last_verified": "2026-09-08",
-      "evidence": "central QA artifact naavos-claims-2026-09-08/naas-public/evidence.json; live /release.json marker check; rendered claim probe",
+      "evidence": "central QA artifact naavos-release-identity-2026-09-08/naas-public/evidence.json; live /release.json marker check; rendered claim probe",
       "status": "content_verified",
       "deployment_automation": {
         "status": "verified",
@@ -55,7 +55,7 @@
       "auth_boundary": "Hugging Face OAuth bearer; tenant-owner enforcement",
       "health_command": "central ~/.radoss-qa public and authenticated adapters",
       "last_verified": "2026-09-07",
-      "evidence": "central QA artifact naavos-claims-2026-09-08/naas-public/evidence.json and docs/DEPLOYMENT_EVIDENCE.md",
+      "evidence": "central QA artifact naavos-release-identity-2026-09-08/naas-public/evidence.json and docs/DEPLOYMENT_EVIDENCE.md",
       "status": "protocol_verified",
       "known_limits": [
         "two independent live-user tenant isolation is not yet accepted",

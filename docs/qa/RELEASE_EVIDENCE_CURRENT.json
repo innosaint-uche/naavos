@@ -101,7 +101,7 @@
   "current_qa": {
     "status": "pass",
     "verified_at": "2026-09-08",
-    "artifact": "/Users/radossagency/.radoss-qa/artifacts/naavos-claims-2026-09-08/summary.json",
+    "artifact": "/Users/radossagency/.radoss-qa/artifacts/naavos-release-identity-2026-09-08/summary.json",
     "adapters": ["local-agents", "naas-public", "universal-tauri-macos"],
     "cli_contract": "pass",
     "format_check": "pass",
