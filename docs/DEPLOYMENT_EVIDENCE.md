@@ -46,12 +46,12 @@ relevant official documentation whenever a host/provider version changes. The ma
 - Central packaged no-code QA: PASS — the real Tauri macOS bundle launched with isolated temporary state; Playwright
   verified the setup UI, privacy mutation/readback, backup action, hostile-origin rejection, privacy pause/retry block,
   rollback readback, user-owned hosting selection, and clean sidecar lifecycle. Evidence:
-  `/Users/radossagency/.radoss-qa/artifacts/naavos-tauri-warning-fix-2026-09-07/universal-tauri-macos/evidence.json`.
+  `/Users/radossagency/.radoss-qa/artifacts/naavos-evidence-guard-2026-09-07/universal-tauri-macos/evidence.json`.
 - Central all-adapter QA: PASS — `local-agents`, `naas-public` and `universal-tauri-macos` all passed in the same run;
-  aggregate evidence is under `/Users/radossagency/.radoss-qa/artifacts/naavos-tauri-warning-fix-2026-09-07/`.
+  aggregate evidence is under `/Users/radossagency/.radoss-qa/artifacts/naavos-evidence-guard-2026-09-07/`.
 - Central local-agent QA: PASS — Codex, Antigravity and Hermes adapter markers were present; `radoss doctor` confirmed
   local MCP health and Hermes OAuth state. Evidence is under
-  `/Users/radossagency/.radoss-qa/artifacts/naavos-tauri-warning-fix-2026-09-07/local-agents/`.
+  `/Users/radossagency/.radoss-qa/artifacts/naavos-evidence-guard-2026-09-07/local-agents/`.
 - Public source repository: verified public at `https://github.com/innosaint-uche/naavos`.
 - Universal Avatar source repository: verified public at `https://github.com/innosaint-uche/radoss-universal-avatar`.
 - Clean source baselines: `naavos` tag `v0.1.0-public-source`; Universal Avatar tag `v0.2.0-public-source`.
@@ -61,10 +61,10 @@ relevant official documentation whenever a host/provider version changes. The ma
 - Canonical local registry: the verified hosted gateway is registered as `naavos_gateway` with no
   Codex/Antigravity/Hermes targets; local agents remain on the guarded `radoss_avatar` stdio control plane.
 - NAAS monorepo: test, typecheck, lint, and build pass.
-- Current central QA run: `naavos-tauri-warning-fix-2026-09-07` passed the local-agent, public-route, and packaged macOS
+- Current central QA run: `naavos-evidence-guard-2026-09-07` passed the local-agent, public-route, and packaged macOS
   Tauri adapters; the Tauri journey additionally verified hostile-origin rejection, privacy pause/retry blocking,
   rollback readback, and user-owned hosting selection. CLI contract, formatting, and secret scan also passed. Evidence
-  is under `/Users/radossagency/.radoss-qa/artifacts/naavos-tauri-warning-fix-2026-09-07/`. The NAAvOS CLI rollback
+  is under `/Users/radossagency/.radoss-qa/artifacts/naavos-evidence-guard-2026-09-07/`. The NAAvOS CLI rollback
   regression now snapshots pre-install target files, supports ReMe's project and Hermes roots, and removes only
   newly-created managed files on restore; its regression and process-level tests pass.
 

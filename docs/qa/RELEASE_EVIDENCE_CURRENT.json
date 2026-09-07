@@ -99,7 +99,7 @@
   "current_qa": {
     "status": "pass",
     "verified_at": "2026-09-07",
-    "artifact": "/Users/radossagency/.radoss-qa/artifacts/naavos-tauri-warning-fix-2026-09-07/summary.json",
+    "artifact": "/Users/radossagency/.radoss-qa/artifacts/naavos-evidence-guard-2026-09-07/summary.json",
     "adapters": ["local-agents", "naas-public", "universal-tauri-macos"],
     "cli_contract": "pass",
     "format_check": "pass",
