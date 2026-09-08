@@ -232,7 +232,7 @@ The committed release manifest points to this fresh aggregate. The packaged macO
 public-source bundle run at `/Users/radossagency/.radoss-qa/artifacts/naavos-public-exact-tauri-2026-09-08/`.
 
 The current live dashboard reconciliation is PASS: `naavos.radoss.agency/release.json` served the content-derived marker
-`fa2b4c2160292bb712501497c59e62da562ee6ce9cbd6999a8b02de3d432d837`, matching the reviewed source inputs. The exact
+`35f22bae24660e8f5ce5bfde23856f7fccd299b8288bb8237d7c79c6ad1b0d63`, matching the reviewed source inputs. The exact
 Coolify deployment ID for this marker remains not independently verified. The repeat aggregate run also passed the
 packaged Tauri hosting-choice server readback check after the harness began waiting for persisted state rather than
 relying only on the UI success message. The last independently verified Coolify identity is retained in

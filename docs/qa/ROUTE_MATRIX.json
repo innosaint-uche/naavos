@@ -7,7 +7,7 @@
       "service": "public-dashboard",
       "environment": "production-facing-development",
       "release_identity": {
-        "source_marker": "fa2b4c2160292bb712501497c59e62da562ee6ce9cbd6999a8b02de3d432d837",
+        "source_marker": "35f22bae24660e8f5ce5bfde23856f7fccd299b8288bb8237d7c79c6ad1b0d63",
         "source_marker_kind": "content-derived",
         "deployment_id": null,
         "deployment_id_status": "not_independently_verified"

@@ -12,17 +12,17 @@ relevant official documentation whenever a host/provider version changes. The ma
 - Public dashboard: `https://naavos.radoss.agency` — HTTP 200, Next.js response, valid TLS certificate, and the
   corrected open-source release copy is live.
 - Dashboard content identity: the live `/release.json` marker is the content-derived source marker
-  `fa2b4c2160292bb712501497c59e62da562ee6ce9cbd6999a8b02de3d432d837` (SHA-256), matching the reviewed source inputs. This was
-  verified by `pnpm verify:live-marker` after the standalone Docker image and live deployment were checked.
-- Coolify deployment ID for this marker: not independently verified. The public marker proves the served content
-  matches the reviewed source inputs; it does not prove the platform's internal deployment identifier.
+  `35f22bae24660e8f5ce5bfde23856f7fccd299b8288bb8237d7c79c6ad1b0d63` (SHA-256), matching the reviewed source inputs.
+  This was verified by `pnpm verify:live-marker` after the standalone Docker image and live deployment were checked.
+- Coolify deployment ID for this marker: not independently verified. The public marker proves the served content matches
+  the reviewed source inputs; it does not prove the platform's internal deployment identifier.
 - Last independently verified dashboard deployment: source commit `97d9950b8d27cf041862de9089d0fbf2633984ef`, Coolify
   deployment `kw8a7b2bvtzemlqo8vf19eki`, running container image
   `a1rpkpmda1lhxn2kyxvvnmpm:97d9950b8d27cf041862de9089d0fbf2633984ef` (application `4`, `naavos-dashboard`).
 - Deployment automation: GitHub hook `675916315` targets Coolify's verified manual route
-  `https://radoss.cloud/webhooks/source/github/events/manual` for `push` events. A correctly HMAC-signed push payload was
-  accepted with HTTP 200 and queued deployment `d5b8vqbh9br09t4qq9tn8nam`, which finished with the exact `518783b977857534ab9b1937eff8dd1fa7267e1a`
-  commit running in the dashboard container.
+  `https://radoss.cloud/webhooks/source/github/events/manual` for `push` events. A correctly HMAC-signed push payload
+  was accepted with HTTP 200 and queued deployment `d5b8vqbh9br09t4qq9tn8nam`, which finished with the exact
+  `518783b977857534ab9b1937eff8dd1fa7267e1a` commit running in the dashboard container.
 - Hosted MCP Worker: `https://naavos-mcp.innosaint-uche.workers.dev/mcp`.
 - Worker deployment version: `d683a9ac-bafb-454c-86eb-a81a94d19b29` (latest verified deployment; tenant-owner
   enforcement and branded OAuth metadata).
@@ -69,20 +69,20 @@ relevant official documentation whenever a host/provider version changes. The ma
 - Canonical local registry: the verified hosted gateway is registered as `naavos_gateway` with no
   Codex/Antigravity/Hermes targets; local agents remain on the guarded `radoss_avatar` stdio control plane.
 - NAAS monorepo: test, typecheck, lint, and build pass.
-- Current central QA run: `naavos-current-all-2026-09-08` passed the local-agent, public-route, and packaged macOS
-  Tauri adapters; the Tauri journey additionally verified hostile-origin rejection, privacy pause/retry blocking,
-  rollback readback, and user-owned hosting selection. CLI contract, formatting, and secret scan also passed. Evidence
-  is under `/Users/radossagency/.radoss-qa/artifacts/naavos-current-all-2026-09-08/`. The NAAvOS CLI rollback
-  regression now snapshots pre-install target files, supports ReMe's project and Hermes roots, and removes only
-  newly-created managed files on restore; its regression and process-level tests pass.
+- Current central QA run: `naavos-current-all-2026-09-08` passed the local-agent, public-route, and packaged macOS Tauri
+  adapters; the Tauri journey additionally verified hostile-origin rejection, privacy pause/retry blocking, rollback
+  readback, and user-owned hosting selection. CLI contract, formatting, and secret scan also passed. Evidence is under
+  `/Users/radossagency/.radoss-qa/artifacts/naavos-current-all-2026-09-08/`. The NAAvOS CLI rollback regression now
+  snapshots pre-install target files, supports ReMe's project and Hermes roots, and removes only newly-created managed
+  files on restore; its regression and process-level tests pass.
 - Universal Avatar unsigned desktop build: PASS on `macos-14`, `windows-2022`, and `ubuntu-24.04` from public workflow
   run `34174061043` at commit `f9666f740eac4224df3f42ee5f20886f0a10bbb3`. This proves reproducible unsigned bundle
   compilation on all three runner families only; it does not prove signing, notarisation, installation, or customer
   release readiness.
 - Public-package verification: PASS — the public Universal Avatar checkout passed 38/38 tests, public-package preflight,
-  dependency audit, secret scanning in workflow `34174621458`, and a clean exact-source macOS packaged E2E run. The local
-  checkout retains personal QA instrumentation and is reported separately; it is not used as a substitute for public-source
-  proof.
+  dependency audit, secret scanning in workflow `34174621458`, and a clean exact-source macOS packaged E2E run. The
+  local checkout retains personal QA instrumentation and is reported separately; it is not used as a substitute for
+  public-source proof.
 
 ## Not yet verified
 
@@ -95,21 +95,19 @@ relevant official documentation whenever a host/provider version changes. The ma
 - The DNS zone's existing website, mail, DKIM, SPF, and DMARC records were preserved; no broad reset was used.
 - ChatGPT/Claude named-host acceptance.
 - Production signing/notarization evidence for the Tauri distribution.
-- Current distribution audit: `security find-identity -v -p codesigning` returned
-  zero valid identities; the local build host has only the `aarch64-apple-darwin`
-  Rust target and one local macOS DMG. This is evidence for the explicit
-  `ad_hoc_local_only` / `not_verified` release state, not customer distribution
-  proof.
+- Current distribution audit: `security find-identity -v -p codesigning` returned zero valid identities; the local build
+  host has only the `aarch64-apple-darwin` Rust target and one local macOS DMG. This is evidence for the explicit
+  `ad_hoc_local_only` / `not_verified` release state, not customer distribution proof.
 - Two independent live production users have not yet been used for the tenant-isolation acceptance; the fixture is not a
   substitute for that live evidence.
 - The personal Antigravity configuration contains pre-existing embedded credential fields; values were not read,
   printed, copied, or modified. This is a personal-environment warning, not distribution evidence, and the isolated
   sample does not use those paths. A distribution security review must still prove that the source and artifacts contain
   no credentials before release.
-- Previous packaged-bundle failure: superseded. The failure was reproduced as QA launching a `/tmp` symlinked executable,
-  which Tauri's shell plugin rejects, compounded by macOS window-state restoration after the earlier crash. The central
-  harness now resolves the executable with `realpath`, passes `-ApplePersistence NO` only to the isolated QA process, and
-  records the configured and resolved paths. Current local and exact public-source bundles pass.
+- Previous packaged-bundle failure: superseded. The failure was reproduced as QA launching a `/tmp` symlinked
+  executable, which Tauri's shell plugin rejects, compounded by macOS window-state restoration after the earlier crash.
+  The central harness now resolves the executable with `realpath`, passes `-ApplePersistence NO` only to the isolated QA
+  process, and records the configured and resolved paths. Current local and exact public-source bundles pass.
 
 ## Do not use
 
