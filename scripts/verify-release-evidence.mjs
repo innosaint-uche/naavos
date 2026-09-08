@@ -1,7 +1,15 @@
 import fs from 'node:fs';
+import os from 'node:os';
 import path from 'node:path';
 
 const root = process.cwd();
+const qaRoot = process.env.RADOS_QA_ROOT || path.join(os.homedir(), '.radoss-qa');
+const resolveQaPath = (value) => {
+  if (typeof value !== 'string') return null;
+  if (path.isAbsolute(value)) return value;
+  if (value.startsWith('artifacts/')) return path.join(qaRoot, value);
+  return path.resolve(root, value);
+};
 const readJson = (relativePath) =>
   JSON.parse(fs.readFileSync(path.join(root, relativePath), 'utf8'));
 const release = readJson('docs/qa/RELEASE_EVIDENCE_CURRENT.json');
@@ -47,7 +55,7 @@ const validateQaArtifact = () => {
       failures.push(`QA adapter ${adapter.adapter} has no evidence path`);
       continue;
     }
-    const evidencePath = path.resolve(root, adapter.evidence);
+    const evidencePath = resolveQaPath(adapter.evidence);
     assert(fs.existsSync(evidencePath), `QA adapter evidence is missing: ${evidencePath}`);
     if (!fs.existsSync(evidencePath)) continue;
     try {
@@ -61,12 +69,18 @@ const validateQaArtifact = () => {
       failures.push(`QA adapter evidence is not valid JSON (${adapter.adapter}): ${error.message}`);
     }
   }
-  const publicAdapter = (summary.adapters || []).find((adapter) => adapter.adapter === 'naas-public');
+  const publicAdapter = (summary.adapters || []).find(
+    (adapter) => adapter.adapter === 'naas-public'
+  );
   if (publicAdapter?.evidence) {
     try {
-      const evidencePath = path.resolve(root, publicAdapter.evidence);
+      const evidencePath = resolveQaPath(publicAdapter.evidence);
       const evidence = JSON.parse(fs.readFileSync(evidencePath, 'utf8'));
-      const checkNames = new Set((evidence.checks || []).filter((check) => check.status === 'pass').map((check) => check.name));
+      const checkNames = new Set(
+        (evidence.checks || [])
+          .filter((check) => check.status === 'pass')
+          .map((check) => check.name)
+      );
       for (const requiredCheck of [
         'browser.dashboard',
         'http.mcp-health',
@@ -75,7 +89,10 @@ const validateQaArtifact = () => {
         'http.release-identity',
         'mcp.unauthenticated-fail-closed',
       ]) {
-        assert(checkNames.has(requiredCheck), `NAAvOS public QA is missing required check: ${requiredCheck}`);
+        assert(
+          checkNames.has(requiredCheck),
+          `NAAvOS public QA is missing required check: ${requiredCheck}`
+        );
       }
     } catch (error) {
       failures.push(`NAAvOS public QA contract could not be inspected: ${error.message}`);
@@ -86,21 +103,35 @@ const validateQaArtifact = () => {
 const validatePackagedTauriEvidence = () => {
   const packaged = release.current_qa?.packaged_tauri_reverification;
   assert(packaged?.status === 'pass', 'current packaged Tauri re-verification is not pass');
-  assert(Array.isArray(packaged?.artifacts), 'current packaged Tauri evidence has no artifact list');
+  assert(
+    Array.isArray(packaged?.artifacts),
+    'current packaged Tauri evidence has no artifact list'
+  );
   if (!requireArtifact) return;
   for (const artifactPath of packaged?.artifacts || []) {
-    assert(fs.existsSync(artifactPath), `packaged Tauri evidence is missing: ${artifactPath}`);
-    if (!fs.existsSync(artifactPath)) continue;
+    const resolvedArtifactPath = resolveQaPath(artifactPath);
+    assert(
+      fs.existsSync(resolvedArtifactPath),
+      `packaged Tauri evidence is missing: ${artifactPath}`
+    );
+    if (!fs.existsSync(resolvedArtifactPath)) continue;
     try {
-      const evidence = JSON.parse(fs.readFileSync(artifactPath, 'utf8'));
+      const evidence = JSON.parse(fs.readFileSync(resolvedArtifactPath, 'utf8'));
       assert(evidence.status === 'pass', `packaged Tauri evidence is not pass: ${artifactPath}`);
-      assert(evidence.token_values_written !== true, `packaged Tauri evidence reports token values written: ${artifactPath}`);
       assert(
-        (evidence.checks || []).some((check) => check.name === 'tauri.sidecar-ready' && check.status === 'pass'),
+        evidence.token_values_written !== true,
+        `packaged Tauri evidence reports token values written: ${artifactPath}`
+      );
+      assert(
+        (evidence.checks || []).some(
+          (check) => check.name === 'tauri.sidecar-ready' && check.status === 'pass'
+        ),
         `packaged Tauri evidence has no passing sidecar check: ${artifactPath}`
       );
     } catch (error) {
-      failures.push(`packaged Tauri evidence is not valid JSON (${artifactPath}): ${error.message}`);
+      failures.push(
+        `packaged Tauri evidence is not valid JSON (${artifactPath}): ${error.message}`
+      );
     }
   }
 };
@@ -213,12 +244,13 @@ assert(release.current_qa?.status === 'pass', 'current central QA status is not 
 validatePackagedTauriEvidence();
 assert(
   typeof release.current_qa?.artifact === 'string' &&
-    release.current_qa.artifact.includes('/.radoss-qa/artifacts/'),
+    (release.current_qa.artifact.startsWith('artifacts/') ||
+      release.current_qa.artifact.includes('/.radoss-qa/artifacts/')),
   'current QA artifact must point to the central QA store'
 );
 if (requireArtifact)
   assert(
-    fs.existsSync(release.current_qa.artifact),
+    fs.existsSync(resolveQaPath(release.current_qa.artifact)),
     `current QA artifact is missing: ${release.current_qa.artifact}`
   );
 validateQaArtifact();
@@ -234,8 +266,8 @@ if (failures.length) {
         endpoint: release.endpoint,
         dashboard_source_marker: release.dashboard_release_identity.source_marker,
         dashboard_deployment_id: release.dashboard_release_identity.deployment_id,
-        qa_artifact: release.current_qa.artifact,
-        artifact_present: fs.existsSync(release.current_qa.artifact),
+        qa_artifact: resolveQaPath(release.current_qa.artifact),
+        artifact_present: fs.existsSync(resolveQaPath(release.current_qa.artifact)),
         token_values_read: false,
       },
       null,
