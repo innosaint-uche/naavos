@@ -84,6 +84,11 @@ relevant official documentation whenever a host/provider version changes. The ma
 - The DNS zone's existing website, mail, DKIM, SPF, and DMARC records were preserved; no broad reset was used.
 - ChatGPT/Claude named-host acceptance.
 - Production signing/notarization evidence for the Tauri distribution.
+- Current distribution audit: `security find-identity -v -p codesigning` returned
+  zero valid identities; the local build host has only the `aarch64-apple-darwin`
+  Rust target and one local macOS DMG. This is evidence for the explicit
+  `ad_hoc_local_only` / `not_verified` release state, not customer distribution
+  proof.
 - Two independent live production users have not yet been used for the tenant-isolation acceptance; the fixture is not a
   substitute for that live evidence.
 - The personal Antigravity configuration contains pre-existing embedded credential fields; values were not read,
