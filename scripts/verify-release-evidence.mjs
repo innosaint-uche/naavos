@@ -27,11 +27,12 @@ const assert = (condition, message) => {
 
 const validateQaArtifact = () => {
   const artifactPath = release.current_qa?.artifact;
-  if (!requireArtifact || typeof artifactPath !== 'string' || !fs.existsSync(artifactPath)) return;
+  const resolvedArtifactPath = resolveQaPath(artifactPath);
+  if (!requireArtifact || !resolvedArtifactPath || !fs.existsSync(resolvedArtifactPath)) return;
 
   let summary;
   try {
-    summary = JSON.parse(fs.readFileSync(artifactPath, 'utf8'));
+    summary = JSON.parse(fs.readFileSync(resolvedArtifactPath, 'utf8'));
   } catch (error) {
     failures.push(`current QA artifact is not valid JSON: ${error.message}`);
     return;
