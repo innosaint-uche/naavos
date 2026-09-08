@@ -113,6 +113,16 @@
     "verified_at": "2026-09-08",
     "artifact": "/Users/radossagency/.radoss-qa/artifacts/naavos-followup-2026-09-08-all-fixed/summary.json",
     "adapters": ["local-agents", "naas-public", "universal-tauri-macos"],
+    "packaged_tauri_reverification": {
+      "status": "failed",
+      "scope": "current local and public macOS bundles",
+      "failure": "Tauri process remained alive but did not enter setup callback or publish sidecar loopback URL",
+      "artifacts": [
+        "/Users/radossagency/.radoss-qa/artifacts/naavos-local-current-2026-09-08-adhoc/evidence.json",
+        "/Users/radossagency/.radoss-qa/artifacts/naavos-public-source-tauri-2026-09-08-envfix/evidence.json"
+      ],
+      "interpretation": "historical packaged pass remains retained but is not current-bundle proof"
+    },
     "cli_contract": "pass",
     "format_check": "pass",
     "secret_scan": "pass",

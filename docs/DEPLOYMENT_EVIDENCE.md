@@ -104,6 +104,9 @@ relevant official documentation whenever a host/provider version changes. The ma
   printed, copied, or modified. This is a personal-environment warning, not distribution evidence, and the isolated
   sample does not use those paths. A distribution security review must still prove that the source and artifacts contain
   no credentials before release.
+- Current-bundle macOS packaged re-verification: NOT VERIFIED — both the current local bundle and a freshly built public
+  Universal Avatar bundle remained alive but did not enter the Tauri setup callback or publish the sidecar loopback URL.
+  Historical packaged-pass artifacts are retained for audit history only and are not treated as current-bundle proof.
 
 ## Do not use
 
