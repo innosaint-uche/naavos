@@ -76,6 +76,11 @@ relevant official documentation whenever a host/provider version changes. The ma
   run `34174061043` at commit `f9666f740eac4224df3f42ee5f20886f0a10bbb3`. This proves reproducible unsigned bundle
   compilation on all three runner families only; it does not prove signing, notarisation, installation, or customer
   release readiness.
+- Public-package verification: PASS — the public Universal Avatar checkout passed 38/38 tests, public-package preflight,
+  dependency audit, and secret scanning in workflow `34174621458`. The local packaged macOS QA checkout is not byte-identical
+  to that public source in `desktop-setup/app.js` and `desktop-setup/src-tauri/src/main.rs`; consequently its local E2E
+  evidence is retained as local validation but is not promoted to public-package acceptance evidence until source/artifact
+  alignment is verified.
 
 ## Not yet verified
 

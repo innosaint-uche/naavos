@@ -105,7 +105,8 @@
   "security": {
     "secret_scan": "pass",
     "distribution_review": "pending",
-    "personal_environment_warning": "present_preexisting_antigravity_fields"
+    "personal_environment_warning": "present_preexisting_antigravity_fields",
+    "desktop_source_artifact_alignment": "not_verified_local_checkout_differs_from_public_repository"
   },
   "current_qa": {
     "status": "pass",
