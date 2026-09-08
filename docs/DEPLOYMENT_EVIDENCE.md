@@ -58,8 +58,8 @@ relevant official documentation whenever a host/provider version changes. The ma
   `universal-tauri-macos` in the same run; aggregate evidence is under
   `/Users/radossagency/.radoss-qa/artifacts/naavos-current-all-2026-09-08/`.
 - Central local-agent QA: PASS — Codex, Antigravity and Hermes adapter markers were present; `radoss doctor` confirmed
-  local MCP health and Hermes OAuth state. Evidence is under
-  `/Users/radossagency/.radoss-qa/artifacts/naavos-production-contract-2026-09-08/local-agents/`.
+  local MCP health and Hermes OAuth state. Current evidence is under
+  `/Users/radossagency/.radoss-qa/artifacts/naavos-current-all-2026-09-08/local-agents/`.
 - Public source repository: verified public at `https://github.com/innosaint-uche/naavos`.
 - Universal Avatar source repository: verified public at `https://github.com/innosaint-uche/radoss-universal-avatar`.
 - Clean source baselines: `naavos` tag `v0.1.0-public-source`; Universal Avatar tag `v0.2.0-public-source`.
