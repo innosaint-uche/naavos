@@ -84,7 +84,15 @@
   "distribution": {
     "signing": "ad_hoc_local_only",
     "notarization": "not_verified",
-    "platforms": "not_verified"
+    "platforms": "not_verified",
+    "unsigned_cross_platform_build": {
+      "status": "verified",
+      "repository": "https://github.com/innosaint-uche/radoss-universal-avatar",
+      "commit": "f9666f740eac4224df3f42ee5f20886f0a10bbb3",
+      "workflow_run": "34174061043",
+      "runners": ["macos-14", "windows-2022", "ubuntu-24.04"],
+      "scope_limit": "build proof only; does not prove signing, notarization, installation, or customer release"
+    }
   },
   "source_release": {
     "visibility": "public",

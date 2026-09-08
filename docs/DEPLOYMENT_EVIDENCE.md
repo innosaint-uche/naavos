@@ -72,6 +72,10 @@ relevant official documentation whenever a host/provider version changes. The ma
   is under `/Users/radossagency/.radoss-qa/artifacts/naavos-followup-2026-09-08-all-fixed/`. The NAAvOS CLI rollback
   regression now snapshots pre-install target files, supports ReMe's project and Hermes roots, and removes only
   newly-created managed files on restore; its regression and process-level tests pass.
+- Universal Avatar unsigned desktop build: PASS on `macos-14`, `windows-2022`, and `ubuntu-24.04` from public workflow
+  run `34174061043` at commit `f9666f740eac4224df3f42ee5f20886f0a10bbb3`. This proves reproducible unsigned bundle
+  compilation on all three runner families only; it does not prove signing, notarisation, installation, or customer
+  release readiness.
 
 ## Not yet verified
 
