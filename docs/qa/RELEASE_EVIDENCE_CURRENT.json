@@ -111,13 +111,13 @@
   "current_qa": {
     "status": "pass",
     "verified_at": "2026-09-08",
-    "artifact": "/Users/radossagency/.radoss-qa/artifacts/naavos-followup-2026-09-08-all-fixed/summary.json",
+    "artifact": "/Users/radossagency/.radoss-qa/artifacts/naavos-current-all-2026-09-08/summary.json",
     "adapters": ["local-agents", "naas-public", "universal-tauri-macos"],
     "packaged_tauri_reverification": {
       "status": "pass",
       "scope": "current local and public macOS bundles",
       "artifacts": [
-        "/Users/radossagency/.radoss-qa/artifacts/naavos-local-current-2026-09-08-qa-fixed/evidence.json",
+        "/Users/radossagency/.radoss-qa/artifacts/naavos-current-all-2026-09-08/universal-tauri-macos/evidence.json",
         "/Users/radossagency/.radoss-qa/artifacts/naavos-public-exact-tauri-2026-09-08/evidence.json"
       ],
       "harness_controls": ["realpath executable", "-ApplePersistence NO", "isolated temporary state"],

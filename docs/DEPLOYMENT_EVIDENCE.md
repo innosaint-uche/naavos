@@ -54,8 +54,9 @@ relevant official documentation whenever a host/provider version changes. The ma
   and clean sidecar lifecycle. Current evidence:
   `/Users/radossagency/.radoss-qa/artifacts/naavos-local-current-2026-09-08-qa-fixed/evidence.json` and
   `/Users/radossagency/.radoss-qa/artifacts/naavos-public-exact-tauri-2026-09-08/evidence.json`.
-- Central all-adapter QA: PASS — `local-agents`, `naas-public` and `universal-tauri-macos` all passed in the same run;
-  aggregate evidence is under `/Users/radossagency/.radoss-qa/artifacts/naavos-followup-2026-09-08-all-fixed/`.
+- Central all-adapter QA: PASS — fresh run on 2026-09-08 passed `local-agents`, `naas-public` and
+  `universal-tauri-macos` in the same run; aggregate evidence is under
+  `/Users/radossagency/.radoss-qa/artifacts/naavos-current-all-2026-09-08/`.
 - Central local-agent QA: PASS — Codex, Antigravity and Hermes adapter markers were present; `radoss doctor` confirmed
   local MCP health and Hermes OAuth state. Evidence is under
   `/Users/radossagency/.radoss-qa/artifacts/naavos-production-contract-2026-09-08/local-agents/`.
@@ -68,10 +69,10 @@ relevant official documentation whenever a host/provider version changes. The ma
 - Canonical local registry: the verified hosted gateway is registered as `naavos_gateway` with no
   Codex/Antigravity/Hermes targets; local agents remain on the guarded `radoss_avatar` stdio control plane.
 - NAAS monorepo: test, typecheck, lint, and build pass.
-- Current central QA run: `naavos-followup-2026-09-08-all-fixed` passed the local-agent, public-route, and packaged macOS
+- Current central QA run: `naavos-current-all-2026-09-08` passed the local-agent, public-route, and packaged macOS
   Tauri adapters; the Tauri journey additionally verified hostile-origin rejection, privacy pause/retry blocking,
   rollback readback, and user-owned hosting selection. CLI contract, formatting, and secret scan also passed. Evidence
-  is under `/Users/radossagency/.radoss-qa/artifacts/naavos-followup-2026-09-08-all-fixed/`. The NAAvOS CLI rollback
+  is under `/Users/radossagency/.radoss-qa/artifacts/naavos-current-all-2026-09-08/`. The NAAvOS CLI rollback
   regression now snapshots pre-install target files, supports ReMe's project and Hermes roots, and removes only
   newly-created managed files on restore; its regression and process-level tests pass.
 - Universal Avatar unsigned desktop build: PASS on `macos-14`, `windows-2022`, and `ubuntu-24.04` from public workflow
