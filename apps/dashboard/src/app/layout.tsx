@@ -18,7 +18,7 @@ export const metadata: Metadata = {
   metadataBase: new URL('https://naavos.radoss.agency'),
   title: 'NAAvOS | User-owned Avatar OS',
   description:
-    'A local-first, inspectable Avatar OS for compiling approved context into supported AI hosts. Public release is being verified in stages.',
+    'An open-source local-first Avatar OS. Download the desktop MVP, follow the personal setup guide, and connect supported AI hosts without NAAvOS-managed hosting.',
   keywords: [
     'AI avatar',
     'cognitive profile',
@@ -37,7 +37,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'NAAvOS | User-owned Avatar OS',
     description:
-      'Define an inspectable Avatar package, preview changes, install reversibly, and verify supported AI-host integrations.',
+      'Download the open-source local desktop MVP, configure your personal Avatar, and connect supported AI hosts with reversible setup.',
     type: 'website',
     locale: 'en_US',
     siteName: 'NAAvOS',
@@ -54,7 +54,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'NAAvOS | User-owned Avatar OS',
     description:
-      'Local-first Avatar context with explicit privacy, scope, adapters, and evidence gates.',
+      'Open-source local Avatar context with explicit privacy, scope, adapters, and evidence gates.',
     images: ['/opengraph-image'],
   },
   robots: {
