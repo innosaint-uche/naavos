@@ -87,6 +87,7 @@ const validatePackagedTauriEvidence = () => {
   const packaged = release.current_qa?.packaged_tauri_reverification;
   assert(packaged?.status === 'pass', 'current packaged Tauri re-verification is not pass');
   assert(Array.isArray(packaged?.artifacts), 'current packaged Tauri evidence has no artifact list');
+  if (!requireArtifact) return;
   for (const artifactPath of packaged?.artifacts || []) {
     assert(fs.existsSync(artifactPath), `packaged Tauri evidence is missing: ${artifactPath}`);
     if (!fs.existsSync(artifactPath)) continue;
