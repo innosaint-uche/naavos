@@ -83,6 +83,27 @@ const validateQaArtifact = () => {
   }
 };
 
+const validatePackagedTauriEvidence = () => {
+  const packaged = release.current_qa?.packaged_tauri_reverification;
+  assert(packaged?.status === 'pass', 'current packaged Tauri re-verification is not pass');
+  assert(Array.isArray(packaged?.artifacts), 'current packaged Tauri evidence has no artifact list');
+  for (const artifactPath of packaged?.artifacts || []) {
+    assert(fs.existsSync(artifactPath), `packaged Tauri evidence is missing: ${artifactPath}`);
+    if (!fs.existsSync(artifactPath)) continue;
+    try {
+      const evidence = JSON.parse(fs.readFileSync(artifactPath, 'utf8'));
+      assert(evidence.status === 'pass', `packaged Tauri evidence is not pass: ${artifactPath}`);
+      assert(evidence.token_values_written !== true, `packaged Tauri evidence reports token values written: ${artifactPath}`);
+      assert(
+        (evidence.checks || []).some((check) => check.name === 'tauri.sidecar-ready' && check.status === 'pass'),
+        `packaged Tauri evidence has no passing sidecar check: ${artifactPath}`
+      );
+    } catch (error) {
+      failures.push(`packaged Tauri evidence is not valid JSON (${artifactPath}): ${error.message}`);
+    }
+  }
+};
+
 assert(release.endpoint === canonicalEndpoint, `release endpoint must be ${canonicalEndpoint}`);
 assert(
   !release.endpoint.includes(retiredEndpoint),
@@ -188,6 +209,7 @@ if (release.dashboard_release_identity.status === 'content_verified') {
   );
 }
 assert(release.current_qa?.status === 'pass', 'current central QA status is not pass');
+validatePackagedTauriEvidence();
 assert(
   typeof release.current_qa?.artifact === 'string' &&
     release.current_qa.artifact.includes('/.radoss-qa/artifacts/'),

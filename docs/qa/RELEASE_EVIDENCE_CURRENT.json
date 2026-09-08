@@ -106,7 +106,7 @@
     "secret_scan": "pass",
     "distribution_review": "pending",
     "personal_environment_warning": "present_preexisting_antigravity_fields",
-    "desktop_source_artifact_alignment": "not_verified_local_checkout_differs_from_public_repository"
+    "desktop_source_artifact_alignment": "public_source_exact_bundle_verified; local_checkout_retains_personal_instrumentation"
   },
   "current_qa": {
     "status": "pass",
@@ -114,14 +114,14 @@
     "artifact": "/Users/radossagency/.radoss-qa/artifacts/naavos-followup-2026-09-08-all-fixed/summary.json",
     "adapters": ["local-agents", "naas-public", "universal-tauri-macos"],
     "packaged_tauri_reverification": {
-      "status": "failed",
+      "status": "pass",
       "scope": "current local and public macOS bundles",
-      "failure": "Tauri process remained alive but did not enter setup callback or publish sidecar loopback URL",
       "artifacts": [
-        "/Users/radossagency/.radoss-qa/artifacts/naavos-local-current-2026-09-08-adhoc/evidence.json",
-        "/Users/radossagency/.radoss-qa/artifacts/naavos-public-source-tauri-2026-09-08-envfix/evidence.json"
+        "/Users/radossagency/.radoss-qa/artifacts/naavos-local-current-2026-09-08-qa-fixed/evidence.json",
+        "/Users/radossagency/.radoss-qa/artifacts/naavos-public-exact-tauri-2026-09-08/evidence.json"
       ],
-      "interpretation": "historical packaged pass remains retained but is not current-bundle proof"
+      "harness_controls": ["realpath executable", "-ApplePersistence NO", "isolated temporary state"],
+      "interpretation": "current local bundle and clean public-source bundle passed packaged macOS E2E"
     },
     "cli_contract": "pass",
     "format_check": "pass",

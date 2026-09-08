@@ -48,10 +48,12 @@ relevant official documentation whenever a host/provider version changes. The ma
 - Tenant-isolation fixture: PASS — two independently signed tenants receive separate sessions, Avatar owners, updates,
   and memory-search results; a session from tenant A is rejected when presented with tenant B's token.
 - Full working-tree secret scan: PASS — `gitleaks dir` found no leaks.
-- Central packaged no-code QA: PASS — the real Tauri macOS bundle launched with isolated temporary state; Playwright
-  verified the setup UI, privacy mutation/readback, backup action, hostile-origin rejection, privacy pause/retry block,
-  rollback readback, user-owned hosting selection, and clean sidecar lifecycle. Evidence:
-  `/Users/radossagency/.radoss-qa/artifacts/naavos-production-contract-2026-09-08/universal-tauri-macos/evidence.json`.
+- Central packaged no-code QA: PASS — the current local bundle and a clean bundle built from the public Universal Avatar
+  source both launched with isolated temporary state; Playwright verified the setup UI, privacy mutation/readback,
+  backup action, hostile-origin rejection, privacy pause/retry block, rollback readback, user-owned hosting selection,
+  and clean sidecar lifecycle. Current evidence:
+  `/Users/radossagency/.radoss-qa/artifacts/naavos-local-current-2026-09-08-qa-fixed/evidence.json` and
+  `/Users/radossagency/.radoss-qa/artifacts/naavos-public-exact-tauri-2026-09-08/evidence.json`.
 - Central all-adapter QA: PASS — `local-agents`, `naas-public` and `universal-tauri-macos` all passed in the same run;
   aggregate evidence is under `/Users/radossagency/.radoss-qa/artifacts/naavos-followup-2026-09-08-all-fixed/`.
 - Central local-agent QA: PASS — Codex, Antigravity and Hermes adapter markers were present; `radoss doctor` confirmed
@@ -77,10 +79,9 @@ relevant official documentation whenever a host/provider version changes. The ma
   compilation on all three runner families only; it does not prove signing, notarisation, installation, or customer
   release readiness.
 - Public-package verification: PASS — the public Universal Avatar checkout passed 38/38 tests, public-package preflight,
-  dependency audit, and secret scanning in workflow `34174621458`. The local packaged macOS QA checkout is not byte-identical
-  to that public source in `desktop-setup/app.js` and `desktop-setup/src-tauri/src/main.rs`; consequently its local E2E
-  evidence is retained as local validation but is not promoted to public-package acceptance evidence until source/artifact
-  alignment is verified.
+  dependency audit, secret scanning in workflow `34174621458`, and a clean exact-source macOS packaged E2E run. The local
+  checkout retains personal QA instrumentation and is reported separately; it is not used as a substitute for public-source
+  proof.
 
 ## Not yet verified
 
@@ -104,9 +105,10 @@ relevant official documentation whenever a host/provider version changes. The ma
   printed, copied, or modified. This is a personal-environment warning, not distribution evidence, and the isolated
   sample does not use those paths. A distribution security review must still prove that the source and artifacts contain
   no credentials before release.
-- Current-bundle macOS packaged re-verification: NOT VERIFIED — both the current local bundle and a freshly built public
-  Universal Avatar bundle remained alive but did not enter the Tauri setup callback or publish the sidecar loopback URL.
-  Historical packaged-pass artifacts are retained for audit history only and are not treated as current-bundle proof.
+- Previous packaged-bundle failure: superseded. The failure was reproduced as QA launching a `/tmp` symlinked executable,
+  which Tauri's shell plugin rejects, compounded by macOS window-state restoration after the earlier crash. The central
+  harness now resolves the executable with `realpath`, passes `-ApplePersistence NO` only to the isolated QA process, and
+  records the configured and resolved paths. Current local and exact public-source bundles pass.
 
 ## Do not use
 
