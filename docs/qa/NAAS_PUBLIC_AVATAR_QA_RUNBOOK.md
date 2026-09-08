@@ -226,9 +226,11 @@ contract, formatting gate, and CLI target-state rollback semantics:
 | Customer/public production gate   | BLOCKED: live-user, named-host and signed-distribution evidence                                                                   |
 | Live dashboard release identity   | PASS: `/release.json` product/surface/marker shape in central QA; exact source-marker match verified by `pnpm verify:live-marker` |
 
-Evidence is stored in: `/Users/radossagency/.radoss-qa/artifacts/naavos-production-contract-2026-09-08/`.
+Evidence is stored in: `/Users/radossagency/.radoss-qa/artifacts/naavos-followup-2026-09-08-all-fixed/`.
 
 The current live dashboard reconciliation is PASS: `naavos.radoss.agency/release.json` served the content-derived marker
 `fa2b4c2160292bb712501497c59e62da562ee6ce9cbd6999a8b02de3d432d837`, matching the reviewed source inputs. The exact
-Coolify deployment ID for this marker remains not independently verified. The last independently verified Coolify
-identity is retained in `docs/DEPLOYMENT_EVIDENCE.md`.
+Coolify deployment ID for this marker remains not independently verified. The repeat aggregate run also passed the
+packaged Tauri hosting-choice server readback check after the harness began waiting for persisted state rather than
+relying only on the UI success message. The last independently verified Coolify identity is retained in
+`docs/DEPLOYMENT_EVIDENCE.md`.
