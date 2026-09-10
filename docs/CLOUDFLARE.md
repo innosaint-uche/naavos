@@ -28,8 +28,9 @@ dependency.
   authoritative DNS points to the Coolify VPS, which terminates TLS and uses a
   thin Caddy proxy to the canonical Worker.
 - The verified hosted MCP surface is `https://mcp.naavos.radoss.agency/mcp`.
-- No ordinary public REST API is certified by this release evidence; do not
-  invent or advertise an `api.naavos.radoss.agency` endpoint.
+- `https://naavos.radoss.agency/api` is the public API discovery surface on the
+  existing website origin. It advertises health, release status, and the
+  canonical MCP route, but it does not expose authenticated Avatar data.
 - `https://api.naavos.io/mcp/v1` is retired and unresolved; do not configure
   it.
 

@@ -49,7 +49,7 @@
   },
   "endpoint": "https://mcp.naavos.radoss.agency/mcp",
   "dashboard_release_identity": {
-    "source_marker": "efee084fefa588c2e23dccf7238a635d40363eb8861b0c2f842b9abefc468fcf",
+    "source_marker": "64328bcef554ca93d466487fa5bdf567dcdc3990eabcc9c9fb386938a51407e5",
     "source_marker_kind": "content-derived",
     "deployment_id": null,
     "deployment_id_status": "not_independently_verified",
@@ -144,7 +144,8 @@
     "cli_contract": "pass",
     "format_check": "pass",
     "secret_scan": "pass",
-    "live_dashboard": "verified_content_marker_efee084f"
+    "live_dashboard": "verified_content_marker_64328bce",
+    "public_api_discovery": "pass"
   },
   "dns": {
     "authoritative_mcp_radoss_agency": "no_record",

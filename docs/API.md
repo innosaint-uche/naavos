@@ -1,18 +1,33 @@
 # NAAvOS API Reference
 
-> **Deployment status — 2026-08-25:** The public website is live at
-> `https://naavos.radoss.agency`. The standards-based MCP gateway is deployed,
+> **Deployment status — 2026-09-10:** The public website is live at
+> `https://naavos.radoss.agency`. The public API discovery surface is available
+> under the website origin, and the standards-based MCP gateway is deployed,
 > OAuth-authenticated, and conformance-tested at the branded route below.
 
 ## Canonical route policy
 
 - Public web/dashboard: `https://naavos.radoss.agency`
+- Public API discovery: `https://naavos.radoss.agency/api`
 - Hosted Worker implementation origin: `https://naavos-mcp.innosaint-uche.workers.dev/mcp`
 - Branded hosted MCP: `https://mcp.naavos.radoss.agency/mcp` (user-facing canonical route)
-- No ordinary public REST API endpoint is certified by the current release
-  evidence. Use the verified Streamable HTTP MCP gateway instead:
+- The public API discovery surface does not expose authenticated Avatar data. Use
+  the verified Streamable HTTP MCP gateway for authenticated Avatar access:
   `https://mcp.naavos.radoss.agency/mcp`.
 - Retired/unresolved URL: `https://api.naavos.io/mcp/v1` (**do not use**)
+
+## Public API discovery
+
+```text
+GET /api
+GET /api/health
+GET /api/mcp
+```
+
+These routes give browsers, testers, and simple uptime monitors a stable
+NAAvOS-owned entry point on the real product domain. They advertise the current
+release status, installer release, ownership model, health state, and canonical
+MCP endpoint. They intentionally do not read or mutate private Avatar data.
 
 ## MCP Server Endpoints
 

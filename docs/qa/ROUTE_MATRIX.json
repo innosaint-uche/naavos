@@ -7,7 +7,7 @@
       "service": "public-dashboard",
       "environment": "production-facing-development",
       "release_identity": {
-        "source_marker": "efee084fefa588c2e23dccf7238a635d40363eb8861b0c2f842b9abefc468fcf",
+        "source_marker": "64328bcef554ca93d466487fa5bdf567dcdc3990eabcc9c9fb386938a51407e5",
         "source_marker_kind": "content-derived",
         "deployment_id": null,
         "deployment_id_status": "not_independently_verified"
@@ -22,7 +22,7 @@
       "auth_boundary": "public informational page; no authenticated Avatar data",
       "health_command": "central ~/.radoss-qa adapter naas-public browser.dashboard",
       "last_verified": "2026-09-10",
-      "evidence": "live /release.json marker check; rendered claim probe includes direct v0.2.0-beta.1 installer links",
+      "evidence": "live /release.json marker check; rendered claim probe includes direct v0.2.0-beta.1 installer links; public API discovery routes",
       "status": "content_verified",
       "deployment_automation": {
         "status": "verified",

@@ -12,8 +12,10 @@ relevant official documentation whenever a host/provider version changes. The ma
 - Public dashboard: `https://naavos.radoss.agency` — HTTP 200, Next.js response, valid TLS certificate, and the
   corrected open-source release copy is live. The current page includes direct beta installer links for macOS, Windows,
   and Linux from the public Universal Avatar release.
+- Public API discovery: `https://naavos.radoss.agency/api`, `/api/health`, and `/api/mcp` are live on the website origin
+  to expose service metadata, health, and the canonical MCP route without exposing authenticated Avatar data.
 - Dashboard content identity: the live `/release.json` marker is the content-derived source marker
-  `efee084fefa588c2e23dccf7238a635d40363eb8861b0c2f842b9abefc468fcf` (SHA-256), matching the reviewed source inputs.
+  `64328bcef554ca93d466487fa5bdf567dcdc3990eabcc9c9fb386938a51407e5` (SHA-256), matching the reviewed source inputs.
   This was verified by `pnpm verify:live-marker` after the standalone Docker image and live deployment were checked.
 - Coolify deployment ID for this marker: not independently verified. The public marker proves the served content matches
   the reviewed source inputs; it does not prove the platform's internal deployment identifier.
