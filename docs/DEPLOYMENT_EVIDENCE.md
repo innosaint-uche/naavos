@@ -1,6 +1,6 @@
 # NAAvOS deployment evidence
 
-Updated: 2026-09-08 (Africa/Lagos)
+Updated: 2026-09-10 (Africa/Lagos)
 
 The productisation design's page-18 **Evidence Standard** is enforced by the Universal release gate. Facts and
 recommendations are recorded separately; host-specific claims remain adapter-owned and must be reverified against the
@@ -10,9 +10,10 @@ relevant official documentation whenever a host/provider version changes. The ma
 ## Verified
 
 - Public dashboard: `https://naavos.radoss.agency` — HTTP 200, Next.js response, valid TLS certificate, and the
-  corrected open-source release copy is live.
+  corrected open-source release copy is live. The current page includes direct beta installer links for macOS, Windows,
+  and Linux from the public Universal Avatar release.
 - Dashboard content identity: the live `/release.json` marker is the content-derived source marker
-  `35f22bae24660e8f5ce5bfde23856f7fccd299b8288bb8237d7c79c6ad1b0d63` (SHA-256), matching the reviewed source inputs.
+  `efee084fefa588c2e23dccf7238a635d40363eb8861b0c2f842b9abefc468fcf` (SHA-256), matching the reviewed source inputs.
   This was verified by `pnpm verify:live-marker` after the standalone Docker image and live deployment were checked.
 - Coolify deployment ID for this marker: not independently verified. The public marker proves the served content matches
   the reviewed source inputs; it does not prove the platform's internal deployment identifier.
@@ -79,6 +80,10 @@ relevant official documentation whenever a host/provider version changes. The ma
   run `34174061043` at commit `f9666f740eac4224df3f42ee5f20886f0a10bbb3`. This proves reproducible unsigned bundle
   compilation on all three runner families only; it does not prove signing, notarisation, installation, or customer
   release readiness.
+- Universal Avatar public beta installers: PASS — prerelease `v0.2.0-beta.1` is published at
+  `https://github.com/innosaint-uche/radoss-universal-avatar/releases/tag/v0.2.0-beta.1` with uploaded macOS Apple
+  Silicon DMG, Windows x64 MSI, Linux x64 DEB/RPM, and `SHA256SUMS.txt` assets. This is tester-accessible development
+  distribution, not a signed customer-production release.
 - Public-package verification: PASS — the public Universal Avatar checkout passed 38/38 tests, public-package preflight,
   dependency audit, secret scanning in workflow `34174621458`, and a clean exact-source macOS packaged E2E run. The
   local checkout retains personal QA instrumentation and is reported separately; it is not used as a substitute for

@@ -8,6 +8,7 @@ import {
   ChevronDown,
   Code2,
   Cpu,
+  Download,
   Link2,
   Menu,
   Settings,
@@ -27,6 +28,31 @@ const platforms = [
   { name: 'Gemini', icon: '✨', status: 'Adapter available' },
   { name: 'OpenClaw', icon: '✦', status: 'Adapter available' },
   { name: 'ReMe', icon: '📝', status: 'Optional projection' },
+];
+
+const releaseTag = 'v0.2.0-beta.1';
+
+const installerLinks = [
+  {
+    platform: 'macOS',
+    detail: 'Apple Silicon DMG',
+    href: `https://github.com/innosaint-uche/radoss-universal-avatar/releases/download/${releaseTag}/NAAvOS-0.2.0-beta.1-macos-aarch64.dmg`,
+  },
+  {
+    platform: 'Windows',
+    detail: '64-bit MSI',
+    href: `https://github.com/innosaint-uche/radoss-universal-avatar/releases/download/${releaseTag}/NAAvOS-0.2.0-beta.1-windows-x64.msi`,
+  },
+  {
+    platform: 'Linux',
+    detail: 'DEB package',
+    href: `https://github.com/innosaint-uche/radoss-universal-avatar/releases/download/${releaseTag}/NAAvOS-0.2.0-beta.1-linux-x64.deb`,
+  },
+  {
+    platform: 'Linux',
+    detail: 'RPM package',
+    href: `https://github.com/innosaint-uche/radoss-universal-avatar/releases/download/${releaseTag}/NAAvOS-0.2.0-beta.1-linux-x64.rpm`,
+  },
 ];
 
 const features = [
@@ -480,6 +506,27 @@ export default function Home() {
             local desktop MVP, follow the personal setup guide, and define an Avatar without
             creating a NAAvOS-hosted account. Hosted connections and named-host certification are
             verified separately.
+          </p>
+          <div className="grid sm:grid-cols-2 gap-3 mb-8 text-left">
+            {installerLinks.map((installer) => (
+              <a
+                key={`${installer.platform}-${installer.detail}`}
+                href={installer.href}
+                className="group rounded-xl border border-white/10 bg-zinc-900/60 p-4 transition-colors hover:border-violet-400/60 hover:bg-zinc-900"
+              >
+                <div className="flex items-center justify-between gap-3">
+                  <div>
+                    <p className="font-medium text-white">{installer.platform}</p>
+                    <p className="text-sm text-zinc-400">{installer.detail}</p>
+                  </div>
+                  <Download className="h-5 w-5 shrink-0 text-zinc-500 transition-colors group-hover:text-violet-300" />
+                </div>
+              </a>
+            ))}
+          </div>
+          <p className="mb-8 text-sm text-zinc-500">
+            Beta installers are unsigned. Use the setup guide if your operating system shows a
+            security prompt.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6">
             <a

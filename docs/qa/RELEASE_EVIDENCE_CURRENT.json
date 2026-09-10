@@ -1,5 +1,5 @@
 {
-  "as_of": "2026-09-08",
+  "as_of": "2026-09-10",
   "customer_release": null,
   "evidence_standard": {
     "version": "1.0",
@@ -49,7 +49,7 @@
   },
   "endpoint": "https://mcp.naavos.radoss.agency/mcp",
   "dashboard_release_identity": {
-    "source_marker": "35f22bae24660e8f5ce5bfde23856f7fccd299b8288bb8237d7c79c6ad1b0d63",
+    "source_marker": "efee084fefa588c2e23dccf7238a635d40363eb8861b0c2f842b9abefc468fcf",
     "source_marker_kind": "content-derived",
     "deployment_id": null,
     "deployment_id_status": "not_independently_verified",
@@ -92,6 +92,20 @@
       "workflow_run": "34174061043",
       "runners": ["macos-14", "windows-2022", "ubuntu-24.04"],
       "scope_limit": "build proof only; does not prove signing, notarization, installation, or customer release"
+    },
+    "public_beta_installers": {
+      "status": "verified_prerelease",
+      "repository": "https://github.com/innosaint-uche/radoss-universal-avatar",
+      "tag": "v0.2.0-beta.1",
+      "release_url": "https://github.com/innosaint-uche/radoss-universal-avatar/releases/tag/v0.2.0-beta.1",
+      "assets": [
+        "NAAvOS-0.2.0-beta.1-macos-aarch64.dmg",
+        "NAAvOS-0.2.0-beta.1-windows-x64.msi",
+        "NAAvOS-0.2.0-beta.1-linux-x64.deb",
+        "NAAvOS-0.2.0-beta.1-linux-x64.rpm",
+        "SHA256SUMS.txt"
+      ],
+      "scope_limit": "tester-accessible unsigned development beta only; does not prove signed customer-production release"
     }
   },
   "source_release": {
@@ -130,7 +144,7 @@
     "cli_contract": "pass",
     "format_check": "pass",
     "secret_scan": "pass",
-    "live_dashboard": "verified_content_marker_fa2b4c21"
+    "live_dashboard": "verified_content_marker_efee084f"
   },
   "dns": {
     "authoritative_mcp_radoss_agency": "no_record",

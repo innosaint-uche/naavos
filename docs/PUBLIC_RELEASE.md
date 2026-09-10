@@ -8,12 +8,14 @@ NAAvOS has two distinct release claims:
 | Claim                   | Required proof                                                                                                                                                                             |
 | ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | Local development       | tests, typecheck, lint, build, local browser and MCP checks                                                                                                                                |
+| Public development beta | local development proof plus public source visibility, published unsigned beta assets, checksums, clear security warning, and live website copy that does not claim production readiness |
 | Public/customer release | all local proof plus hosted OAuth, two-user tenant isolation, named ChatGPT/Claude acceptance, signed/notarised artifacts, distribution security review, source visibility, and exact deployment identity |
 
-The current checkout is a controlled development release. Its source repository is public for open-source contributors
-at `https://github.com/innosaint-uche/naavos`. This source-public state is deliberately separate from a public/customer
-release: no unresolved GitHub URL may be advertised as the official source, and no customer-ready claim may be made
-until the evidence manifest is complete.
+The current checkout is a controlled public development beta. Its source repository is public for open-source
+contributors at `https://github.com/innosaint-uche/naavos`, and unsigned tester installers may be linked while clearly
+labelled as beta artifacts. This state is deliberately separate from a public/customer release: no unresolved GitHub URL
+may be advertised as the official source, and no customer-ready claim may be made until the evidence manifest is
+complete.
 
 ## Release sequence
 
@@ -26,7 +28,8 @@ until the evidence manifest is complete.
 5. Obtain named ChatGPT and Claude acceptance.
 6. Complete the distribution security review and build signed and notarised desktop artifacts for every advertised platform.
 7. Update `docs/qa/RELEASE_EVIDENCE_CURRENT.json` with observed evidence.
-8. Only then publish customer-facing install instructions, signed release artifacts, and public/customer claims. The
+8. Only then publish signed customer-facing install instructions, signed release artifacts, and public/customer claims.
+   Public beta installer links may exist earlier only when they are clearly labelled unsigned development artifacts. The
    source repository may remain publicly readable during controlled development, but its status must stay explicit until
    these gates pass.
 

@@ -1,5 +1,5 @@
 {
-  "as_of": "2026-09-08",
+  "as_of": "2026-09-10",
   "authority": "docs/DEPLOYMENT_EVIDENCE.md and .shared-ai-skills/DEPLOYMENT_TRUTH_PROTOCOL.md",
   "routes": [
     {
@@ -7,7 +7,7 @@
       "service": "public-dashboard",
       "environment": "production-facing-development",
       "release_identity": {
-        "source_marker": "35f22bae24660e8f5ce5bfde23856f7fccd299b8288bb8237d7c79c6ad1b0d63",
+        "source_marker": "efee084fefa588c2e23dccf7238a635d40363eb8861b0c2f842b9abefc468fcf",
         "source_marker_kind": "content-derived",
         "deployment_id": null,
         "deployment_id_status": "not_independently_verified"
@@ -21,8 +21,8 @@
       "runtime": "Next.js",
       "auth_boundary": "public informational page; no authenticated Avatar data",
       "health_command": "central ~/.radoss-qa adapter naas-public browser.dashboard",
-      "last_verified": "2026-09-08",
-      "evidence": "central QA artifact naavos-central-release-marker-2026-09-08/naas-public/evidence.json; live /release.json marker check; rendered claim probe",
+      "last_verified": "2026-09-10",
+      "evidence": "live /release.json marker check; rendered claim probe includes direct v0.2.0-beta.1 installer links",
       "status": "content_verified",
       "deployment_automation": {
         "status": "verified",
