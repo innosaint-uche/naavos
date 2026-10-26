@@ -120,7 +120,7 @@ jobs:
           pnpm verify:cli
           pnpm verify:claims
           pnpm verify:evidence
-          pnpm exec naavos doctor
+          node scripts/verify-cli-doctor.mjs
 
   secrets-scan:
     name: Secrets Scan
@@ -149,9 +149,12 @@ jobs:
         with:
           fetch-depth: 0
       - name: Create source archive
+        env:
+          RELEASE_TAG: ${{ inputs.tag }}
         run: |
-          git archive --format=tar.gz --prefix=naavos-${{ inputs.tag }}/ HEAD > naavos-${{ inputs.tag }}.tar.gz
-          sha256sum naavos-${{ inputs.tag }}.tar.gz > naavos-${{ inputs.tag }}.tar.gz.sha256
+          [[ "$RELEASE_TAG" =~ ^v[0-9]+\.[0-9]+\.[0-9]+(-[A-Za-z0-9.-]+)?$ ]] || { echo "Invalid release tag"; exit 1; }
+          git archive --format=tar.gz --prefix="naavos-$RELEASE_TAG/" HEAD > "naavos-$RELEASE_TAG.tar.gz"
+          sha256sum "naavos-$RELEASE_TAG.tar.gz" > "naavos-$RELEASE_TAG.tar.gz.sha256"
       - name: Publish source release
         uses: softprops/action-gh-release@v2
         with:

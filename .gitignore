@@ -32,3 +32,6 @@ Thumbs.db
 credentials.json
 *.pem
 memory/
+
+# Wrangler local secrets
+.dev.vars*

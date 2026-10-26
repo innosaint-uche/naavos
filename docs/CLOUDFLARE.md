@@ -1,146 +1,93 @@
-# Deploy NAAvOS to Cloudflare
+# Deploy the hosted NAAvOS gateway
 
-> **Important:** This is a deployment guide, not deployment evidence. Do not
-> publish or configure an endpoint until DNS, TLS, exact routing, MCP protocol,
-> OAuth, tenant isolation, and release identity have passed live checks.
+This is an operator procedure, not evidence that a deployment has occurred. Local desktop use requires no Cloudflare,
+Coolify or hosted account.
 
-## Ownership boundary
+The existing public dashboard runs on Coolify. The authenticated MCP implementation is a Cloudflare Worker with D1. The
+branded reverse proxy is in `deploy/mcp-proxy/`. Do not publish `.next/static` to Pages: the dashboard is a standalone
+Next.js application and must use the root Dockerfile.
 
-This document describes the existing NAAvOS operator deployment and is not a
-prerequisite for the open-source Universal Avatar or for an individual user.
-The current NAAvOS route uses the maintainer's Hostinger/Coolify and Cloudflare
-accounts. A user who chooses an online Avatar should deploy an isolated copy
-into the user's own Cloudflare account, VPS, or other supported host; the user
-owns that domain, storage, credentials, and operating cost. Local mode needs
-none of these services.
+## Resource-bound authentication
 
-The future no-code provisioning surface should collect the user's hosting
-choice and open that provider's authorization flow. It must never silently
-deploy into the maintainer's accounts or make the NAAvOS-managed route a hidden
-dependency.
+The gateway requires a real OAuth authorization authority. A successful Hugging Face account lookup does not establish
+that an access token was issued for NAAvOS. Provider integrations in the local runtime remain separate from gateway
+authentication.
 
-## Current routing decision
+Configure these non-secret values for the selected environment:
 
-- `https://naavos.radoss.agency` is the existing public dashboard surface.
-- The verified hosted MCP endpoint is
-  `https://naavos-mcp.innosaint-uche.workers.dev/mcp`.
-- `https://mcp.naavos.radoss.agency/mcp` is the verified branded route. Hostinger
-  authoritative DNS points to the Coolify VPS, which terminates TLS and uses a
-  thin Caddy proxy to the canonical Worker.
-- The verified hosted MCP surface is `https://mcp.naavos.radoss.agency/mcp`.
-- `https://naavos.radoss.agency/api` is the public API discovery surface on the
-  existing website origin. It advertises health, release status, and the
-  canonical MCP route, but it does not expose authenticated Avatar data.
-- `https://api.naavos.io/mcp/v1` is retired and unresolved; do not configure
-  it.
+| Variable                       | Meaning                                                                    |
+| ------------------------------ | -------------------------------------------------------------------------- |
+| `MCP_RESOURCE_URL`             | Canonical resource URI, for example `https://mcp.naavos.radoss.agency/mcp` |
+| `OAUTH_ISSUER`                 | Exact issuer identifier used by the authorization server                   |
+| `OAUTH_AUDIENCE`               | The dedicated audience issued for the NAAvOS resource                      |
+| `OAUTH_AUTHORIZATION_ENDPOINT` | Real authorization endpoint with browser consent and S256 PKCE             |
+| `OAUTH_TOKEN_ENDPOINT`         | Real token endpoint                                                        |
+| `OAUTH_REGISTRATION_ENDPOINT`  | Optional real registration endpoint, only when supported                   |
+| `OAUTH_INTROSPECTION_ENDPOINT` | HTTPS introspection endpoint if using opaque access tokens                 |
+| `ALLOWED_ORIGINS`              | Explicit allowed browser origins                                           |
+| `RELEASE_SHA`                  | Exact reviewed source commit deployed by the operator                      |
 
-The standards-based Worker remains deployed at this implementation/test origin:
+Select one validator:
 
-```text
-https://naavos-mcp.innosaint-uche.workers.dev/mcp
-```
+- Dedicated HS256 JWT access tokens: store `JWT_SECRET` as a Worker secret. Tokens must have a finite future `exp`,
+  non-empty `sub`, matching `iss` and `aud`, and appropriate scopes. Use a strong dedicated signing key supplied by the
+  authorization authority.
+- OAuth introspection: configure the trusted HTTPS introspection endpoint. Store `OAUTH_INTROSPECTION_CLIENT_ID` and
+  `OAUTH_INTROSPECTION_CLIENT_SECRET` as secrets when the issuer requires client authentication. Introspection must
+  return `active=true`, `sub`, finite `exp`, the dedicated `aud`, and scopes. An issuer mismatch is rejected.
 
-For the current NAAvOS architecture, the public dashboard remains on the
-existing Hostinger/Coolify origin while the standards-compliant MCP service is
-deployed as a Cloudflare Worker with D1 persistence. The branded route is
-publicly reachable through the existing edge proxy; the Worker origin is not
-the user-facing connector URL.
+`read-mcp` is required for access. Updates and data deletion also require `write-avatar` and explicit confirmation. The
+issuer controls any signed `tenant_id` mapping; otherwise the subject is the tenant. For per-user Avatars, issue one
+owner-scoped tenant per user.
 
-## Prerequisites
+Do not deploy with `NAAVOS_DEV_MODE=true`. Development fallback is accepted only on loopback without a bearer token.
+Removed `HF_OAUTH_*` flags do not grant access. Never commit `.dev.vars`, environment files or secret values.
 
-- Cloudflare account
-- Wrangler CLI: `pnpm add -g wrangler`
-- Node.js 22+
+## Staged rollout
 
-## Deploy MCP Server
+1. Back up the existing D1 database and preserve the live gateway version.
+2. Create an isolated Worker and D1 binding in the intended owner's account. Use a separate reviewed Wrangler
+   configuration; do not reuse the production database ID for staging.
+3. Configure the real issuer, audience, resource URI, endpoints and secrets through the account's secret manager/Doppler
+   integration. Wrangler `versions secret put` stages a version without immediately replacing the live deployment.
+4. Apply the existing D1 schema to the isolated database:
 
-```bash
-cd apps/mcp-server
+   ```sh
+   wrangler d1 migrations apply DB --local
+   wrangler d1 migrations apply DB --remote
+   ```
 
-# Login to Cloudflare
-wrangler login
+5. Deploy the reviewed configuration with the exact source revision:
 
-# Configure (create wrangler.toml)
-wrangler init
+   ```sh
+   wrangler deploy --var "RELEASE_SHA:$(git rev-parse HEAD)"
+   ```
 
-# Deploy
-wrangler deploy
-```
+6. Check `/health`, both resource metadata paths, authorization discovery, a real OAuth flow, refresh/revocation and
+   scopes. A healthy-looking configuration response alone does not prove authentication or persistence.
+7. Use two independent live accounts to test save, reload, search, cross-tenant rejection, deletion and session
+   revocation. Fixtures are necessary but do not replace this check.
+8. Verify named ChatGPT and Claude acceptance and the exact deployment identity. Record evidence in the central QA store
+   and run `pnpm verify:release`.
+9. Map existing `hf:<username>` tenants to new issuer subjects only with verified ownership. Do not guess a
+   username/subject association, move another owner's data or silently delete the old database.
+10. Promote the reviewed Worker and branded proxy only after those checks pass. Retain the previous version for
+    rollback.
 
-## wrangler.toml
+The current source change adds no D1 schema migration. Its delete tool operates on the existing tenant-scoped tables in
+one transaction.
 
-```toml
-name = "naavos-mcp-server"
-main = "src/index.js"
-compatibility_date = "2024-01-01"
+## Dashboard deployment
 
-[vars]
-VERSION = "1.0.0"
+Use the root Dockerfile on the existing Coolify deployment. It builds self-hosted font assets, generates
+`public/release.json` and runs the standalone Next server as a non-root user. Verify the resulting marker against
+`pnpm release:marker` after deployment.
 
-[[ Durable Objects]]
-class = "AvatarStore"
-```
+Do not relabel the existing unsigned desktop beta as containing these fixes. Build new desktop artifacts from the
+reviewed runtime revision and verify signing, notarisation and advertised-platform installation separately.
 
-## Deploy Dashboard
+## Primary references
 
-```bash
-cd apps/dashboard
-
-# Build
-pnpm run build
-
-# Deploy to Pages
-npx wrangler pages deploy .next/static --project-name=naavos-dashboard
-```
-
-## Environment Variables
-
-```bash
-# In Cloudflare dashboard
-NAAVOS_D1_DATABASE=xxx
-NAAVOS_R2_BUCKET=xxx
-NAAVOS_API_KEY=xxx
-```
-
-## MCP Endpoints
-
-After the authoritative Cloudflare account owns the zone, use a Worker Custom
-Domain, not a raw CNAME, and verify the branded MCP server at:
-
-```
-https://mcp.naavos.radoss.agency/mcp
-```
-
-Do not recreate an accidental MCP CNAME or use any retired route. The branded
-NAAvOS route is the user-facing connector for this operator deployment; a
-user-owned deployment must use the user's own verified hostname. The Worker
-URL is kept only as an implementation/test origin.
-
-## CORS Configuration
-
-Update `src/index.js` with your production domain:
-
-```javascript
-const corsHeaders = {
-  'Access-Control-Allow-Origin': 'https://naavos.radoss.agency',
-  // ...
-};
-```
-
-## Custom Domain
-
-1. Confirm `radoss.agency` appears in the Cloudflare account that deploys `naavos-mcp`.
-2. Select the Worker and add `mcp.naavos.radoss.agency` under Custom Domains.
-3. Remove any conflicting CNAME before creating the Custom Domain.
-4. Let Cloudflare provision DNS and TLS.
-5. Verify DNS, TLS, `/health`, OAuth discovery, MCP conformance, and release identity.
-
-## Monitoring
-
-```bash
-# View logs
-wrangler tail
-
-# Check metrics
-wrangler deployments list
-```
+- [MCP authorization and resource binding](https://modelcontextprotocol.io/specification/2025-11-25/basic/authorization)
+- [Cloudflare D1 migration commands](https://developers.cloudflare.com/d1/wrangler-commands/)
+- [Cloudflare Worker secret/version commands](https://developers.cloudflare.com/workers/wrangler/commands/workers/)

@@ -3,6 +3,9 @@
 
 title = "gitleaks config for NAAvOS"
 
+[extend]
+useDefault = true
+
 [[rules]]
 id = "generic-api-key"
 description = "Generic API Key"

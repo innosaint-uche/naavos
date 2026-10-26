@@ -1,7 +1,7 @@
 {
   "name": "naavos-monorepo",
   "private": true,
-  "description": "NAAvOS — open-source compiler and conformance platform for portable AI avatars",
+  "description": "NAAvOS \u2014 open-source compiler and conformance platform for portable AI avatars",
   "bin": {
     "naavos": "packages/cli/bin/naavos.js"
   },
@@ -20,7 +20,8 @@
     "verify:live-marker": "node scripts/verify-live-release-marker.mjs",
     "verify:evidence": "node scripts/verify-release-evidence.mjs",
     "verify:live-tenants": "node scripts/verify-live-tenants.mjs",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "verify:release": "node scripts/verify-release-evidence.mjs --require-artifact --production"
   },
   "devDependencies": {
     "@naavos/cli": "workspace:*",
@@ -51,5 +52,11 @@
     "*.{json,md,yaml,yml}": [
       "prettier --write"
     ]
+  },
+  "pnpm": {
+    "overrides": {
+      "postcss": "8.5.31",
+      "source-map-js": "1.2.2"
+    }
   }
 }

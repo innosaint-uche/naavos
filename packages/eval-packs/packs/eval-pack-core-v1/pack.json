@@ -16,8 +16,7 @@
     {
       "id": "core-3",
       "type": "adapter_compiles",
-      "description": "All declared adapters must compile without error",
-      "targets": ["hermes", "claude-code", "gemini", "openclaw"]
+      "description": "All declared adapters must compile without error"
     },
     {
       "id": "core-4",

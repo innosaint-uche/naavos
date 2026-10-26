@@ -1,7 +1,9 @@
 import assert from 'node:assert/strict';
+import { spawnSync } from 'node:child_process';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
+import { gunzipSync } from 'node:zlib';
 
 import { compile } from '@naavos/compiler';
 import { describe, expect, it } from 'vitest';
@@ -13,7 +15,7 @@ function makeValidAvatar(overrides: Record<string, unknown> = {}): Record<string
   return {
     metadata: {
       package_id: 'a1b2c3d4-e5f6-7777-8888-999999999999',
-      owner_id: 'f6e5d4c3-b2a1-8888-7777-666666666666',
+      owner_id: 'f6e5d4c3-b2a1-4888-8777-666666666666',
       schema_version: '1.0.0',
       semantic_version: '1.0.0',
       created_at: new Date().toISOString(),
@@ -226,6 +228,105 @@ describe('backup and rollback', () => {
       if (previousHome === undefined) delete process.env['HOME'];
       else process.env['HOME'] = previousHome;
       fs.rmSync(tmpDir, { recursive: true, force: true });
+    }
+  });
+});
+
+describe('CLI process regressions', () => {
+  const cli = path.resolve('bin/naavos.js');
+  function fixture() {
+    const home = fs.mkdtempSync(path.join(os.tmpdir(), 'naavos-process-'));
+    fs.mkdirSync(path.join(home, '.naavos'), { recursive: true });
+    const avatar = makeValidAvatar();
+    fs.writeFileSync(path.join(home, '.naavos/avatar.json'), JSON.stringify(avatar));
+    const run = (...args: string[]) =>
+      spawnSync(process.execPath, [cli, ...args], {
+        cwd: home,
+        env: { ...process.env, HOME: home, HERMES_HOME: path.join(home, 'hermes') },
+        encoding: 'utf8',
+      });
+    return { home, avatar, run };
+  }
+
+  it('ReMe dry run does not change an existing Hermes skill or create backups', () => {
+    const { home, run } = fixture();
+    try {
+      fs.mkdirSync(path.join(home, 'skills/reme_memory'), { recursive: true });
+      fs.writeFileSync(path.join(home, 'skills/reme_memory/SKILL.md'), 'Existing project skill');
+      fs.mkdirSync(path.join(home, 'hermes/skills/reme_memory'), { recursive: true });
+      fs.writeFileSync(
+        path.join(home, 'hermes/skills/reme_memory/SKILL.md'),
+        'Existing Hermes skill'
+      );
+      assert.equal(run('compile', '--target', 'reme').status, 0);
+      assert.equal(run('install', '--target', 'reme', '--dry-run').status, 0);
+      assert.equal(
+        fs.readFileSync(path.join(home, 'hermes/skills/reme_memory/SKILL.md'), 'utf8'),
+        'Existing Hermes skill'
+      );
+      assert.equal(fs.existsSync(path.join(home, '.naavos/backups')), false);
+    } finally {
+      fs.rmSync(home, { recursive: true, force: true });
+    }
+  });
+
+  it('export recompiles current source instead of leaking stale compiled files', () => {
+    const { home, avatar, run } = fixture();
+    try {
+      assert.equal(run('compile', '--target', 'hermes').status, 0);
+      fs.writeFileSync(
+        path.join(home, '.naavos/compiled/hermes/deleted-secret.md'),
+        'STALE_PRIVATE_CONTEXT'
+      );
+      avatar.identity = { name: 'Current User' };
+      fs.writeFileSync(path.join(home, '.naavos/avatar.json'), JSON.stringify(avatar));
+      assert.equal(run('export', '--target', 'hermes').status, 0);
+      const archive = gunzipSync(
+        fs.readFileSync(path.join(home, '.naavos/avatar-profile.tar.gz'))
+      ).toString();
+      assert.match(archive, /Current User/);
+      assert.doesNotMatch(archive, /STALE_PRIVATE_CONTEXT/);
+    } finally {
+      fs.rmSync(home, { recursive: true, force: true });
+    }
+  });
+
+  it('failed evals exit nonzero in JSON mode and an empty eval list runs installed packs', () => {
+    const { home, run } = fixture();
+    try {
+      const result = run('test', '--json');
+      assert.equal(result.status, 1);
+      const results = JSON.parse(result.stdout);
+      assert.ok(results.length > 0);
+      assert.ok(results.some((item: { failed: number }) => item.failed > 0));
+    } finally {
+      fs.rmSync(home, { recursive: true, force: true });
+    }
+  });
+
+  it('reinitialisation refuses to overwrite a saved Avatar', () => {
+    const { home, run } = fixture();
+    try {
+      const before = fs.readFileSync(path.join(home, '.naavos/avatar.json'), 'utf8');
+      assert.equal(run('init').status, 1);
+      assert.equal(fs.readFileSync(path.join(home, '.naavos/avatar.json'), 'utf8'), before);
+    } finally {
+      fs.rmSync(home, { recursive: true, force: true });
+    }
+  });
+
+  it('installation rejects symlink destinations without modifying their target', () => {
+    const { home, run } = fixture();
+    try {
+      fs.writeFileSync(path.join(home, 'outside.md'), 'User-owned content');
+      fs.symlinkSync(path.join(home, 'outside.md'), path.join(home, 'CLAUDE.md'));
+      assert.equal(run('compile', '--target', 'claude-code').status, 0);
+      const installed = run('install', '--target', 'claude-code');
+      assert.equal(installed.status, 1);
+      assert.match(installed.stderr, /symlink/);
+      assert.equal(fs.readFileSync(path.join(home, 'outside.md'), 'utf8'), 'User-owned content');
+    } finally {
+      fs.rmSync(home, { recursive: true, force: true });
     }
   });
 });

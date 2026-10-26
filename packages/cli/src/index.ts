@@ -1,5 +1,7 @@
 #!/usr/bin/env node
+import { randomUUID } from 'node:crypto';
 import fs from 'node:fs';
+import os from 'node:os';
 import path from 'node:path';
 import { PassThrough } from 'node:stream';
 import { pipeline } from 'node:stream/promises';
@@ -35,7 +37,7 @@ const logo = `
 program.name('naavos').description('NAAvOS: Give Every AI Your Brain').version('1.0.0');
 
 function getAvatarPath(): string {
-  return path.join(process.env['HOME'] ?? '', '.naavos', 'avatar.json');
+  return path.join(process.env['HOME'] || os.homedir(), '.naavos', 'avatar.json');
 }
 
 function loadAvatar(): unknown {
@@ -47,7 +49,7 @@ function loadAvatar(): unknown {
 }
 
 function getBackupsDir(): string {
-  return path.join(process.env['HOME'] ?? '', '.naavos', 'backups');
+  return path.join(process.env['HOME'] || os.homedir(), '.naavos', 'backups');
 }
 
 function getBackupJournalPath(): string {
@@ -63,19 +65,26 @@ function loadJournal(): JournalEntry[] {
 }
 
 function saveJournal(journal: JournalEntry[]): void {
-  fs.mkdirSync(path.dirname(getBackupJournalPath()), { recursive: true });
-  fs.writeFileSync(getBackupJournalPath(), JSON.stringify(journal, null, 2));
+  privateWrite(getBackupJournalPath(), JSON.stringify(journal, null, 2));
 }
 
 function targetRoot(target: string): string {
   if (target === 'hermes') {
-    return process.env['HERMES_HOME'] || path.join(process.env['HOME'] ?? '', '.hermes');
+    return process.env['HERMES_HOME'] || path.join(process.env['HOME'] || os.homedir(), '.hermes');
   }
   return process.cwd();
 }
 
 function safeRelativePath(relativePath: string): string {
   const normalized = path.normalize(relativePath);
+  if (
+    !relativePath ||
+    relativePath.includes('\\') ||
+    relativePath.includes('\0') ||
+    normalized === '.' ||
+    /^[A-Za-z]:/.test(relativePath)
+  )
+    throw new Error(`Unsafe backup path: ${relativePath}`);
   if (
     path.isAbsolute(relativePath) ||
     normalized === '..' ||
@@ -84,6 +93,35 @@ function safeRelativePath(relativePath: string): string {
     throw new Error(`Unsafe backup path: ${relativePath}`);
   }
   return normalized;
+}
+
+function safeDestination(root: string, relativePath: string): string {
+  const destination = path.resolve(root, safeRelativePath(relativePath));
+  const resolvedRoot = path.resolve(root);
+  if (!destination.startsWith(resolvedRoot + path.sep))
+    throw new Error('Destination escapes target root');
+  // Refuse symlinks in the root and every child, including dangling symlinks.
+  let cursor = path.parse(destination).root;
+  for (const part of destination.slice(cursor.length).split(path.sep)) {
+    cursor = path.join(cursor, part);
+    let entry: fs.Stats;
+    try {
+      entry = fs.lstatSync(cursor);
+    } catch (error) {
+      if ((error as NodeJS.ErrnoException).code === 'ENOENT') continue;
+      throw error;
+    }
+    if (entry.isSymbolicLink()) throw new Error(`Refusing symlink destination: ${cursor}`);
+    if (cursor === destination ? !entry.isFile() : !entry.isDirectory())
+      throw new Error(`Invalid destination type: ${cursor}`);
+  }
+  return destination;
+}
+
+function privateWrite(filePath: string, content: string | Buffer): void {
+  fs.mkdirSync(path.dirname(filePath), { recursive: true, mode: 0o700 });
+  fs.writeFileSync(filePath, content, { mode: 0o600 });
+  fs.chmodSync(filePath, 0o600);
 }
 
 interface BackupSource {
@@ -99,11 +137,10 @@ function snapshotLocation(
   const existingFiles: string[] = [];
   for (const relativePath of source.files.keys()) {
     const safePath = safeRelativePath(relativePath);
-    const sourcePath = path.join(source.root, safePath);
+    const sourcePath = safeDestination(source.root, safePath);
     if (fs.existsSync(sourcePath) && fs.statSync(sourcePath).isFile()) {
       const dest = path.join(backupDir, backupPrefix, safePath);
-      fs.mkdirSync(path.dirname(dest), { recursive: true });
-      fs.copyFileSync(sourcePath, dest);
+      privateWrite(dest, fs.readFileSync(sourcePath));
       existingFiles.push(safePath);
     }
   }
@@ -121,9 +158,9 @@ async function createBackup(
   additionalSources: BackupSource[] = []
 ): Promise<string> {
   const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
-  const backupId = `${timestamp}-${target}`;
+  const backupId = `${timestamp}-${target}-${randomUUID().slice(0, 8)}`;
   const backupDir = path.join(getBackupsDir(), backupId);
-  fs.mkdirSync(backupDir, { recursive: true });
+  fs.mkdirSync(backupDir, { recursive: true, mode: 0o700 });
 
   const compiledFiles = compile(data, target);
   const targetDir = targetRoot(target);
@@ -152,6 +189,7 @@ async function createBackup(
 }
 
 async function restoreBackup(backupId: string): Promise<string> {
+  if (!/^[A-Za-z0-9_-]+$/.test(backupId)) throw new Error('Invalid backup id');
   const backupDir = path.join(getBackupsDir(), backupId);
   if (!fs.existsSync(backupDir)) {
     throw new Error(`Backup not found: ${backupId}`);
@@ -184,11 +222,16 @@ async function restoreBackup(backupId: string): Promise<string> {
           },
         ];
 
+  // Validate every managed destination before changing any file.
+  for (const location of locations) {
+    safeRelativePath(location.backup_prefix === '.' ? 'primary' : location.backup_prefix);
+    for (const file of location.managed_files) safeDestination(location.root, file);
+  }
   for (const location of locations) {
     const snapshotFiles = new Set(location.files.map(safeRelativePath));
     for (const relativePath of location.managed_files.map(safeRelativePath)) {
       if (!snapshotFiles.has(relativePath)) {
-        const dest = path.join(location.root, relativePath);
+        const dest = safeDestination(location.root, relativePath);
         if (fs.existsSync(dest) && fs.statSync(dest).isFile()) fs.rmSync(dest);
       }
     }
@@ -201,9 +244,8 @@ async function restoreBackup(backupId: string): Promise<string> {
         const fullPath = path.join(fsEntry.parentPath || snapshotDir, fsEntry.name);
         const relativePath = safeRelativePath(path.relative(snapshotDir, fullPath));
         if (!snapshotFiles.has(relativePath)) continue;
-        const dest = path.join(location.root, relativePath);
-        fs.mkdirSync(path.dirname(dest), { recursive: true });
-        fs.writeFileSync(dest, fs.readFileSync(fullPath, 'utf-8'));
+        const dest = safeDestination(location.root, relativePath);
+        privateWrite(dest, fs.readFileSync(fullPath));
       }
     }
   }
@@ -215,23 +257,13 @@ function listBackups(): JournalEntry[] {
   return loadJournal();
 }
 
-function walkDir(dir: string, base: string, files: Map<string, string>): void {
-  const entries = fs.readdirSync(dir, { withFileTypes: true });
-  for (const entry of entries) {
-    const fullPath = path.join(dir, entry.name);
-    const relativePath = path.relative(base, fullPath);
-    if (entry.isDirectory()) {
-      walkDir(fullPath, base, files);
-    } else if (entry.isFile()) {
-      files.set(relativePath, fs.readFileSync(fullPath, 'utf-8'));
-    }
-  }
-}
-
 async function createTarGz(files: FileMap, outputPath: string): Promise<void> {
   const tarParts: Buffer[] = [];
 
   for (const [filePath, content] of files) {
+    safeRelativePath(filePath);
+    if (Buffer.byteLength(filePath, 'utf-8') > 100)
+      throw new Error(`Archive path exceeds 100 bytes: ${filePath}`);
     const contentBuffer = Buffer.from(content, 'utf-8');
     const header = Buffer.alloc(512);
 
@@ -239,7 +271,7 @@ async function createTarGz(files: FileMap, outputPath: string): Promise<void> {
     nameBytes.copy(header, 0, 0, Math.min(100, nameBytes.length));
 
     const mode = Buffer.alloc(8);
-    mode.write('0000644', 0, 7, 'ascii');
+    mode.write('0000600', 0, 7, 'ascii');
     mode.copy(header, 100);
 
     const uid = Buffer.alloc(8);
@@ -290,7 +322,8 @@ async function createTarGz(files: FileMap, outputPath: string): Promise<void> {
   pass.write(tarBuffer);
   pass.end();
 
-  await pipeline(pass, createGzip(), fs.createWriteStream(outputPath));
+  await pipeline(pass, createGzip(), fs.createWriteStream(outputPath, { mode: 0o600 }));
+  fs.chmodSync(outputPath, 0o600);
 }
 
 program
@@ -302,6 +335,8 @@ program
     const spinner = ora('Initializing your avatar...').start();
 
     try {
+      if (fs.existsSync(getAvatarPath()))
+        throw new Error('An Avatar already exists. Edit it or back it up before reinitialising.');
       const answers = (await inquirer.prompt([
         {
           type: 'input',
@@ -334,7 +369,7 @@ program
         target: string;
       };
 
-      const avatarDir = path.join(process.env['HOME'] ?? '', '.naavos');
+      const avatarDir = path.join(process.env['HOME'] || os.homedir(), '.naavos');
       fs.mkdirSync(avatarDir, { recursive: true });
 
       const schema = {
@@ -361,7 +396,10 @@ program
           .map((r) => r.trim())
           .filter(Boolean)
           .map((statement, idx) => ({
-            id: `rule.${idx}`,
+            id:
+              statement === 'Cite evidence before claiming completion'
+                ? 'evidence.no_false_completion'
+                : `rule.${idx}`,
             statement,
             priority: 80 - idx,
             tests: [],
@@ -379,10 +417,11 @@ program
             unsupported_behaviour_policy: 'warn',
           },
         ],
-        evals: [],
+        evals: ['eval-pack-core-v1'],
       };
 
-      fs.writeFileSync(path.join(avatarDir, 'avatar.json'), JSON.stringify(schema, null, 2));
+      const validated = AvatarPackageSchema.parse(schema);
+      privateWrite(path.join(avatarDir, 'avatar.json'), JSON.stringify(validated, null, 2));
 
       spinner.succeed(chalk.green('Avatar initialized!'));
       console.log(chalk.bold('\nNext steps:'));
@@ -391,6 +430,7 @@ program
       console.log(chalk.gray('  naavos install             # Install into your AI tool'));
     } catch (error) {
       spinner.fail(chalk.red('Failed: ' + (error as Error).message));
+      process.exitCode = 1;
     }
   });
 
@@ -405,9 +445,9 @@ program
       spinner.succeed(chalk.green('Avatar package is valid.'));
     } catch (error) {
       spinner.fail(chalk.red('Validation failed:'));
-      const e = error as { errors?: { path: (string | number)[]; message: string }[] };
+      const e = error as { issues?: { path: (string | number)[]; message: string }[] };
       console.error(
-        e.errors?.map((err) => `  - ${err.path.join('.')}: ${err.message}`).join('\n') ||
+        e.issues?.map((err) => `  - ${err.path.join('.')}: ${err.message}`).join('\n') ||
           (error as Error).message
       );
       process.exit(1);
@@ -433,15 +473,15 @@ program
         if (options.templateDir) {
           process.env['NAAVOS_TEMPLATE_DIR'] = options.templateDir;
         }
-        const data = loadAvatar();
-        AvatarPackageSchema.parse(data);
-        const parsed = data as AvatarPackage;
+        const parsed = AvatarPackageSchema.parse(loadAvatar());
 
         const target = options.target || parsed.adapters?.[0]?.host_id;
         if (!target) {
           throw new Error('No target specified. Use --target or set adapters in avatar.json.');
         }
 
+        if (options.format && !['files', 'tar.gz'].includes(options.format))
+          throw new Error('Unknown format. Use files or tar.gz.');
         const files = compile(parsed, target);
 
         if (options.dryRun) {
@@ -459,7 +499,7 @@ program
             throw new Error('tar.gz format is only supported for the Hermes target.');
           }
           const outputPath = path.join(
-            process.env['HOME'] ?? '',
+            process.env['HOME'] || os.homedir(),
             '.naavos',
             'avatar-profile.tar.gz'
           );
@@ -469,13 +509,16 @@ program
           return;
         }
 
-        const outputDir = path.join(process.env['HOME'] ?? '', '.naavos', 'compiled', target);
+        const outputDir = path.join(
+          process.env['HOME'] || os.homedir(),
+          '.naavos',
+          'compiled',
+          target
+        );
         fs.mkdirSync(outputDir, { recursive: true });
 
         for (const [filePath, content] of files) {
-          const fullPath = path.join(outputDir, filePath);
-          fs.mkdirSync(path.dirname(fullPath), { recursive: true });
-          fs.writeFileSync(fullPath, content);
+          privateWrite(safeDestination(outputDir, filePath), content);
         }
 
         spinner.succeed(chalk.green(`Compiled ${files.size} files to ${outputDir}`));
@@ -494,32 +537,21 @@ program
   .action(async (options: { target?: string; output?: string }) => {
     const spinner = ora('Exporting profile bundle...').start();
     try {
-      const data = loadAvatar();
+      const data = AvatarPackageSchema.parse(loadAvatar());
       const target = options.target || (data as AvatarPackage).adapters?.[0]?.host_id || 'hermes';
 
       if (target !== 'hermes') {
         throw new Error('Export is only supported for the Hermes target.');
       }
 
-      const compiledDir = path.join(process.env['HOME'] ?? '', '.naavos', 'compiled', target);
-      if (!fs.existsSync(compiledDir)) {
-        const files = compile(data as AvatarPackage, target);
-        const outputPath =
-          options.output ||
-          path.join(process.env['HOME'] ?? '', '.naavos', 'avatar-profile.tar.gz');
-        fs.mkdirSync(path.dirname(outputPath), { recursive: true });
-        await createTarGz(files, outputPath);
-        spinner.succeed(chalk.green(`Exported Hermes profile bundle to ${outputPath}`));
-      } else {
-        const files = new Map<string, string>();
-        walkDir(compiledDir, compiledDir, files);
-        const outputPath =
-          options.output ||
-          path.join(process.env['HOME'] ?? '', '.naavos', 'avatar-profile.tar.gz');
-        fs.mkdirSync(path.dirname(outputPath), { recursive: true });
-        await createTarGz(files, outputPath);
-        spinner.succeed(chalk.green(`Exported Hermes profile bundle to ${outputPath}`));
-      }
+      // Always compile current source. Cached output can contain stale or deleted private context.
+      const files = compile(data, target);
+      const outputPath =
+        options.output ||
+        path.join(process.env['HOME'] || os.homedir(), '.naavos', 'avatar-profile.tar.gz');
+      fs.mkdirSync(path.dirname(outputPath), { recursive: true, mode: 0o700 });
+      await createTarGz(files, outputPath);
+      spinner.succeed(chalk.green(`Exported Hermes profile bundle to ${outputPath}`));
     } catch (error) {
       spinner.fail(chalk.red('Export failed: ' + (error as Error).message));
       process.exit(1);
@@ -534,13 +566,18 @@ program
   .action(async (options: { target?: string; dryRun?: boolean }) => {
     const spinner = ora('Installing avatar...').start();
     try {
-      const data = loadAvatar();
+      const data = AvatarPackageSchema.parse(loadAvatar());
       const target = options.target || (data as AvatarPackage).adapters?.[0]?.host_id;
       if (!target) {
         throw new Error('No target specified.');
       }
 
-      const compiledDir = path.join(process.env['HOME'] ?? '', '.naavos', 'compiled', target);
+      const compiledDir = path.join(
+        process.env['HOME'] || os.homedir(),
+        '.naavos',
+        'compiled',
+        target
+      );
       if (!fs.existsSync(compiledDir)) {
         throw new Error(
           `Nothing compiled for target "${target}". Run naavos compile --target ${target} first.`
@@ -557,12 +594,11 @@ program
 
         const files = compile(data as AvatarPackage, target);
         for (const [relativePath, content] of files) {
-          const dest = path.join(hermesHome, relativePath);
+          const dest = safeDestination(hermesHome, relativePath);
           if (options.dryRun) {
             console.log(chalk.gray(`Would write: ${dest}`));
           } else {
-            fs.mkdirSync(path.dirname(dest), { recursive: true });
-            fs.writeFileSync(dest, content);
+            privateWrite(dest, content);
           }
         }
         spinner.succeed(
@@ -585,20 +621,22 @@ program
         }
 
         for (const [relativePath, content] of files) {
-          const dest = path.join(projectRoot, relativePath);
+          const dest = safeDestination(projectRoot, relativePath);
           if (options.dryRun) {
             console.log(chalk.gray(`Would write: ${dest}`));
           } else {
-            fs.mkdirSync(path.dirname(dest), { recursive: true });
-            fs.writeFileSync(dest, content);
+            privateWrite(dest, content);
           }
         }
 
         const hermesSkill = path.join(projectRoot, 'skills', 'reme_memory', 'SKILL.md');
         const destSkill = path.join(hermesHome, 'skills', 'reme_memory', 'SKILL.md');
-        if (fs.existsSync(hermesSkill)) {
-          fs.mkdirSync(path.dirname(destSkill), { recursive: true });
-          fs.copyFileSync(hermesSkill, destSkill);
+        if (options.dryRun && remeSkill) console.log(chalk.gray(`Would write: ${destSkill}`));
+        if (!options.dryRun && fs.existsSync(hermesSkill)) {
+          privateWrite(
+            safeDestination(hermesHome, 'skills/reme_memory/SKILL.md'),
+            fs.readFileSync(hermesSkill)
+          );
           console.log(chalk.gray(`Installed ReMe skill into Hermes: ${destSkill}`));
         }
 
@@ -616,12 +654,11 @@ program
 
         const files = compile(data as AvatarPackage, target);
         for (const [relativePath, content] of files) {
-          const dest = path.join(projectRoot, relativePath);
+          const dest = safeDestination(projectRoot, relativePath);
           if (options.dryRun) {
             console.log(chalk.gray(`Would write: ${dest}`));
           } else {
-            fs.mkdirSync(path.dirname(dest), { recursive: true });
-            fs.writeFileSync(dest, content);
+            privateWrite(dest, content);
           }
         }
 
@@ -654,6 +691,12 @@ program
       AvatarPackageSchema.parse(data);
       checks.push({ name: 'Avatar schema valid', pass: true });
       checks.push({
+        name: 'Target adapters available',
+        pass: (data as AvatarPackage).adapters.every((entry) =>
+          listTargets().includes(entry.host_id)
+        ),
+      });
+      checks.push({
         name: 'Target adapters defined',
         pass: (data as AvatarPackage).adapters?.length > 0,
       });
@@ -668,6 +711,7 @@ program
 
     const passed = checks.filter((c) => c.pass).length;
     console.log(chalk.gray(`\n${passed}/${checks.length} checks passed`));
+    if (checks.some((check) => !check.pass)) process.exitCode = 1;
   });
 
 program
@@ -681,9 +725,15 @@ program
       const data = loadAvatar();
       AvatarPackageSchema.parse(data);
 
-      const packs = options.pack ? [options.pack] : (data as AvatarPackage).evals || listPacks();
+      const configuredPacks = (data as AvatarPackage).evals;
+      const packs = options.pack
+        ? [options.pack]
+        : configuredPacks.length
+          ? configuredPacks
+          : listPacks();
       if (packs.length === 0) {
-        spinner.warn('No eval packs specified and none found in avatar.evals.');
+        spinner.fail('No eval packs are available.');
+        process.exitCode = 1;
         return;
       }
 
@@ -693,9 +743,11 @@ program
         results.push(result);
       }
 
+      const failed = results.some((result) => result.failed > 0 || result.total === 0);
+      if (failed) process.exitCode = 1;
       if (options.json) {
         console.log(JSON.stringify(results, null, 2));
-        spinner.succeed('Test run complete.');
+        spinner.stop();
         return;
       }
 
@@ -720,9 +772,11 @@ program
       const overallColor =
         overallScore === 100 ? chalk.green : overallScore >= 80 ? chalk.yellow : chalk.red;
 
-      spinner.succeed(
-        overallColor(`Fidelity score: ${overallPassed}/${overallTotal} (${overallScore}%)`)
+      const summary = overallColor(
+        `Static conformance: ${overallPassed}/${overallTotal} (${overallScore}%). Host behaviour is not evaluated.`
       );
+      if (failed) spinner.fail(summary);
+      else spinner.succeed(summary);
     } catch (error) {
       spinner.fail(chalk.red('Test run failed: ' + (error as Error).message));
       process.exit(1);

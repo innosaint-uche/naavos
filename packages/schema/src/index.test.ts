@@ -29,7 +29,7 @@ function makeValidPackage(): AvatarPackage {
   return {
     metadata: {
       package_id: 'a1b2c3d4-e5f6-7777-8888-999999999999',
-      owner_id: 'f6e5d4c3-b2a1-8888-7777-666666666666',
+      owner_id: 'f6e5d4c3-b2a1-4888-8777-666666666666',
       schema_version: '1.0.0',
       semantic_version: '1.0.0',
       created_at: new Date().toISOString(),
@@ -68,6 +68,24 @@ function makeValidPackage(): AvatarPackage {
   };
 }
 
+describe('portable package identifiers', () => {
+  it('rejects duplicate rules and adapter targets instead of silently overwriting context', () => {
+    const duplicateRules = makeValidPackage();
+    duplicateRules.operating_rules.push(duplicateRules.operating_rules[0]!);
+    expect(() => AvatarPackageSchema.parse(duplicateRules)).toThrow('Duplicate identifier');
+    const duplicateTargets = makeValidPackage();
+    duplicateTargets.adapters.push(duplicateTargets.adapters[0]!);
+    expect(() => AvatarPackageSchema.parse(duplicateTargets)).toThrow('Duplicate identifier');
+  });
+
+  it('rejects unknown schema versions instead of stripping an unsupported format', () => {
+    const pkg = makeValidPackage();
+    expect(() =>
+      AvatarPackageSchema.parse({ ...pkg, metadata: { ...pkg.metadata, schema_version: '2.0.0' } })
+    ).toThrow();
+  });
+});
+
 // ---------------------------------------------------------------------------
 // MetadataSchema
 // ---------------------------------------------------------------------------
@@ -76,7 +94,7 @@ describe('MetadataSchema', () => {
   it('parses a valid metadata object', () => {
     const input = {
       package_id: 'a1b2c3d4-e5f6-7777-8888-999999999999',
-      owner_id: 'f6e5d4c3-b2a1-8888-7777-666666666666',
+      owner_id: 'f6e5d4c3-b2a1-4888-8777-666666666666',
       schema_version: '1.0.0',
       semantic_version: '1.2.3',
       created_at: '2026-01-15T10:30:00.000Z',
@@ -91,7 +109,7 @@ describe('MetadataSchema', () => {
   it('defaults schema_version to 1.0.0', () => {
     const input = {
       package_id: 'a1b2c3d4-e5f6-7777-8888-999999999999',
-      owner_id: 'f6e5d4c3-b2a1-8888-7777-666666666666',
+      owner_id: 'f6e5d4c3-b2a1-4888-8777-666666666666',
       semantic_version: '1.0.0',
       created_at: '2026-01-15T10:30:00.000Z',
       updated_at: '2026-01-16T12:00:00.000Z',
@@ -103,7 +121,7 @@ describe('MetadataSchema', () => {
   it('rejects non-UUID package_id', () => {
     const input = {
       package_id: 'not-a-uuid',
-      owner_id: 'f6e5d4c3-b2a1-8888-7777-666666666666',
+      owner_id: 'f6e5d4c3-b2a1-4888-8777-666666666666',
       semantic_version: '1.0.0',
       created_at: '2026-01-15T10:30:00.000Z',
       updated_at: '2026-01-16T12:00:00.000Z',
@@ -114,7 +132,7 @@ describe('MetadataSchema', () => {
   it('rejects invalid semantic_version (no patch)', () => {
     const input = {
       package_id: 'a1b2c3d4-e5f6-7777-8888-999999999999',
-      owner_id: 'f6e5d4c3-b2a1-8888-7777-666666666666',
+      owner_id: 'f6e5d4c3-b2a1-4888-8777-666666666666',
       semantic_version: '1.2',
       created_at: '2026-01-15T10:30:00.000Z',
       updated_at: '2026-01-16T12:00:00.000Z',
@@ -455,7 +473,7 @@ describe('AvatarPackageSchema', () => {
     const minimal = {
       metadata: {
         package_id: 'a1b2c3d4-e5f6-7777-8888-999999999999',
-        owner_id: 'f6e5d4c3-b2a1-8888-7777-666666666666',
+        owner_id: 'f6e5d4c3-b2a1-4888-8777-666666666666',
         semantic_version: '1.0.0',
         created_at: '2026-01-15T10:30:00.000Z',
         updated_at: '2026-01-16T12:00:00.000Z',

@@ -24,7 +24,9 @@ if (page.includes("status: 'Supported'")) {
 }
 
 if (!page.includes('host certification is verified separately')) {
-  throw new Error('Public dashboard must explain that host certification is a separate evidence layer');
+  throw new Error(
+    'Public dashboard must explain that host certification is a separate evidence layer'
+  );
 }
 
 if (!readme.includes('Available Adapters and Evidence Status')) {
@@ -36,3 +38,11 @@ if (readme.includes('## Supported Targets')) {
 }
 
 console.log(JSON.stringify({ status: 'pass', check: 'public-claims' }));
+
+for (const claim of [
+  'Conformance tests prove agents follow your rules.',
+  'Rules, style, history — always loaded.',
+  'AI targets supported',
+]) {
+  if (page.includes(claim)) throw new Error(`Unsupported public claim: ${claim}`);
+}

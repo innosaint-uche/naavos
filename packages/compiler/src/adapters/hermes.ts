@@ -4,6 +4,7 @@ import { fileURLToPath } from 'node:url';
 
 import type { AvatarPackage, Rule } from '@naavos/schema';
 
+import { renderContext } from '../context.js';
 import type { FileMap } from '../index.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -63,7 +64,7 @@ function render(template: string, vars: Record<string, unknown>): string {
 export function hermesAdapter(pkg: AvatarPackage): FileMap {
   const files = new Map<string, string>();
 
-  files.set('SOUL.md', generateSoul(pkg));
+  files.set('SOUL.md', generateSoul(pkg) + '\n' + renderContext(pkg));
   files.set('SKILL.md', generateSkill(pkg));
 
   if (pkg.modes && pkg.modes.length > 0) {
@@ -103,7 +104,7 @@ function generateSoul(pkg: AvatarPackage): string {
     metadata: {
       package_id: pkg.metadata?.package_id || 'unknown',
     },
-    compiled_at: new Date().toISOString(),
+    compiled_at: pkg.metadata.updated_at,
   });
 }
 
@@ -133,7 +134,7 @@ function generateSubAgent(
         : 'None',
       permitted_capabilities: capabilities.length
         ? capabilities.join('\n')
-        : 'All capabilities permitted',
+        : 'No additional capabilities granted',
     },
     metadata: {
       package_id: pkg.metadata?.package_id || 'unknown',
@@ -159,7 +160,7 @@ ${formatRules(rules)}
 
 ## Last Updated
 
-${new Date().toISOString()}
+${pkg.metadata.updated_at}
 `;
 }
 

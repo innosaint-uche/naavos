@@ -39,12 +39,20 @@ const ADAPTERS: Record<string, AdapterFn> = {
  */
 export function compile(packageData: unknown, target: string): FileMap {
   const parsed = AvatarPackageSchema.parse(packageData);
-  const adapter = ADAPTERS[target];
+  const adapter = Object.hasOwn(ADAPTERS, target) ? ADAPTERS[target] : undefined;
 
   if (!adapter) {
     throw new Error(`Unknown target: ${target}. Supported: ${Object.keys(ADAPTERS).join(', ')}`);
   }
 
+  const required = parsed.adapters.find((entry) => entry.host_id === target)?.min_adapter_version;
+  if (required) {
+    const parts = required.split('.').map(Number);
+    if (parts[0]! > 1 || (parts[0] === 1 && (parts[1]! > 0 || parts[2]! > 0)))
+      throw new Error(
+        `Target ${target} requires adapter ${required}; available adapter version is 1.0.0`
+      );
+  }
   return adapter(parsed);
 }
 

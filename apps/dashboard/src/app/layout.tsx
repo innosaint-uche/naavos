@@ -1,18 +1,7 @@
+import '@fontsource-variable/inter';
+import '@fontsource-variable/jetbrains-mono';
 import type { Metadata } from 'next';
-import { Inter, JetBrains_Mono } from 'next/font/google';
 import './globals.css';
-
-const inter = Inter({
-  subsets: ['latin'],
-  variable: '--font-inter',
-  display: 'swap',
-});
-
-const jetbrainsMono = JetBrains_Mono({
-  subsets: ['latin'],
-  variable: '--font-jetbrains-mono',
-  display: 'swap',
-});
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://naavos.radoss.agency'),
@@ -39,7 +28,7 @@ export const metadata: Metadata = {
     description:
       'Download the open-source local desktop MVP, configure your personal Avatar, and connect supported AI hosts with reversible setup.',
     type: 'website',
-    locale: 'en_US',
+    locale: 'en_GB',
     siteName: 'NAAvOS',
     images: [
       {
@@ -103,9 +92,7 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body
-        className={`${inter.variable} ${jetbrainsMono.variable} bg-[#09090b] text-zinc-100 antialiased overflow-x-hidden font-sans`}
-      >
+      <body className="bg-[#09090b] text-zinc-100 antialiased overflow-x-hidden font-sans">
         {children}
       </body>
     </html>

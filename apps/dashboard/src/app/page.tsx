@@ -155,7 +155,7 @@ export default function Home() {
       t2.kill();
       t3.kill();
       t4.kill();
-      ScrollTrigger.getAll().forEach((t) => t.kill());
+      t4.scrollTrigger?.kill();
     };
   }, []);
 
@@ -192,12 +192,19 @@ export default function Home() {
                 Release status
               </a>
             </div>
-            <button onClick={() => setMobileMenuOpen(!mobileMenuOpen)} className="md:hidden p-2">
+            <button
+              type="button"
+              aria-label={mobileMenuOpen ? 'Close navigation' : 'Open navigation'}
+              aria-expanded={mobileMenuOpen}
+              aria-controls="mobile-navigation"
+              onClick={() => setMobileMenuOpen((open) => !open)}
+              className="md:hidden p-2"
+            >
               {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
             </button>
           </div>
           {mobileMenuOpen && (
-            <div className="md:hidden bg-zinc-950 border-b border-white/5">
+            <div id="mobile-navigation" className="md:hidden bg-zinc-950 border-b border-white/5">
               <div className="px-4 py-4 space-y-3">
                 <a
                   href="#features"
@@ -320,7 +327,7 @@ export default function Home() {
               <div className="text-3xl sm:text-4xl font-bold bg-gradient-to-r from-violet-400 to-purple-400 bg-clip-text text-transparent">
                 6
               </div>
-              <div className="text-xs sm:text-sm text-zinc-500 mt-2">AI targets supported</div>
+              <div className="text-xs sm:text-sm text-zinc-500 mt-2">Compiler adapters</div>
             </div>
             <div>
               <div className="text-3xl sm:text-4xl font-bold bg-gradient-to-r from-amber-400 to-orange-400 bg-clip-text text-transparent">
@@ -330,9 +337,9 @@ export default function Home() {
             </div>
             <div>
               <div className="text-3xl sm:text-4xl font-bold bg-gradient-to-r from-emerald-400 to-green-400 bg-clip-text text-transparent">
-                99
+                CI
               </div>
-              <div className="text-xs sm:text-sm text-zinc-500 mt-2">Tests passing</div>
+              <div className="text-xs sm:text-sm text-zinc-500 mt-2">Automated checks</div>
             </div>
             <div>
               <div className="text-3xl sm:text-4xl font-bold bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent">
@@ -381,10 +388,10 @@ export default function Home() {
               </div>
               <ul className="space-y-3 sm:space-y-4">
                 {[
-                  'One avatar.json. Every agent knows you.',
-                  'Rules, style, history — always loaded.',
+                  'One Avatar package for available adapters.',
+                  'Approved context, loaded through your host integration.',
                   'Update once. Compile everywhere.',
-                  'Conformance tests prove agents follow your rules.',
+                  'Static checks validate packages. Host behaviour is verified separately.',
                 ].map((item, i) => (
                   <li key={i} className="flex items-start gap-3 text-zinc-300 text-sm sm:text-base">
                     <span className="text-emerald-400 mt-1">→</span>

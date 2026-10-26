@@ -22,10 +22,10 @@ The complete product request and non-negotiable release rules are in the
 
 - **Compile Your Persona:** Define your identity, rules, and knowledge sources in a single, versioned
   `Avatar-Source-Package`.
-- **Safe Installation:** The NAAvOS compiler translates your package into verified, host-specific instructions for every
-  AI tool (Claude, Gemini, Cursor, Hermes, etc.).
-- **Prove It Works:** A conformance harness runs tests to ensure agents actually adhere to your rules, providing a
-  "fidelity score" for each tool.
+- **Safe Installation:** The NAAvOS compiler translates your package into host-specific instructions for available AI
+  adapters (Claude, Gemini, Cursor, Hermes, etc.).
+- **Prove It Works:** Static conformance checks validate the source package and generated files. Behavioural acceptance
+  must be tested independently in each named host.
 
 ## Quick Start
 
@@ -143,4 +143,4 @@ MIT — Use it. Fork it. Make it yours.
 
 ---
 
-**Built with 70% faster execution. Zero fluff.**
+**User-owned context. Inspectable output. Reversible installation.**

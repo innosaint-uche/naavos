@@ -4,7 +4,7 @@ export const MetadataSchema = z.object({
   package_id: z.string().uuid().describe('Unique ID for this package instance.'),
   owner_id: z.string().uuid().describe('The user who owns this package.'),
   schema_version: z
-    .string()
+    .literal('1.0.0')
     .default('1.0.0')
     .describe('The version of the schema this package adheres to.'),
   semantic_version: z
@@ -68,7 +68,11 @@ export const RuleSchema = z.object({
 export type Rule = z.infer<typeof RuleSchema>;
 
 export const ModeSchema = z.object({
-  id: z.string().describe("Unique ID for the mode (e.g., 'cto_mode')."),
+  id: z
+    .string()
+    .max(64)
+    .regex(/^[A-Za-z0-9_-]+$/, 'Mode id must be a safe filename')
+    .describe("Unique ID for the mode (e.g., 'cto_mode')."),
   activation_phrases: z.array(z.string()).describe('Phrases that trigger this mode.'),
   deactivation_phrases: z.array(z.string()).describe('Phrases that deactivate this mode.'),
   persistence: z.enum(['session', 'project', 'global']).describe('How long the mode stays active.'),
@@ -100,7 +104,7 @@ export type Route = z.infer<typeof RouteSchema>;
 
 export const PrivacySchema = z.object({
   consents: z
-    .record(z.boolean())
+    .record(z.string(), z.boolean())
     .describe('Record of user consents for specific data processing activities.'),
   data_residency: z.string().optional().describe('Preferred geographic region for data storage.'),
   retention_policy: z.string().optional().describe("e.g., 'delete-after-90-days'"),
@@ -132,46 +136,78 @@ export const KnowledgeSourceSchema = z.object({
     .string()
     .optional()
     .describe('Type of knowledge source (e.g., "git", "http", "connector-reme").'),
-  config: z.record(z.any()).optional().describe('Configuration for this knowledge source.'),
+  config: z
+    .record(z.string(), z.unknown())
+    .optional()
+    .describe('Configuration for this knowledge source.'),
 });
 
 export type KnowledgeSource = z.infer<typeof KnowledgeSourceSchema>;
 
-export const AvatarPackageSchema = z.object({
-  metadata: MetadataSchema.describe('Package metadata and versioning.'),
-  identity: IdentitySchema.describe('Public identity information.'),
-  communication: CommunicationSchema.describe('Preferred communication style for AI interactions.'),
-  operating_rules: z
-    .array(RuleSchema)
-    .min(1)
-    .describe('A list of testable, prioritized operational rules.'),
-  privacy: PrivacySchema.describe('User consents and data handling policies.'),
-  adapters: z
-    .array(AdapterTargetSchema)
-    .min(1)
-    .describe('A list of target AI hosts this package is configured for.'),
-  evals: z
-    .array(z.string())
-    .describe('References to evaluation packs required for release gating.'),
-  modes: z
-    .array(ModeSchema)
-    .optional()
-    .describe("Defines persistent persona overlays like 'CTO Mode'."),
-  routing: z
-    .array(RouteSchema)
-    .optional()
-    .describe('Rules for routing user intents to specific tools or skills.'),
-  knowledge_sources: z
-    .array(z.union([z.string(), KnowledgeSourceSchema]))
-    .optional()
-    .describe(
-      'References (URIs/paths) to external knowledge sources. Can be plain strings (backward-compatible) or objects with type and config. Secrets are never embedded.'
+export const AvatarPackageSchema = z
+  .object({
+    metadata: MetadataSchema.describe('Package metadata and versioning.'),
+    identity: IdentitySchema.describe('Public identity information.'),
+    communication: CommunicationSchema.describe(
+      'Preferred communication style for AI interactions.'
     ),
-  projects: z
-    .array(z.union([z.string(), KnowledgeSourceSchema]))
-    .optional()
-    .describe('References (URIs/paths) to canonical project definitions.'),
-});
+    operating_rules: z
+      .array(RuleSchema)
+      .min(1)
+      .describe('A list of testable, prioritized operational rules.'),
+    privacy: PrivacySchema.describe('User consents and data handling policies.'),
+    adapters: z
+      .array(AdapterTargetSchema)
+      .min(1)
+      .describe('A list of target AI hosts this package is configured for.'),
+    evals: z
+      .array(z.string())
+      .describe('References to evaluation packs required for release gating.'),
+    modes: z
+      .array(ModeSchema)
+      .optional()
+      .describe("Defines persistent persona overlays like 'CTO Mode'."),
+    routing: z
+      .array(RouteSchema)
+      .optional()
+      .describe('Rules for routing user intents to specific tools or skills.'),
+    knowledge_sources: z
+      .array(z.union([z.string(), KnowledgeSourceSchema]))
+      .optional()
+      .describe(
+        'References (URIs/paths) to external knowledge sources. Can be plain strings (backward-compatible) or objects with type and config. Secrets are never embedded.'
+      ),
+    projects: z
+      .array(z.union([z.string(), KnowledgeSourceSchema]))
+      .optional()
+      .describe('References (URIs/paths) to canonical project definitions.'),
+  })
+  .superRefine((pkg, ctx) => {
+    const checkUnique = (ids: string[], field: string) => {
+      const seen = new Set<string>();
+      ids.forEach((id, index) => {
+        if (seen.has(id))
+          ctx.addIssue({
+            code: 'custom',
+            path: [field, index],
+            message: `Duplicate identifier: ${id}`,
+          });
+        seen.add(id);
+      });
+    };
+    checkUnique(
+      pkg.operating_rules.map((rule) => rule.id),
+      'operating_rules'
+    );
+    checkUnique(
+      (pkg.modes || []).map((mode) => mode.id),
+      'modes'
+    );
+    checkUnique(
+      pkg.adapters.map((adapter) => adapter.host_id),
+      'adapters'
+    );
+  });
 
 export type AvatarPackage = z.infer<typeof AvatarPackageSchema>;
 export { z };

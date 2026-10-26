@@ -1,3 +1,4 @@
+import { execFileSync } from 'node:child_process';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
@@ -19,7 +20,8 @@ const deploymentEvidence = fs.readFileSync(path.join(root, 'docs/DEPLOYMENT_EVID
 const canonicalEndpoint = 'https://mcp.naavos.radoss.agency/mcp';
 const retiredEndpoint = 'https://api.naavos.io/mcp/v1';
 const hostedRoute = routes.routes.find((route) => route.service === 'hosted-mcp-gateway');
-const requireArtifact = process.argv.includes('--require-artifact');
+const production = process.argv.includes('--production');
+const requireArtifact = production || process.argv.includes('--require-artifact');
 const failures = [];
 const assert = (condition, message) => {
   if (!condition) failures.push(message);
@@ -156,34 +158,38 @@ assert(
   release.remote_gateway?.branded_route === 'verified',
   'branded route is not marked verified'
 );
-assert(
-  release.remote_gateway?.tenant_isolation === 'not_verified_two_live_users',
-  'tenant gate must remain explicit until two live users pass'
-);
-assert(
-  release.host_acceptance?.chatgpt === 'pending_named_host_acceptance',
-  'ChatGPT acceptance must remain explicit until named-host proof exists'
-);
-assert(
-  release.host_acceptance?.claude === 'pending_named_host_acceptance',
-  'Claude acceptance must remain explicit until named-host proof exists'
-);
-assert(
-  release.distribution?.signing === 'ad_hoc_local_only',
-  'distribution signing must remain explicit until production signing is evidenced'
-);
-assert(
-  release.distribution?.notarization === 'not_verified',
-  'notarization must remain explicit until production notarization is evidenced'
-);
-assert(
-  release.distribution?.platforms === 'not_verified',
-  'cross-platform distribution must remain explicit until each advertised platform is evidenced'
-);
-assert(
-  release.customer_release === null,
-  'customer release must remain unset until every external release gate passes'
-);
+if (production) {
+  assert(release.customer_release !== null, 'customer release is not approved');
+  assert(
+    release.remote_gateway?.tenant_isolation === 'pass',
+    'two independent live-user tenant isolation is not proven'
+  );
+  for (const host of ['chatgpt', 'claude'])
+    assert(
+      release.host_acceptance?.[host] === 'accepted',
+      `${host} named-host acceptance is not proven`
+    );
+  assert(release.distribution?.signing === 'verified', 'production signing is not proven');
+  assert(release.distribution?.notarization === 'verified', 'notarization is not proven');
+  assert(
+    release.distribution?.platforms === 'verified',
+    'advertised-platform installation is not proven'
+  );
+  const current = JSON.parse(
+    execFileSync(process.execPath, ['scripts/write-release-manifest.mjs', '--print'], {
+      encoding: 'utf8',
+    })
+  );
+  assert(
+    release.dashboard_release_identity?.source_marker === current.source_marker,
+    'dashboard evidence does not match current source'
+  );
+} else {
+  assert(
+    release.customer_release === null,
+    'development manifest must keep customer release unset'
+  );
+}
 assert(
   ['verified', 'content_verified'].includes(release.dashboard_release_identity?.status),
   'dashboard release identity is not verified at any accepted evidence level'
@@ -263,7 +269,9 @@ if (failures.length) {
   console.log(
     JSON.stringify(
       {
-        status: 'pass',
+        status: production ? 'release-verified' : 'manifest-valid',
+        production_certified: production,
+        source_bound: production,
         endpoint: release.endpoint,
         dashboard_source_marker: release.dashboard_release_identity.source_marker,
         dashboard_deployment_id: release.dashboard_release_identity.deployment_id,

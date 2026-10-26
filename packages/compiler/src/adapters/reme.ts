@@ -30,14 +30,13 @@ components:
   as_auto_memory: ${config.enableAutoMemory ? 'true' : 'false'}
   as_auto_dream: ${config.enableAutoDream ? 'true' : 'false'}
   as_embedding: ${config.enableEmbeddings ? 'true' : 'false'}
-  as_embedding_store: ${config.enableEmbeddings ? 'default' : ''}
+  as_embedding_store: ${config.enableEmbeddings ? 'default' : 'null'}
 
 # Memory as File, File as Memory
 # Workspace layers: session/ -> daily/ -> digest/
 # See: https://reme.agentscope.io/?doc=memory-as-file-en
 
----
-*Compiled from NAAvOS package ${pkg.metadata?.package_id || 'unknown'} — ${new Date().toISOString()}*
+# Compiled from NAAvOS package ${pkg.metadata.package_id} — ${pkg.metadata.updated_at}
 `;
 
   files.set('.remerc', remerc);
@@ -129,10 +128,14 @@ function extractReMeConfig(pkg: AvatarPackage): ReMeConfig {
       if (ks.type === 'connector-reme' && ks.config) {
         const config = ks.config as Record<string, unknown>;
         return {
-          workspaceDir: (config['workspaceDir'] as string) ?? '.reme',
-          servicePort: (config['servicePort'] as number) ?? 2333,
-          enableAutoMemory: config['enableAutoMemory'] !== false,
-          enableAutoDream: config['enableAutoDream'] !== false,
+          workspaceDir: validateWorkspace(config['workspaceDir'] ?? '.reme'),
+          servicePort: validatePort(config['servicePort'] ?? 2333),
+          enableAutoMemory:
+            config['enableAutoMemory'] === true &&
+            pkg.privacy.consents['allow-auto-memory'] === true,
+          enableAutoDream:
+            config['enableAutoDream'] === true &&
+            pkg.privacy.consents['allow-auto-memory'] === true,
           enableEmbeddings: (config['enableEmbeddings'] as boolean) ?? false,
         };
       }
@@ -142,12 +145,24 @@ function extractReMeConfig(pkg: AvatarPackage): ReMeConfig {
   return {
     workspaceDir: '.reme',
     servicePort: 2333,
-    enableAutoMemory: true,
-    enableAutoDream: true,
+    enableAutoMemory: false,
+    enableAutoDream: false,
     enableEmbeddings: false,
   };
 }
 
 function fmtBool(value: boolean | undefined): 'Allowed' | 'Disabled' {
   return value ? 'Allowed' : 'Disabled';
+}
+
+function validatePort(value: unknown): number {
+  if (typeof value !== 'number' || !Number.isInteger(value) || value < 1 || value > 65535)
+    throw new Error('ReMe servicePort must be an integer from 1 to 65535');
+  return value;
+}
+
+function validateWorkspace(value: unknown): string {
+  if (typeof value !== 'string' || !value || /[\r\n\0:#{}[\],&*!|>'"%@`]/.test(value))
+    throw new Error('ReMe workspaceDir must be a plain filesystem path');
+  return value;
 }

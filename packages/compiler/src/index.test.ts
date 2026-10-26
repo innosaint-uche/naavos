@@ -7,7 +7,7 @@ function makeValidPackage(overrides: Record<string, unknown> = {}) {
   return {
     metadata: {
       package_id: 'a1b2c3d4-e5f6-7777-8888-999999999999',
-      owner_id: 'f6e5d4c3-b2a1-8888-7777-666666666666',
+      owner_id: 'f6e5d4c3-b2a1-4888-8777-666666666666',
       schema_version: '1.0.0',
       semantic_version: '1.0.0',
       created_at: new Date().toISOString(),
@@ -274,6 +274,95 @@ describe('reme adapter', () => {
     const remerc = files.get('.remerc')!;
     expect(remerc).toContain('port: 5555');
     expect(remerc).toContain('as_auto_dream: false');
+  });
+});
+
+describe('portable context contract', () => {
+  it('preserves preferences, scoped rules, exceptions, modes and references for every instruction-file adapter', () => {
+    const pkg = makeValidPackage({
+      communication: {
+        tone: 'Gentle',
+        structure: 'Connected prose',
+        verbosity: 'Detailed',
+        accessibility_needs: ['Large text'],
+        prohibited_patterns: ['Corporate jargon'],
+      },
+      operating_rules: [
+        {
+          id: 'scope-rule',
+          statement: 'Obtain approval',
+          priority: 90,
+          scope: ['publishing'],
+          exceptions: ['Already approved'],
+          evidence_requirement: ['Approval record'],
+        },
+      ],
+      modes: [
+        {
+          id: 'editor',
+          activation_phrases: ['Edit this'],
+          deactivation_phrases: ['Finish editing'],
+          persistence: 'session',
+        },
+      ],
+      knowledge_sources: ['private-reference.md'],
+    });
+    for (const target of ['hermes', 'claude-code', 'gemini', 'cursor', 'openclaw']) {
+      const files = compile(pkg, target);
+      const text = [...files.values()].join('\n');
+      for (const value of [
+        'Gentle',
+        'Connected prose',
+        'Detailed',
+        'Large text',
+        'Corporate jargon',
+        'publishing',
+        'Already approved',
+        'Approval record',
+        'Edit this',
+        'private-reference.md',
+      ])
+        expect(text).toContain(value);
+      expect([...compile(pkg, target)]).toEqual([...files]);
+    }
+  });
+
+  it('rejects traversal mode IDs and prototype-property target names', () => {
+    const pkg = makeValidPackage({
+      modes: [
+        {
+          id: '../../escape',
+          activation_phrases: [],
+          deactivation_phrases: [],
+          persistence: 'session',
+        },
+      ],
+    });
+    expect(() => compile(pkg, 'hermes')).toThrow();
+    for (const target of ['constructor', 'toString', '__proto__'])
+      expect(() => compile(makeValidPackage(), target)).toThrow('Unknown target');
+  });
+
+  it('ReMe never enables automatic capture by default and rejects invalid service config', () => {
+    expect(compile(makeValidPackage(), 'reme').get('.remerc')).toContain('as_auto_memory: false');
+    expect(() =>
+      compile(
+        makeValidPackage({
+          knowledge_sources: [{ type: 'connector-reme', config: { servicePort: -1 } }],
+        }),
+        'reme'
+      )
+    ).toThrow('servicePort');
+    expect(() =>
+      compile(
+        makeValidPackage({
+          knowledge_sources: [
+            { type: 'connector-reme', config: { workspaceDir: '.reme\nmalicious: true' } },
+          ],
+        }),
+        'reme'
+      )
+    ).toThrow('workspaceDir');
   });
 });
 

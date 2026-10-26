@@ -5,10 +5,10 @@ workers_dev = true
 
 [vars]
 ALLOWED_ORIGINS = "https://naavos.radoss.agency,https://mcp.naavos.radoss.agency"
-OAUTH_ISSUER = "https://mcp.naavos.radoss.agency"
-RELEASE_SHA = "e79819d414731cda4d6cc25726842c94621e059c37ee523191bd5e7b68ec84aa"
-HF_OAUTH_ENABLED = "true"
-HF_OAUTH_WRITE_ENABLED = "true"
+MCP_RESOURCE_URL = "https://mcp.naavos.radoss.agency/mcp"
+# Configure OAUTH_ISSUER, OAUTH_AUDIENCE and real authorization/token endpoints before deployment.
+RELEASE_SHA = "unbound" # deployment must inject the exact reviewed source revision
+# Identity-provider tokens are not accepted as NAAvOS resource tokens.
 
 [[d1_databases]]
 binding = "DB"

@@ -180,9 +180,9 @@ export async function runScenario(scenario: Scenario, avatar: unknown): Promise<
 }
 
 function formatZodError(e: unknown): string {
-  if (e && typeof e === 'object' && 'errors' in e) {
-    const zodErr = e as { errors: { path: (string | number)[]; message: string }[] };
-    return `Schema error: ${zodErr.errors.map((i) => `${i.path.join('.')} : ${i.message}`).join('; ')}`;
+  if (e && typeof e === 'object' && 'issues' in e) {
+    const zodErr = e as { issues: { path: (string | number)[]; message: string }[] };
+    return `Schema error: ${zodErr.issues.map((i) => `${i.path.join('.')} : ${i.message}`).join('; ')}`;
   }
   return `Error: ${(e as Error).message}`;
 }

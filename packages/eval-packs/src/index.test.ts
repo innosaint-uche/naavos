@@ -7,7 +7,7 @@ import { listPacks, loadPack, runEval } from './index.js';
 const sample = {
   metadata: {
     package_id: 'a1b2c3d4-e5f6-7777-8888-999999999999',
-    owner_id: 'f6e5d4c3-b2a1-8888-7777-666666666666',
+    owner_id: 'f6e5d4c3-b2a1-4888-8777-666666666666',
     schema_version: '1.0.0',
     semantic_version: '1.0.0',
     created_at: new Date().toISOString(),
